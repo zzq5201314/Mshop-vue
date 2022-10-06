@@ -1,19 +1,19 @@
 # vue2x-shop
 
-## Project setup
+## 安装依赖
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目启动
+
 ```
-npm run serve
+npm run dev
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+vue.config.js => port  设置启动端口
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+res/utils/base => baseUrl 配置服务器地址
