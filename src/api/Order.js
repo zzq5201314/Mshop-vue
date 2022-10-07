@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-10-07 18:05:58
- * @LastEditTime: 2022-10-07 18:58:29
+ * @LastEditTime: 2022-10-08 00:58:53
  * @LastEditors: you name
  * @Description: 订单api
  */
@@ -17,9 +17,10 @@ export function buyOrder (data) {
 }
 
 // 获取订单列表
-export function getOrderList () {
+export function getOrderList (type) {
 	return request({
 		url: `/order/list`,
-		method: 'get'
+		method: 'get',
+		params: { type }
 	})
 }
