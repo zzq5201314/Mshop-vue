@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-18 22:30:04
- * @LastEditTime: 2022-09-29 18:14:53
+ * @LastEditTime: 2022-10-07 18:18:44
  * @LastEditors: you name
  * @Description: 
 -->
@@ -169,6 +169,7 @@
 
 <script>
 import { getShoppingCartList, removeShoppingCart, updateShoppingCart } from '@/api/ShoppingCart'
+import { buyOrder } from '@/api/Order'
 import { addCollect } from '@/api/Collect'
 export default {
   name: "index",
@@ -181,6 +182,7 @@ export default {
       checkedProduct: [], // 选中的商品
       businessList: [],  // 全部的店铺id
       shoppingCartIdList: [],  // 全部商品id
+      checkedProductInfo: [],
       dataLength: null,
       total_prices: null,
     }
@@ -196,20 +198,17 @@ export default {
   },
   // 函数
   methods: {
-    handleCheckAllChange (val) {
-      // console.log("全选 => val", val)
-      this.checkedBusiness = val ? this.businessList : [];
-      // console.log("getShoppingCartList => this.business", this.checkedBusiness)
-      // this.checkAll = val ? this.shoppingCartData : [];
-    },
-    selectBusiness (value) {
-      // console.log("单选 => value", value)
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.shoppingCartData.length;
-      // console.log("getShoppingCartList => this.business", this.checkedBusiness)
-    },
     checkOut () { // 结算
       console.log('结账了');
+      console.log("去结算商品", this.checkedProductInfo)
+      console.log("商品 =>", this.checkedProduct)
+      if (this.checkedProductInfo.length > 0) {
+
+        buyOrder({ order: this.checkedProductInfo }).then(response => {
+          console.log("buyOrder => response", response)
+
+        })
+      }
     },
     addCollect (productItem) { // 添加收藏
       const query = { type: 'product' }
@@ -328,6 +327,22 @@ export default {
       if ($type === 0) { // 全选
         this.checkedBusiness = e ? this.businessList : [];
         this.checkedProduct = e ? this.shoppingCartIdList : [];
+        if (e == true) {
+          // this.checkedProductInfo=
+          this.shoppingCartData.forEach(businessItem => {
+            businessItem.shopping_cart_list.forEach(productItem => {
+              const temp_obj = {
+                product_id: productItem.product_id._id,
+                business_id: businessItem._id,
+                num: productItem.product_num,
+                specification_id: productItem.specification._id
+              }
+              this.checkedProductInfo.push(temp_obj)
+            })
+          })
+        } else {
+          this.checkedProductInfo = []
+        }
 
         // if (e) {
         //   this.shoppingCartData.forEach((item) => {
@@ -354,15 +369,26 @@ export default {
         if (e) {
           this.checkedBusiness.pushNoRepeat($row._id)
           $row.shopping_cart_list.forEach((item) => {
-            console.log("$row.shopping_cart_list.forEach => item", item)
             this.checkedProduct.pushNoRepeat(item._id)
-            // this.total_prices = this.total_prices + (item.product_num * item.specification.product_price)
+
+            const temp_obj = {
+              product_id: item.product_id._id,
+              business_id: $row._id,
+              num: item.product_num,
+              specification_id: item.specification._id
+            }
+            this.checkedProductInfo.push(temp_obj)
           })
         } else {
           this.checkedBusiness.remove($row._id)
           $row.shopping_cart_list.forEach((item) => {
             this.checkedProduct.remove(`${item._id}`)
-            // this.total_prices = this.total_prices - (item.product_num * item.specification.product_price)
+
+            for (let i = 0; i < this.checkedProductInfo.length; i++) {
+              if (item.specification._id == this.checkedProductInfo[i].specification_id) {
+                this.checkedProductInfo.splice(i, 1)
+              }
+            }
           })
 
         }
@@ -387,10 +413,26 @@ export default {
         if (e) {
           this.checkedProduct.pushNoRepeat($row._id)
           // this.total_prices = this.total_prices + ($row.specification.product_price * $row.product_num)
+
+          const temp_obj = {
+            product_id: $row.product_id._id,
+            business_id: $row.product_id.business,
+            num: $row.product_num,
+            specification_id: $row.specification._id
+          }
+          this.checkedProductInfo.push(temp_obj)
         } else {
           //删除某个元素值
           this.checkedProduct.remove(`${$row._id}`)
           // this.total_prices = this.total_prices - ($row.specification.product_price * $row.product_num)
+
+          for (let i = 0; i < this.checkedProductInfo.length; i++) {
+            if ($row.specification._id == this.checkedProductInfo[i].specification_id) {
+              this.checkedProductInfo.splice(i, 1)
+            }
+
+          }
+
         }
 
 
@@ -432,8 +474,8 @@ export default {
 
 
       }
-
-      console.log("商品 =>", this.checkedProduct)
+      // console.log("handlerChange => this.checkedProductInfo", this.checkedProductInfo)
+      // console.log("商品 =>", this.checkedProduct)
       this.countMoney()
       // this.getShoppingCartList()
     },

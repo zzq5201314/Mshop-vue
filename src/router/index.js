@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-03 16:32:59
+ * @LastEditTime: 2022-10-07 18:55:27
  * @LastEditors: you name
  * @Description: 
  */
@@ -123,6 +123,12 @@ const routes = [
           name: 'addAddress',
           component: () => import('@/views/My/components/addAddress.vue'),
           meta: { title: '添加收获地址' },
+        },
+        {
+          path: '/order',
+          name: 'myOrder',
+          component: () => import('@/views/My/components/order.vue'),
+          meta: { title: '我的订单' },
         }
       ]
     }]

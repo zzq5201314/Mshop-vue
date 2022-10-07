@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-02 14:33:53
+ * @LastEditTime: 2022-10-07 18:57:07
  * @LastEditors: you name
  * @Description: 
 -->
@@ -46,6 +46,9 @@
             :class="{'text-blue-500':checkRouter=='/address'}"
           >
             <router-link :to="{name:'address'}">我的收货地址</router-link>
+          </div>
+          <div class="px-6 py-4 hover:text-blue-500 cursor-pointer">
+            <router-link :to="{name:'myOrder'}">我的订单</router-link>
           </div>
           <div class="px-6 py-4 hover:text-blue-500 cursor-pointer">
             <router-link :to="{name:'shoppingCartList'}">我的购物车</router-link>
