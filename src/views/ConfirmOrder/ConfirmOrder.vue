@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-09 00:28:58
+ * @LastEditTime: 2022-10-09 01:02:21
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -9,7 +9,7 @@
 <template>
   <div class="ConfirmOrder bg-gray-100 h-full">
     <div class=" container mx-auto max-w-7xl py-5">
-      <header class="bg-white p-8">
+      <header class="bg-white p-8 rounded-xl">
 
         <div
           class="space-y-5"
@@ -18,7 +18,7 @@
           <span class="text-lg text-black">收货地址</span>
           <div
             @click="addAddress"
-            class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer"
+            class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer hover:bg-black hover:text-white"
           ><i class="el-icon-plus text-black font-bold mx-1" />新增收货地址</div>
         </div>
 
@@ -29,9 +29,10 @@
           <div class="flex justify-between ">
             <span class="text-lg text-black">收货地址</span>
             <span
-              class="border px-4 text-sm py-1 cursor-pointer"
+              class="border px-4 text-sm py-1 cursor-pointer hover:bg-black hover:text-white group"
               @click="addAddress"
-            ><i class="el-icon-plus text-black font-bold mx-1" />
+            ><i
+                class="el-icon-plus text-black font-bold mx-1 group-hover:text-white" />
               新增收货地址</span>
           </div>
 
@@ -46,9 +47,13 @@
             <div
               v-for="(addressItem,addressIndex) in addressList"
               :key="addressIndex"
-              class=" border space-y-2 h-full relative group cursor-default"
-              :class="{'border-red-600':addressItem.selectAddressId===addressItem._id}"
-              @click="selectAddress(addressItem,addressIndex)"
+              class=" border space-y-2 h-full relative group cursor-default select-none"
+              :class="{
+							'border-red-600':addressItem.selectAddressId===addressItem._id,
+							'cursor-pointer':addressItem.selectAddressId===null,
+							'hover:border-gray-600':addressItem.selectAddressId===null,
+							}"
+              @click.prevent="selectAddress(addressItem,addressIndex)"
             >
               <div class="p-6">
                 <div>
@@ -72,17 +77,20 @@
               >
                 <span class="hover:text-red-600 cursor-pointer">设置为默认</span>
                 <span class="hover:text-red-600 cursor-pointer">修改</span>
-                <span class="hover:text-red-600 cursor-pointer">删除</span>
+                <span
+                  class="hover:text-red-600 cursor-pointer"
+                  @click="handleDelete(addressIndex,addressItem)"
+                >删除</span>
               </div>
             </div>
 
             <div
-              class="cursor-pointer"
+              class="cursor-pointer text-sm"
               v-if="isFold==true"
               @click="fold"
             >查看全部地址 <i class="el-icon-arrow-down ml-2" /></div>
             <div
-              class="cursor-pointer"
+              class="cursor-pointer text-sm"
               v-else
               @click="fold"
             >收起地址<i class="el-icon-arrow-up ml-2" />
@@ -163,27 +171,28 @@ export default {
     },
     // 选择地址
     async selectAddress (addressItem, addressIndex) {
-      this.isReloadLoading = true
-      for (var i in this.addressList) {
-        this.addressList[i].selectAddressId = null
-      }
-      this.addressId = this.addressList[addressIndex].selectAddressId = addressItem._id
-      console.log("selectAddress => this.addressId", this.addressId)
-      for (var a in this.addressList) {
-        if (this.addressId == this.addressList[a].selectAddressId) {
-
-          // function toFirst (arr, index) {
-          //   if (index != 0) {
-          //     arr.unshift(arr.splice(index, 1)[0])
-          //   }
-          // }
-
-          this.addressList.unshift(this.addressList.splice(a, 1)[0])
+      if (addressIndex !== 0) {
+        this.isReloadLoading = true
+        for (var i in this.addressList) {
+          this.addressList[i].selectAddressId = null
         }
-      }
+        this.addressId = this.addressList[addressIndex].selectAddressId = addressItem._id
+        console.log("selectAddress => this.addressId", this.addressId)
+        for (var a in this.addressList) {
+          if (this.addressId == this.addressList[a].selectAddressId) {
 
-      await this.reload()
-      // await this.loading()
+            // function toFirst (arr, index) {
+            //   if (index != 0) {
+            //     arr.unshift(arr.splice(index, 1)[0])
+            //   }
+            // }
+
+            this.addressList.unshift(this.addressList.splice(a, 1)[0])
+          }
+        }
+
+        await this.reload()
+      }
     },
     // 刷新当前页面，在修改数据之后 this.reload 一下就可以完成刷新当前这个指定标签的刷新
     async reload () {
@@ -198,6 +207,7 @@ export default {
 
 
     },
+    // 折叠
     fold () {
       if (this.isFold == false) {
         this.foldAddressData = this.addressList
@@ -208,6 +218,19 @@ export default {
         this.addressList = this.addressList.concat(this.foldAddressData)
         this.isFold = false
       }
+    },
+    // 删除
+    handleDelete (index, row) {
+      console.log(index, row);
+      const data = { addressId: row._id }
+      console.log("handleDelete => row._id", row._id)
+      // delAddress(data).then(response => {
+      //   this.$message({
+      //     type: 'success',
+      //     message: response.data.msg
+      //   })
+      //   // this.getData()
+      // })
     }
   }
 }
@@ -222,5 +245,9 @@ export default {
   ::v-deep .el-icon-loading {
     font-size: 48px;
   }
+}
+
+.onlyRead {
+  pointer-events: none;
 }
 </style>
