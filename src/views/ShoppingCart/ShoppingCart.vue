@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-18 22:30:04
- * @LastEditTime: 2022-10-08 14:45:00
+ * @LastEditTime: 2022-10-08 15:08:05
  * @LastEditors: you name
  * @Description: 
 -->
@@ -204,10 +204,14 @@ export default {
       console.log("商品 =>", this.checkedProduct)
       if (this.checkedProductInfo.length > 0) {
 
-        getProductOrderInfo({ shoppingCartIdList: this.checkedProduct }).then(response => {
-          console.log("getProductOrderInfo => response", response.data.data)
-
+        this.$router.push({
+          name: 'confirmOrder',
+          query: { shoppingCartIdList: this.checkedProduct }
         })
+        // getProductOrderInfo({ shoppingCartIdList: this.checkedProduct }).then(response => {
+        //   console.log("getProductOrderInfo => response", response.data.data)
+
+        // })
 
 
 

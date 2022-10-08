@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-07 18:55:27
+ * @LastEditTime: 2022-10-08 14:52:27
  * @LastEditors: you name
  * @Description: 
  */
@@ -131,6 +131,20 @@ const routes = [
           meta: { title: '我的订单' },
         }
       ]
+    }]
+  },
+
+
+  {
+    path: '/confirmOrder',
+    // name:'confirmOrder',
+    component: HomeLayout,
+    redirect: '/',
+    children: [{
+      path: '/',
+      name: 'confirmOrder',
+      component: () => import('@/views/ConfirmOrder/ConfirmOrder.vue'),
+      meta: { title: '确认订单' },
     }]
   },
 
