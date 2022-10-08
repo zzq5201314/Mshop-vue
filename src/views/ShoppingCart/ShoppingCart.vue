@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-18 22:30:04
- * @LastEditTime: 2022-10-07 18:18:44
+ * @LastEditTime: 2022-10-08 14:45:00
  * @LastEditors: you name
  * @Description: 
 -->
@@ -169,7 +169,7 @@
 
 <script>
 import { getShoppingCartList, removeShoppingCart, updateShoppingCart } from '@/api/ShoppingCart'
-import { buyOrder } from '@/api/Order'
+import { buyOrder, getProductOrderInfo } from '@/api/Order'
 import { addCollect } from '@/api/Collect'
 export default {
   name: "index",
@@ -199,15 +199,22 @@ export default {
   // 函数
   methods: {
     checkOut () { // 结算
-      console.log('结账了');
+      // console.log('结账了');
       console.log("去结算商品", this.checkedProductInfo)
       console.log("商品 =>", this.checkedProduct)
       if (this.checkedProductInfo.length > 0) {
 
-        buyOrder({ order: this.checkedProductInfo }).then(response => {
-          console.log("buyOrder => response", response)
+        getProductOrderInfo({ shoppingCartIdList: this.checkedProduct }).then(response => {
+          console.log("getProductOrderInfo => response", response.data.data)
 
         })
+
+
+
+        // buyOrder({ order: this.checkedProductInfo }).then(response => {
+        //   console.log("buyOrder => response", response)
+
+        // })
       }
     },
     addCollect (productItem) { // 添加收藏
@@ -224,7 +231,7 @@ export default {
       var total_arr = []
       this.total_prices = null
       if (this.checkedProduct.length == 0) {
-        console.log("没有选择商品 => ")
+        // console.log("没有选择商品 => ")
         this.total_prices = null
         this.total_arr = []
       }
@@ -236,12 +243,12 @@ export default {
             if (productItemId == item._id) {
               if (this.checkedProduct.length == 1) {
 
-                console.log("选择了一个商品 => ")
+                // console.log("选择了一个商品 => ")
                 this.total_prices = item.product_num * item.specification.product_price
 
               }
               else {
-                console.log("选择了多个商品 =>  计算总数 =>", item.product_num * item.specification.product_price)
+                // console.log("选择了多个商品 =>  计算总数 =>", item.product_num * item.specification.product_price)
                 total_arr.push(item.product_num * item.specification.product_price)
               }
             }

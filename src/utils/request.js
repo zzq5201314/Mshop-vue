@@ -1,13 +1,14 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:51:25
- * @LastEditTime: 2022-09-16 16:42:15
+ * @LastEditTime: 2022-10-08 13:25:32
  * @LastEditors: you name
  * @Description: 
  */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
+import qs from 'qs'
 
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -19,6 +20,14 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		// do something before request is sent
+
+
+		if (config.method === 'get') {
+			// 如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
+			config.paramsSerializer = function (params) {
+				return qs.stringify(params, { arrayFormat: 'repeat' })
+			}
+		}
 
 		if (store.getters.token) {
 			// let each request carry token
