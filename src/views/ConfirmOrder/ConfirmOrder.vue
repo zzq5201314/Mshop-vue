@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-09 17:16:41
+ * @LastEditTime: 2022-10-09 17:18:01
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -139,7 +139,9 @@
               <div class=" text-right text-2xl text-red-700 font-bold w-full">
                 ￥{{sumMoney.toFixed(2)}}</div>
             </div>
-            <div class="bg-red-700 text-white px-16 py-4 text-xl text-center">
+            <div
+              class="bg-red-700 text-white px-16 py-4 text-xl text-center cursor-pointer"
+            >
               提交订单</div>
           </div>
         </div>
