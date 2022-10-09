@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-26 13:13:48
- * @LastEditTime: 2022-10-08 16:05:22
+ * @LastEditTime: 2022-10-09 11:45:05
  * @LastEditors: you name
  * @Description: 
 -->
@@ -187,6 +187,7 @@ export default {
         // this.$router.push({
         //   path: '/address'
         // })
+        this.$emit('addOk', true)
         this.closeDialog()
       })
     },

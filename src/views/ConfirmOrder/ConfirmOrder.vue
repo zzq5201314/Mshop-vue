@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-09 01:02:21
+ * @LastEditTime: 2022-10-09 17:16:41
  * @LastEditors: you name
  * @Description: 确认订单
 -->
 <!-- ConfirmOrder 页 -->
 <template>
-  <div class="ConfirmOrder bg-gray-100 h-full">
-    <div class=" container mx-auto max-w-7xl py-5">
+  <div class="ConfirmOrder bg-gray-100 h-full py-5">
+    <div class=" container mx-auto max-w-7xl space-y-10">
       <header class="bg-white p-8 rounded-xl">
 
         <div
@@ -18,7 +18,7 @@
           <span class="text-lg text-black">收货地址</span>
           <div
             @click="addAddress"
-            class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer hover:bg-black hover:text-white"
+            class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer hover:border-black"
           ><i class="el-icon-plus text-black font-bold mx-1" />新增收货地址</div>
         </div>
 
@@ -75,11 +75,14 @@
               <div
                 class="absolute -top-2 right-0 h-full p-6 space-x-3 hidden group-hover:block text-xs"
               >
-                <span class="hover:text-red-600 cursor-pointer">设置为默认</span>
+                <span
+                  class="hover:text-red-600 cursor-pointer"
+                  v-if="addressItem.isDefault===false"
+                >设置为默认</span>
                 <span class="hover:text-red-600 cursor-pointer">修改</span>
                 <span
                   class="hover:text-red-600 cursor-pointer"
-                  @click="handleDelete(addressIndex,addressItem)"
+                  @click.stop="handleDelete(addressIndex,addressItem)"
                 >删除</span>
               </div>
             </div>
@@ -99,13 +102,55 @@
         </div>
 
       </header>
-      <div></div>
+
+      <div class="bg-white p-8 rounded-xl flex">
+        <div>
+          <div
+            class="flex space-x-6 border h-36"
+            v-for="(productItem,productIndex) in productList"
+            :key="productIndex"
+          >
+            <span class="w-40 flex items-center justify-center">
+              <img
+                class="w-36"
+                :src="baseUrl+productItem.specification.product_pic"
+              >
+            </span>
+            <span class="w-80 py-6">{{productItem.product_id.name}}</span>
+            <span
+              class="w-44 text-sm py-6">{{productItem.specification.product_specs}}</span>
+            <span class="w-8 text-sm py-6">X{{productItem.product_num}}</span>
+            <span
+              class="w-24 text-sm py-6">￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}</span>
+          </div>
+        </div>
+        <div class="bg-gray-100 w-full relative border">
+          <div class="absolute bottom-0 left-0 p-6 w-full space-y-2">
+            <div class="flex space-x-2">
+              <div class=" text-right w-3/5">商品总金额：</div>
+              <div class=" text-right w-full">￥{{sumMoney.toFixed(2)}}</div>
+            </div>
+            <div class="flex space-x-2">
+              <div class=" text-right w-3/5">运费：</div>
+              <div class=" text-right w-full">￥{{sumMoney.toFixed(2)}}</div>
+            </div>
+            <div class="flex space-x-2">
+              <div class=" text-right text-xl text-black w-3/5">应付金额：</div>
+              <div class=" text-right text-2xl text-red-700 font-bold w-full">
+                ￥{{sumMoney.toFixed(2)}}</div>
+            </div>
+            <div class="bg-red-700 text-white px-16 py-4 text-xl text-center">
+              提交订单</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div v-if="dialogShow">
       <addAddress
         :dialogShow="dialogShow"
         @dialogShowChange="dialogShowChange"
+        @addOk="addOk"
       />
     </div>
   </div>
@@ -119,15 +164,18 @@ export default {
   name: "ConfirmOrder",
   data () {
     return {
+      baseUrl: this.$baseUrl,
       shoppingCartIdList: this.$route.query.shoppingCartIdList,
       addressList: [],
       dialogShow: false,
-      addressId: '',
+      addressId: '',  // 选中的地址id
       // 刷新标识
       isReloadData: true,
       isReloadLoading: false,
-      isFold: false,			// 是否折叠
-      foldAddressData: [] // 被折叠住的地址数据
+      isFold: false,			// 是否折叠  true:折叠起来 , false：展开
+      foldAddressData: [], // 被折叠住的地址数据
+      productList: [],   // 商品数组
+      sumMoney: 0   // 总金额
     }
   },
   components: { addAddress },
@@ -142,32 +190,61 @@ export default {
   // 函数
   methods: {
     // 获取数据
-    getData () {
+    async getData () {
       // 获取商品数据
-      getProductOrderInfo({ shoppingCartIdList: this.shoppingCartIdList }).then(response => {
-        console.log("getProductOrderInfo => response", response.data.data)
+      await getProductOrderInfo({ shoppingCartIdList: this.shoppingCartIdList }).then(response => {
+        this.productList = response.data.data
+        console.log("getProductOrderInfo => this.productList", this.productList)
 
       })
-      // 获取收货地址
-      getAddressList().then(response => {
-        this.addressList = response.data.data
+      await this.getAddressList()
+      await this.countMoney()
+    },
 
-        this.addressList.forEach(addressItem => {
+    // 获取收货地址
+    async getAddressList (value) {  // value :验证是否需要执行折叠  true:不需要执行折叠 \ 其余的要执行
+      this.foldAddressData = []  // 初始化折叠的数据
+      await getAddressList().then(response => {
+        this.addressList = response.data.data
+        var count = 0
+        this.addressList.forEach(addressItem => {  // 循环高亮默认收货地址 
           addressItem['selectAddressId'] = null
           if (addressItem.selectAddressId == null && addressItem.isDefault == true) {
             addressItem.selectAddressId = addressItem._id
+          } else {   // 没有默认地址
+            count++
           }
         })
+        if (count == this.addressList.length) {  // 当数组里没有默认收货地址的数长度等于总数组长度，代表没有默认数组，就高亮第一个数据
+          this.addressI = this.addressList[0].selectAddressId = this.addressList[0]._id
+        }
 
         console.log("getAddressList => this.addressList", this.addressList)
-        this.fold()
+        if (value !== true) {  // 折叠起来的
+          console.log('执行了');
+          this.fold()
+        }
       })
+
     },
+    // 打开添加地址窗口
     addAddress () {
       this.dialogShow = true
     },
+    // 退出添加地址窗口
     dialogShowChange (val) {
       this.dialogShow = val
+    },
+    // 添加地址成功
+    async addOk () {
+      // 判断 当前是否折叠起来  如果折叠起来，就展开--如果展开，则保持展开
+      if (this.isFold == true) {  // 折叠起来了
+        // console.log("addOk => this.isFold  =>  折叠起来了")
+        this.getAddressList()
+      } else { // 打开了的
+        // console.log("addOk => this.isFold  =>  展开起来了")
+        this.getAddressList(true)
+      }
     },
     // 选择地址
     async selectAddress (addressItem, addressIndex) {
@@ -180,12 +257,6 @@ export default {
         console.log("selectAddress => this.addressId", this.addressId)
         for (var a in this.addressList) {
           if (this.addressId == this.addressList[a].selectAddressId) {
-
-            // function toFirst (arr, index) {
-            //   if (index != 0) {
-            //     arr.unshift(arr.splice(index, 1)[0])
-            //   }
-            // }
 
             this.addressList.unshift(this.addressList.splice(a, 1)[0])
           }
@@ -207,30 +278,43 @@ export default {
 
 
     },
-    // 折叠
+    // 折叠 收货地址
     fold () {
-      if (this.isFold == false) {
+      if (this.isFold == false) {  // 折叠
+        // console.log("fold => this.isFold => 折叠起来了")
         this.foldAddressData = this.addressList
-        console.log("fold => this.foldAddressData", this.foldAddressData)
         this.addressList = this.foldAddressData.splice(0, 1)
         this.isFold = true
-      } else {
+      } else if (this.isFold == true) {   // 展开
+        // console.log("fold => this.isFold => 展开了")
         this.addressList = this.addressList.concat(this.foldAddressData)
         this.isFold = false
       }
     },
-    // 删除
-    handleDelete (index, row) {
+    // 删除 -- 收货地址
+    async handleDelete (index, row) {
+
       console.log(index, row);
       const data = { addressId: row._id }
       console.log("handleDelete => row._id", row._id)
-      // delAddress(data).then(response => {
-      //   this.$message({
-      //     type: 'success',
-      //     message: response.data.msg
-      //   })
-      //   // this.getData()
-      // })
+      await delAddress(data).then(response => {
+        this.$message({
+          type: 'success',
+          message: response.data.msg
+        })
+
+        if (index == 0) {
+          console.log("handleDelete => index", index)
+          this.addressId = this.addressList[index + 1]._id
+        }
+      })
+      await this.getAddressList(true)
+    },
+    // 计算总金额
+    countMoney () {
+      this.productList.forEach(productItem => {
+        this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
+      })
     }
   }
 }
