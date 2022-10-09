@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-09 17:18:01
+ * @LastEditTime: 2022-10-09 18:31:53
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -21,6 +21,7 @@
             class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer hover:border-black"
           ><i class="el-icon-plus text-black font-bold mx-1" />新增收货地址</div>
         </div>
+        <!-- 有地址数据 end -->
 
         <div
           class="space-y-5"
@@ -100,51 +101,83 @@
             </div>
           </div>
         </div>
-
+        <!-- 没地址数组 end -->
       </header>
 
-      <div class="bg-white p-8 rounded-xl flex">
+      <div
+        v-if="productList.length>0"
+        class="bg-white p-8 rounded-xl flex"
+        :class="{'h-72':productList.length==1}"
+      >
         <div>
           <div
-            class="flex space-x-6 border h-36"
+            class="flex space-x-6 border h-36 text-black"
             v-for="(productItem,productIndex) in productList"
             :key="productIndex"
           >
-            <span class="w-40 flex items-center justify-center">
+            <span
+              class="w-40 flex items-center justify-center"
+              v-if="productItem"
+            >
               <img
                 class="w-36"
                 :src="baseUrl+productItem.specification.product_pic"
               >
             </span>
-            <span class="w-80 py-6">{{productItem.product_id.name}}</span>
+            <!-- 商品图片end -->
             <span
-              class="w-44 text-sm py-6">{{productItem.specification.product_specs}}</span>
-            <span class="w-8 text-sm py-6">X{{productItem.product_num}}</span>
+              class="w-80 py-6"
+              v-if="productItem"
+            >{{productItem.product_id.name}}</span>
+            <!-- 商品名称end -->
             <span
-              class="w-24 text-sm py-6">￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}</span>
+              v-if="productItem"
+              class="w-44 text-sm py-6"
+            >{{productItem.specification.product_specs}}</span>
+            <!-- 商品规格end -->
+            <span
+              class="w-8 text-sm py-6"
+              v-if="productItem"
+            >X{{productItem.product_num}}</span>
+            <!-- 商品数量end -->
+            <span
+              v-if="productItem"
+              class="w-24 text-sm py-6"
+            >￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}</span>
+            <!-- 商品金额end -->
           </div>
         </div>
-        <div class="bg-gray-100 w-full relative border">
+        <!-- 商品列表--左 end -->
+
+        <div class="bg-gray-100 w-full relative border border-l-0">
           <div class="absolute bottom-0 left-0 p-6 w-full space-y-2">
+
             <div class="flex space-x-2">
               <div class=" text-right w-3/5">商品总金额：</div>
               <div class=" text-right w-full">￥{{sumMoney.toFixed(2)}}</div>
             </div>
+
             <div class="flex space-x-2">
               <div class=" text-right w-3/5">运费：</div>
               <div class=" text-right w-full">￥{{sumMoney.toFixed(2)}}</div>
             </div>
+
             <div class="flex space-x-2">
               <div class=" text-right text-xl text-black w-3/5">应付金额：</div>
               <div class=" text-right text-2xl text-red-700 font-bold w-full">
                 ￥{{sumMoney.toFixed(2)}}</div>
             </div>
+
             <div
               class="bg-red-700 text-white px-16 py-4 text-xl text-center cursor-pointer"
+              @click="submitOrder"
             >
               提交订单</div>
+
           </div>
         </div>
+        <!-- 商品订单右边--商品信息 end -->
+
       </div>
     </div>
 
@@ -200,7 +233,7 @@ export default {
 
       })
       await this.getAddressList()
-      await this.countMoney()
+      this.countMoney()
     },
 
     // 获取收货地址
@@ -317,6 +350,10 @@ export default {
       this.productList.forEach(productItem => {
         this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
       })
+    },
+    // 提交订单
+    submitOrder () {
+      console.log('shoppingCartIdList => ', this.shoppingCartIdList);
     }
   }
 }
