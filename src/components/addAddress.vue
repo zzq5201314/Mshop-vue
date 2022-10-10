@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-26 13:13:48
- * @LastEditTime: 2022-10-09 11:45:05
+ * @LastEditTime: 2022-10-10 15:44:35
  * @LastEditors: you name
  * @Description: 
 -->
@@ -97,13 +97,19 @@
 <script>
 
 import provincesCascader from '@/components/cascader.vue'
-import { addAddress } from '@/api/Address'
+import { addAddress, updateAddress } from '@/api/Address'
 import { regionData, CodeToText } from 'element-china-area-data'
 export default {
   props: {
-    dialogShow: Boolean,
-    default: false,
-    required: true
+    dialogShow: {  // 是否显示
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    alterAddressFrom: {  // 修改的地址信息
+      type: Object,
+      default: new Object()
+    }
   },
   name: "myAddress",
   data () {
@@ -119,7 +125,8 @@ export default {
         city: '',
         area: '',
       },
-      dialogFormVisible: this.dialogShow
+      dialogFormVisible: this.dialogShow,
+      alterFrom: this.alterAddressFrom
     }
   },
   components: { provincesCascader },
@@ -137,6 +144,34 @@ export default {
       // const { province, city, area, town } = require('province-city-china/data');
       // const { data, province, city, area, town } = require('province-city-china/data');
 
+      console.log("getData => this.alterFrom", this.alterFrom)
+      if (Object.keys(this.alterFrom).length !== 0) {
+        console.log('有');
+
+        this.form = {
+          detailAddress: this.alterFrom.detailAddress,
+          addressee: this.alterFrom.addressee,
+          phone: this.alterFrom.phone,
+          isDefault: this.alterFrom.isDefault,
+          province: this.alterFrom.province,
+          city: this.alterFrom.city,
+          area: this.alterFrom.area,
+        }
+        this.selectedOptions = this.alterFrom.selectedOptions
+
+      } else {
+        console.log('无');
+        this.form = {
+          detailAddress: '',
+          addressee: '',
+          phone: null,
+          isDefault: true,
+          province: '',
+          city: '',
+          area: '',
+        }
+      }
+      console.log(' form ==>', this.form);
     },
     addressChange (arr) {
       // console.log(this.selectedOptions) //  Proxy {0: '120000', 1: '120100', 2: '120101'}
@@ -164,32 +199,57 @@ export default {
         detailAddress: this.form.detailAddress,
         addressee: this.form.addressee,
         phone: this.form.phone,
-        isDefault: this.form.isDefault
+        isDefault: this.form.isDefault,
+        selectedOptions: this.selectedOptions
       }
-      console.log("save => data", data)
-      addAddress(data).then(response => {
-        this.$message({
-          type: 'success',
-          message: '添加成功'
+      if (Object.keys(this.alterFrom).length !== 0) {  // 修改模式
+        data['addressId'] = this.alterFrom._id
+        console.log("save => data", data)
+        updateAddress(data).then(response => {
+          this.$message({
+            type: 'success',
+            message: '添加成功'
+          })
+          this.selectedOptions = [],
+
+            this.form = {
+              detailAddress: '',
+              addressee: '',
+              phone: null,
+              isDefault: true,
+              province: '',
+              city: '',
+              area: '',
+            }
+          this.$emit('addOk', true)
+          this.closeDialog()
         })
-        this.selectedOptions = [],
+      } else {
+        addAddress(data).then(response => {   // 添加模式
+          this.$message({
+            type: 'success',
+            message: '添加成功'
+          })
+          this.selectedOptions = [],
 
-          this.form = {
-            detailAddress: '',
-            addressee: '',
-            phone: null,
-            isDefault: true,
-            province: '',
-            city: '',
-            area: '',
-          }
+            this.form = {
+              detailAddress: '',
+              addressee: '',
+              phone: null,
+              isDefault: true,
+              province: '',
+              city: '',
+              area: '',
+            }
 
-        // this.$router.push({
-        //   path: '/address'
-        // })
-        this.$emit('addOk', true)
-        this.closeDialog()
-      })
+          // this.$router.push({
+          //   path: '/address'
+          // })
+          this.$emit('addOk', true)
+          this.closeDialog()
+        })
+      }
+
     },
     closeDialog () {
       this.$emit('dialogShowChange', false)
@@ -198,6 +258,9 @@ export default {
   watch: {
     dialogShow (val) {
       this.dialogFormVisible = dialogShow
+    },
+    alterAddressFrom (val) {
+      this.alterFrom = alterAddressFrom
     }
   }
 }

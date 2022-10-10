@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-10 13:41:08
+ * @LastEditTime: 2022-10-10 15:34:24
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -17,7 +17,7 @@
         >
           <span class="text-lg text-black">收货地址</span>
           <div
-            @click="addAddress"
+            @click="openAddress()"
             class="h-20 w-3/5 flex items-center justify-center border text-sm cursor-pointer hover:border-black"
           ><i class="el-icon-plus text-black font-bold mx-1" />新增收货地址</div>
         </div>
@@ -31,7 +31,7 @@
             <span class="text-lg text-black">收货地址</span>
             <span
               class="border px-4 text-sm py-1 cursor-pointer hover:bg-black hover:text-white group"
-              @click="addAddress"
+              @click="openAddress()"
             ><i
                 class="el-icon-plus text-black font-bold mx-1 group-hover:text-white" />
               新增收货地址</span>
@@ -79,9 +79,12 @@
                 <span
                   class="hover:text-red-600 cursor-pointer"
                   v-if="addressItem.isDefault===false"
-                  @click="setDefaultAddress(addressItem._id)"
+                  @click.stop="setDefaultAddress(addressItem._id)"
                 >设置为默认</span>
-                <span class="hover:text-red-600 cursor-pointer">修改</span>
+                <span
+                  class="hover:text-red-600 cursor-pointer"
+                  @click.stop="openAddress(addressItem)"
+                >修改</span>
                 <span
                   class="hover:text-red-600 cursor-pointer"
                   @click.stop="handleDelete(addressIndex,addressItem)"
@@ -185,6 +188,7 @@
     <div v-if="dialogShow">
       <addAddress
         :dialogShow="dialogShow"
+        :alterAddressFrom="alterAddressFrom"
         @dialogShowChange="dialogShowChange"
         @addOk="addOk"
       />
@@ -212,7 +216,8 @@ export default {
       foldAddressData: [], // 被折叠住的地址数据
       productList: [],   // 商品数组
       sumMoney: 0,   // 总金额
-      freightMoney: 0
+      freightMoney: 0,
+      alterAddressFrom: {}
     }
   },
   components: { addAddress },
@@ -265,12 +270,18 @@ export default {
 
     },
     // 打开添加地址窗口
-    addAddress () {
+    openAddress (addressItem) {
+      // console.log("openAddress => addressItem", addressItem)
+      if (addressItem) {
+        this.alterAddressFrom = addressItem
+        console.log("openAddress => this.alterAddressFrom", this.alterAddressFrom)
+      }
       this.dialogShow = true
     },
     // 退出添加地址窗口
     dialogShowChange (val) {
       this.dialogShow = val
+      this.alterAddressFrom = {}
     },
     // 添加地址成功
     async addOk () {
@@ -368,6 +379,11 @@ export default {
         })
         this.getAddressList()
       })
+    },
+    // 修改地址信息
+    alterAddress (addressItem) {
+      console.log("alterAddress => addressItem", addressItem)
+      this.dialogShow = true
     }
   }
 }
