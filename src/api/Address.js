@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-26 22:35:15
- * @LastEditTime: 2022-09-28 10:24:03
+ * @LastEditTime: 2022-10-10 13:37:40
  * @LastEditors: you name
  * @Description: 
  */
@@ -40,5 +40,14 @@ export function delAddress (data) {
 		url: '/address/del',
 		method: 'post',
 		data
+	})
+}
+
+// 设置默认收货地址
+export function setDefaultAddress (addressId) {
+	return request({
+		url: '/address/default',
+		method: 'post',
+		data: addressId
 	})
 }

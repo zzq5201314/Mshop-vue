@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-09 18:31:53
+ * @LastEditTime: 2022-10-10 13:41:08
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -79,6 +79,7 @@
                 <span
                   class="hover:text-red-600 cursor-pointer"
                   v-if="addressItem.isDefault===false"
+                  @click="setDefaultAddress(addressItem._id)"
                 >设置为默认</span>
                 <span class="hover:text-red-600 cursor-pointer">修改</span>
                 <span
@@ -159,7 +160,7 @@
 
             <div class="flex space-x-2">
               <div class=" text-right w-3/5">运费：</div>
-              <div class=" text-right w-full">￥{{sumMoney.toFixed(2)}}</div>
+              <div class=" text-right w-full">￥{{freightMoney.toFixed(2)}}</div>
             </div>
 
             <div class="flex space-x-2">
@@ -194,7 +195,7 @@
 <script>
 import addAddress from '@/components/addAddress.vue'
 import { buyOrder, getProductOrderInfo } from '@/api/Order'
-import { getAddressList, delAddress } from '@/api/Address'
+import { getAddressList, delAddress, setDefaultAddress } from '@/api/Address'
 export default {
   name: "ConfirmOrder",
   data () {
@@ -210,7 +211,8 @@ export default {
       isFold: false,			// 是否折叠  true:折叠起来 , false：展开
       foldAddressData: [], // 被折叠住的地址数据
       productList: [],   // 商品数组
-      sumMoney: 0   // 总金额
+      sumMoney: 0,   // 总金额
+      freightMoney: 0
     }
   },
   components: { addAddress },
@@ -348,12 +350,24 @@ export default {
     // 计算总金额
     countMoney () {
       this.productList.forEach(productItem => {
+        this.freightMoney = this.freightMoney + Number(productItem.product_id.postage)
         this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
       })
     },
     // 提交订单
     submitOrder () {
       console.log('shoppingCartIdList => ', this.shoppingCartIdList);
+    },
+    // 设置默认收货地址
+    setDefaultAddress (addressId) {
+      console.log("setDefaultAddress => addressId", addressId)
+      setDefaultAddress({ addressId }).then(response => {
+        this.$message({
+          type: 'success',
+          message: response.data.msg
+        })
+        this.getAddressList()
+      })
     }
   }
 }
