@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:58:43
- * @LastEditTime: 2022-10-02 14:22:55
+ * @LastEditTime: 2022-10-12 10:08:34
  * @LastEditors: you name
  * @Description: 
 -->
@@ -53,7 +53,10 @@
           <li
             class="px-4 text-center hover:text-white transition duration-300 cursor-pointer border-r border-gray-400"
           >
-            我的订单</li>
+            <router-link :to="{name:'myOrder'}">
+              我的订单
+            </router-link>
+          </li>
           <li
             class="px-4 text-center hover:text-white transition duration-300 cursor-pointer border-r border-gray-400"
             @click='goCollect'

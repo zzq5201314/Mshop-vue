@@ -1,9 +1,9 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-26 13:13:48
- * @LastEditTime: 2022-10-10 15:44:35
+ * @LastEditTime: 2022-10-10 15:54:29
  * @LastEditors: you name
- * @Description: 
+ * @Description:  添加地址
 -->
 <!-- myAddress 页 -->
 <template>
@@ -11,6 +11,7 @@
   <el-dialog
     :visible.sync="dialogFormVisible"
     @close="closeDialog"
+    :title="Object.keys(this.alterFrom).length === 0?'添加收货地址':'修改收货地址'"
   >
     <div class="myAddress">
       <div class="max-w-lg">

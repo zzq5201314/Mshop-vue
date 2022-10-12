@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-10 15:34:24
+ * @LastEditTime: 2022-10-10 19:19:25
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -217,7 +217,8 @@ export default {
       productList: [],   // 商品数组
       sumMoney: 0,   // 总金额
       freightMoney: 0,
-      alterAddressFrom: {}
+      alterAddressFrom: {},
+      order: []
     }
   },
   components: { addAddress },
@@ -252,18 +253,19 @@ export default {
         this.addressList.forEach(addressItem => {  // 循环高亮默认收货地址 
           addressItem['selectAddressId'] = null
           if (addressItem.selectAddressId == null && addressItem.isDefault == true) {
-            addressItem.selectAddressId = addressItem._id
+            this.addressId = addressItem.selectAddressId = addressItem._id
           } else {   // 没有默认地址
             count++
           }
         })
         if (count == this.addressList.length) {  // 当数组里没有默认收货地址的数长度等于总数组长度，代表没有默认数组，就高亮第一个数据
-          this.addressI = this.addressList[0].selectAddressId = this.addressList[0]._id
+          this.addressId = this.addressList[0].selectAddressId = this.addressList[0]._id
         }
 
-        console.log("getAddressList => this.addressList", this.addressList)
+        // console.log("getAddressList => this.addressList", this.addressList)
+        // console.log('this.addressId => ', this.addressId);
         if (value !== true) {  // 折叠起来的
-          console.log('执行了');
+          // console.log('执行了');
           this.fold()
         }
       })
@@ -358,16 +360,37 @@ export default {
       })
       await this.getAddressList(true)
     },
-    // 计算总金额
+    // 计算总金额 -- 运费 -- 订单
     countMoney () {
       this.productList.forEach(productItem => {
         this.freightMoney = this.freightMoney + Number(productItem.product_id.postage)
         this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
+
       })
+
     },
     // 提交订单
     submitOrder () {
-      console.log('shoppingCartIdList => ', this.shoppingCartIdList);
+      this.order = []
+      this.productList.forEach(productItem => {
+        const temp_obj = {
+          product_id: productItem.product_id._id,
+          business_id: productItem.business_id._id,
+          num: productItem.product_num,
+          specification_id: productItem.specification._id,
+        }
+        this.order.push(temp_obj)
+      })
+      const data = {
+        addressId: this.addressId,
+        order: this.order
+      }
+      buyOrder(data).then(response => {
+        this.$message({
+          type: 'success',
+          message: response.data.msg
+        })
+      })
     },
     // 设置默认收货地址
     setDefaultAddress (addressId) {

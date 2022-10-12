@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-24 14:44:21
- * @LastEditTime: 2022-09-29 18:40:48
+ * @LastEditTime: 2022-10-12 10:30:26
  * @LastEditors: you name
  * @Description: 
 -->
@@ -122,11 +122,13 @@ export default {
       })
     },
     goBusiness (businessId) {
-      console.log("goBusiness => businessId", businessId)
-
+      // console.log("goBusiness => businessId", businessId)
+      this.$router.push({
+        path: '/business/info/' + businessId
+      })
     },
     goProductInfo (productId) {
-      console.log("goProductInfo => productId", productId)
+      // console.log("goProductInfo => productId", productId)
       this.$router.push({
         path: '/product/info/' + productId
       })

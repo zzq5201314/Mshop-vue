@@ -1,13 +1,13 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-07 18:57:07
+ * @LastEditTime: 2022-10-12 09:26:01
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- My 页 -->
 <template>
-  <div class="My bg-gray-100 h-screen">
+  <div class="My bg-gray-100 ">
     <div class="container mx-auto max-w-7xl py-5">
       <div class="flex space-x-5">
         <div class="w-1/5 bg-white rounded-xl h-full">
@@ -62,7 +62,7 @@
         </div>
         <!-- 左边选项end -->
 
-        <div class="w-4/5 h-screen bg-white rounded-xl p-5">
+        <div class="w-4/5  bg-white rounded-xl p-5">
           <router-view />
         </div>
         <!-- 右边内容 -->
