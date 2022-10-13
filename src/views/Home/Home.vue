@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:42:03
- * @LastEditTime: 2022-09-17 13:13:57
+ * @LastEditTime: 2022-10-13 08:20:56
  * @LastEditors: you name
  * @Description: 主页
 -->
@@ -132,6 +132,9 @@ export default {
         // console.log("getCategory => response", response)
         this.categoryList = response.data.data
         // console.log("getCategory => this.categoryList", this.categoryList)
+        if (this.categoryList.length == 0) {
+          this.categoryList = 6
+        }
       })
     },
 
