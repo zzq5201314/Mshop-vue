@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-10 19:19:25
+ * @LastEditTime: 2022-10-13 15:49:57
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -198,6 +198,7 @@
 
 <script>
 import addAddress from '@/components/addAddress.vue'
+import { getProductInfo, getProductSpecification } from '@/api/productInfo'
 import { buyOrder, getProductOrderInfo } from '@/api/Order'
 import { getAddressList, delAddress, setDefaultAddress } from '@/api/Address'
 export default {
@@ -218,7 +219,8 @@ export default {
       sumMoney: 0,   // 总金额
       freightMoney: 0,
       alterAddressFrom: {},
-      order: []
+      order: [],
+      productInfo: this.$route.query.productInfo
     }
   },
   components: { addAddress },
@@ -234,12 +236,25 @@ export default {
   methods: {
     // 获取数据
     async getData () {
-      // 获取商品数据
-      await getProductOrderInfo({ shoppingCartIdList: this.shoppingCartIdList }).then(response => {
-        this.productList = response.data.data
-        console.log("getProductOrderInfo => this.productList", this.productList)
+      if (this.shoppingCartIdList) {      // 购物车--结算 跳转过来的
+        if (this.shoppingCartIdList.length > 0) {
+          // 获取商品数据
+          await getProductOrderInfo({ shoppingCartIdList: this.shoppingCartIdList }).then(response => {
+            this.productList = response.data.data
 
-      })
+          })
+        }
+      } else if (this.productInfo.constructor === Object) {  // 商品页立即下单 跳转过来的
+        await getProductOrderInfo({ productInfo: this.productInfo }).then(response => {
+          this.productList = response.data.data
+        })
+      } else {
+        this.$router.push({
+          path: `/`
+        })
+      }
+
+      // console.log("getProductInfo => this.productInfo", this.productInfo)
       await this.getAddressList()
       this.countMoney()
     },
@@ -276,7 +291,7 @@ export default {
       // console.log("openAddress => addressItem", addressItem)
       if (addressItem) {
         this.alterAddressFrom = addressItem
-        console.log("openAddress => this.alterAddressFrom", this.alterAddressFrom)
+        // console.log("openAddress => this.alterAddressFrom", this.alterAddressFrom)
       }
       this.dialogShow = true
     },
@@ -304,7 +319,7 @@ export default {
           this.addressList[i].selectAddressId = null
         }
         this.addressId = this.addressList[addressIndex].selectAddressId = addressItem._id
-        console.log("selectAddress => this.addressId", this.addressId)
+        // console.log("selectAddress => this.addressId", this.addressId)
         for (var a in this.addressList) {
           if (this.addressId == this.addressList[a].selectAddressId) {
 
@@ -346,7 +361,7 @@ export default {
 
       console.log(index, row);
       const data = { addressId: row._id }
-      console.log("handleDelete => row._id", row._id)
+      // console.log("handleDelete => row._id", row._id)
       await delAddress(data).then(response => {
         this.$message({
           type: 'success',
@@ -362,6 +377,7 @@ export default {
     },
     // 计算总金额 -- 运费 -- 订单
     countMoney () {
+      console.log('计算总金额');
       this.productList.forEach(productItem => {
         this.freightMoney = this.freightMoney + Number(productItem.product_id.postage)
         this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
@@ -378,6 +394,7 @@ export default {
           business_id: productItem.business_id._id,
           num: productItem.product_num,
           specification_id: productItem.specification._id,
+          shopping_cart_id: productItem._id
         }
         this.order.push(temp_obj)
       })
@@ -390,6 +407,7 @@ export default {
           type: 'success',
           message: response.data.msg
         })
+
       })
     },
     // 设置默认收货地址

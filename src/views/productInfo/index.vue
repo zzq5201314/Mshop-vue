@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-10-07 14:43:10
+ * @LastEditTime: 2022-10-13 10:13:31
  * @LastEditors: you name
  * @Description: 
 -->
@@ -200,6 +200,7 @@
           >加入购物车</button>
           <button
             class="py-2 px-12 bg-red-500 text-white text-xl hover:text-red-500 hover:bg-white shadow-md rounded mx-4 w-56 transition duration-300"
+            @click="goConfirmOrder"
           >立即下单</button>
         </div>
       </div>
@@ -285,6 +286,7 @@ export default {
     },
 
     async select (keyId, keyName, index) {  // 选择商品规格值
+      console.log("select => 选择商品规格值")
       var count = null  // 计算已选择了几个项
       for (var i in this.checkedList) { // 循环已选择的规格项数组
         if (this.checkedList[i].name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
@@ -303,6 +305,7 @@ export default {
       this.checkedList[index].name = keyName
     },
 
+
     getProductSpecification (productSpecs) { //获取商品规格值
       const data = { productSpecs, productId: this.productId }
       getProductSpecification(data).then(response => {
@@ -319,8 +322,10 @@ export default {
         this.productData.stock = specificationData.product_stock
         this.specificationId = specificationData._id
       })
+
     },
 
+    // 添加购物车
     addShoppingCart () {
       const hasToken = getToken()
       if (!hasToken) { // 判断是否登录
@@ -345,7 +350,7 @@ export default {
           businessId: this.businessId
         }
         addShoppingCart(data).then(response => {
-          console.log("addShoppingCart => response", response)
+          // console.log("addShoppingCart => response", response)
           this.$message({
             type: 'success',
             message: response.data.msg
@@ -354,6 +359,39 @@ export default {
         })
       }
     },
+
+    // 立即购买
+    goConfirmOrder () {
+      const hasToken = getToken()
+      if (!hasToken) { // 判断是否登录
+        this.$router.push({
+          path: `/login`
+        })
+        this.$message({
+          type: 'error',
+          message: '请先登录'
+        })
+      }
+      else if (!this.specificationId) { // 判断是否选择商品规格
+        this.$message({
+          type: 'error',
+          message: '请选择商品规格'
+        })
+      } else {
+        const temp_obj = {
+          product_id: this.productId,
+          business_id: this.productData.business._id,
+          num: this.productNum,
+          specification_id: this.specificationId,
+        }
+        this.$router.push({
+          name: 'confirmOrder',
+          query: { productInfo: temp_obj }
+        })
+        console.log("goConfirmOrder => temp_obj", temp_obj)
+      }
+    },
+
     addCollect () { // 添加收藏
 
       if (!this.productData.collect) {
