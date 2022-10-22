@@ -1,13 +1,13 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:56:51
- * @LastEditTime: 2022-10-17 12:55:59
+ * @LastEditTime: 2022-10-23 01:34:38
  * @LastEditors: you name
  * @Description: 
  */
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
-
+// const defaultSettings = require('./src/config/index.js')
 function resolve (dir) {
 	return path.join(__dirname, dir)
 }
@@ -31,15 +31,18 @@ module.exports = {
 			warnings: false,
 			errors: true
 		},
-		proxy: {
-			[process.env.VUE_APP_BASE_API]: {
-				target: process.env.BACKGROUND_APPLICATION_URL,
-				changeOrigin: true, // 是否跨域
-				pathRewrite: {
-					['^' + process.env.VUE_APP_BASE_API]: ''
-				}
-			}
-		},
+		// proxy: {
+		// 	['/api']: {
+		// 		// target: 'http://112.74.54.76:3003/api',
+		// 		// target: process.env.BACKGROUND_APPLICATION_URL,
+		// 		target: process.env.VUE_APP_BASE_API,
+		// 		changeOrigin: true, // 是否跨域
+		// 		pathRewrite: {
+		// 			// '^/api'是一个正则表达式，表示要匹配请求的url中，全部'http://localhost:8081/api' 转接为 http://localhost:8081/
+		// 			'^/api': '',
+		// 		}
+		// 	}
+		// },
 	},
 	configureWebpack: {
 		// provide the app's title in webpack's name field, so that

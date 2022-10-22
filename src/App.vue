@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-16 17:07:31
+ * @LastEditTime: 2022-10-23 01:39:08
  * @LastEditors: you name
  * @Description: 
 -->
@@ -15,6 +15,10 @@
 </template>
 
 <script>
+
+import {
+  baseApi
+} from '@/config'
 export default {
   name: "App",
   data () {
@@ -32,11 +36,14 @@ export default {
   mounted () {
     if (this._isMobile()) {
       console.log('手机端');
+
+
       // alert("手机端");
       //跳转到你手机路由
       // this.$router.replace("/m_index");
     } else {
       console.log('pc端');
+      console.log('process.env.VUE_APP_BASE_API =>', baseApi);
       // alert("pc端");
       //跳转到PC端路由
       // this.$router.replace("/main");

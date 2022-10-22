@@ -1,19 +1,25 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:51:25
- * @LastEditTime: 2022-10-08 13:25:32
+ * @LastEditTime: 2022-10-23 02:08:30
  * @LastEditors: you name
  * @Description: 
  */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import { baseUrl } from './base'
 import store from '@/store'
 import qs from 'qs'
+import {
+	baseApi
+} from '@/config'
 
 const service = axios.create({
-	baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-	// withCredentials: true, // send cookies when cross-domain requests
-	timeout: 5000 // request timeout
+	// baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+	baseURL: baseApi, // url = base url + request url
+	// baseURL: baseUrl,
+	withCredentials: true, // send cookies when cross-domain requests
+	timeout: 5000, // request timeout
 })
 
 // 请求 拦截器

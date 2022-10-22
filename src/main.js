@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-22 23:01:21
+ * @LastEditTime: 2022-10-23 01:36:15
  * @LastEditors: you name
  * @Description: 
  */
@@ -17,9 +17,12 @@ Vue.use(VueCookies)
 import '@/permission' // permission control
 
 
+import {
+  baseUrl
+} from '@/config'
+// Vue.prototype.$baseApi=baseApi
 
-
-import { baseUrl } from '@/utils/base'
+// import { baseUrl } from '@/utils/base'
 Vue.prototype.$baseUrl = baseUrl
 
 Vue.config.productionTip = false
