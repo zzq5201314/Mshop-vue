@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:56:51
- * @LastEditTime: 2022-10-13 09:33:23
+ * @LastEditTime: 2022-10-17 12:55:59
  * @LastEditors: you name
  * @Description: 
  */
@@ -15,7 +15,7 @@ function resolve (dir) {
 
 const name = defaultSettings.title || 'vue' // page title
 
-const port = process.env.port || process.env.npm_config_port || 8888 // dev port
+const port = process.env.port || process.env.npm_config_port || 3003 // dev port
 // 这里的webpack配置会和公共的webpack.config.js进行合并
 module.exports = {
 	// NODE_ENV：Node.js 暴露给执行脚本的系统环境变量。通常用于确定在开发环境还是生产环境

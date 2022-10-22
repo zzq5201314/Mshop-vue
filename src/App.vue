@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-09-29 18:39:36
+ * @LastEditTime: 2022-10-16 17:07:31
  * @LastEditors: you name
  * @Description: 
 -->
@@ -13,6 +13,37 @@
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  name: "App",
+  data () {
+    return {};
+  },
+  methods: {
+    _isMobile () {
+      let flag = navigator.userAgent.match(
+        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+      );
+      return flag;
+    }
+  },
+  //App.vue
+  mounted () {
+    if (this._isMobile()) {
+      console.log('手机端');
+      // alert("手机端");
+      //跳转到你手机路由
+      // this.$router.replace("/m_index");
+    } else {
+      console.log('pc端');
+      // alert("pc端");
+      //跳转到PC端路由
+      // this.$router.replace("/main");
+    }
+  }
+};
+</script>
 
 <style lang="scss">
 // #app {

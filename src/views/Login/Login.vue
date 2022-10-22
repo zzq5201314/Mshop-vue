@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:47:15
- * @LastEditTime: 2022-09-29 08:45:17
+ * @LastEditTime: 2022-10-22 22:29:53
  * @LastEditors: you name
  * @Description: 登录页
 -->
@@ -127,6 +127,7 @@ export default {
           password: this.password
         }
         this.$store.dispatch('user/login', data).then(() => {
+          console.log('已经登录成功');
           // this.$router.push({ path: '/' })
           this.$router.go(-1)
         })

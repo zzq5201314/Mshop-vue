@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-08 14:52:27
+ * @LastEditTime: 2022-10-16 18:29:13
  * @LastEditors: you name
  * @Description: 
  */
@@ -93,6 +93,19 @@ const routes = [
       name: 'productCollect',
       component: () => import('@/views/Collect/Collect.vue'),
       meta: { title: '收藏夹' },
+    }]
+  },
+
+  {
+    path: '/category',
+    name: 'category',
+    component: HomeLayout,
+    redirect: '/',
+    children: [{
+      path: '/',
+      name: 'category',
+      component: () => import('@/views/Category/Category.vue'),
+      meta: { title: '商品分类' },
     }]
   },
 

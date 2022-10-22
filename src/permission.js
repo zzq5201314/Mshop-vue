@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-16 15:38:14
- * @LastEditTime: 2022-09-24 14:50:30
+ * @LastEditTime: 2022-10-22 23:24:29
  * @LastEditors: you name
  * @Description: 
  */
@@ -34,6 +34,7 @@ router.beforeEach(async (to, from, next) => {
 
 	// 这里的getToken()就是在上面导入的auth.js里的getToken()方法
 	const hasToken = getToken()
+	console.log("router.beforeEach => hasToken", hasToken)
 
 	//如果存在token，即存在已登陆的令牌
 	if (hasToken) {

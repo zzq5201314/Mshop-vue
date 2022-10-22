@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-15 16:29:44
- * @LastEditTime: 2022-10-02 14:37:28
+ * @LastEditTime: 2022-10-22 22:55:03
  * @LastEditors: you name
  * @Description: 用户token
  */
@@ -49,11 +49,12 @@ const actions = {
 		const { phone, password } = userInfo
 		return new Promise((resolve, reject) => {
 			login(userInfo).then(response => {
-				// console.log("login => response", response)
+				console.log("login => response", response)
 				// const token = getToken()
-				// commit('SET_TOKEN', this.token)
+				// setToken('token')
+				console.log("login => this.token", getToken())
+				// commit('SET_TOKEN', getToken())
 				// commit('SET_USER_ID', data.session.user_id)
-				// setToken(data.token)
 				resolve()
 			}).catch(error => {
 				reject(error)
@@ -63,6 +64,7 @@ const actions = {
 
 	// 获取用户信息
 	getInfo ({ commit }) {
+		console.log('获取用户信息');
 		return new Promise((resolve, reject) => {
 			getUserInfo().then(response => {
 				const { data } = response.data
