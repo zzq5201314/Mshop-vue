@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-09-09 16:25:51
+ * @LastEditTime: 2022-10-23 23:48:37
  * @LastEditors: you name
  * @Description: 
 -->
@@ -10,14 +10,12 @@
   <div class="Home">
     <Header class="" />
     <router-view />
-    <div class="back">
-      <el-backtop target=".back">
-      </el-backtop>
-    </div>
+    <AppTab class="md:hidden" />
   </div>
 </template>
 
 <script>
+import AppTab from './components/appTab.vue'
 import Header from './components/Header.vue'
 export default {
   name: "Home",
@@ -26,7 +24,7 @@ export default {
 
     }
   },
-  components: { Header },
+  components: { Header, AppTab },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -43,7 +41,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
-.back {
-  overflow-x: hidden;
-}
 </style>

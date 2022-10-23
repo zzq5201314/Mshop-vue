@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 21:56:09
- * @LastEditTime: 2022-10-23 22:55:05
+ * @LastEditTime: 2022-10-23 23:55:11
  * @LastEditors: you name
  * @Description: 热门推荐列表
 -->
@@ -51,6 +51,7 @@
                 </div>
                 <div
                   class="mx-auto bg-gray-100 text-xs text-black font-semibold px-4 py-2 rounded-full "
+                  @click="jumpProductInfo(productItem._id)"
                 >立即购买</div>
               </div>
             </div>
@@ -90,6 +91,12 @@ export default {
         // console.log("getProductRecommendList => this.recommendList", this.recommendList)
       })
     },
+    jumpProductInfo (value) { // 跳转商品详情
+      console.log("click => value", value)
+      this.$router.push({
+        path: '/product/info/' + value
+      })
+    }
   }
 }
 </script>
