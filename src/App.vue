@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-23 01:39:08
+ * @LastEditTime: 2022-10-23 23:06:35
  * @LastEditors: you name
  * @Description: 
 -->
 <template>
   <div
     id="app"
-    class=" text-gray-500 antialiased bg-white"
+    class=" text-gray-500 antialiased bg-white "
   >
     <router-view />
   </div>

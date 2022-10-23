@@ -1,13 +1,13 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-12 09:26:01
+ * @LastEditTime: 2022-10-23 19:11:11
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- My 页 -->
 <template>
-  <div class="My bg-gray-100 ">
+  <div class="My bg-gray-100 min-h-screen">
     <div class="container mx-auto max-w-7xl py-5">
       <div class="flex space-x-5">
         <div class="w-1/5 bg-white rounded-xl h-full">

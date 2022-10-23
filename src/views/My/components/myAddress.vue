@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-27 10:34:01
- * @LastEditTime: 2022-09-28 10:36:18
+ * @LastEditTime: 2022-10-23 19:38:04
  * @LastEditors: you name
  * @Description: 
 -->
@@ -9,10 +9,16 @@
 <template>
   <div class="myAddress space-y-6">
     <div>
-      <router-link
+      <!-- <router-link
         :to="{name:'addAddress'}"
         class=" px-6 py-2 text-red-500 hover:bg-red-400 hover:text-white transition duration-300"
-      >添加收货地址</router-link>
+      >添加收货地址</router-link> -->
+      <span
+        class=" px-6 py-2 text-red-500 hover:bg-red-400 hover:text-white transition duration-300 cursor-pointer"
+        @click="openAddress()"
+      >
+        添加收货地址
+      </span>
     </div>
 
     <div class="space-y-6">
@@ -63,7 +69,7 @@
           >
             <template slot-scope="scope">
               <button
-                @click="handleEdit(scope.$index, scope.row)"
+                @click="openAddress(scope.row)"
                 class="hover:text-red-500"
               > 修改</button>
               <el-divider direction="vertical"></el-divider>
@@ -89,7 +95,7 @@
               </div>
               <button
                 v-else
-                @click="handleDelete(scope.$index, scope.row)"
+                @click="setDefaultAddress(scope.$index, scope.row)"
                 class="hover:text-red-500"
               >设为默认</button>
             </template>
@@ -98,19 +104,31 @@
         </el-table>
       </div>
     </div>
+
+    <div v-if="dialogShow">
+      <addAddress
+        :dialogShow="dialogShow"
+        :alterAddressFrom="alterAddressFrom"
+        @dialogShowChange="dialogShowChange"
+        @addOk="addOk"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import { getAddressList, delAddress } from '@/api/Address'
+import addAddress from '@/components/addAddress.vue'
+import { getAddressList, delAddress, setDefaultAddress } from '@/api/Address'
 export default {
   name: "myAddress",
   data () {
     return {
-      addressList: []
+      addressList: [],
+      dialogShow: false,
+      alterAddressFrom: {},
     }
   },
-  components: {},
+  components: { addAddress },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -121,28 +139,69 @@ export default {
   },
   // 函数
   methods: {
-    getData () {
-      getAddressList().then(response => {
+    async getData () {
+      await getAddressList().then(response => {
         this.addressList = response.data.data
         console.log("getAddressList => this.addressList", this.addressList)
 
       })
     },
-    handleEdit (index, row) {
-      console.log(index, row);
+    // handleEdit (index, row) {
+    //   console.log(index, row);
+    // },
+    // handleDelete (index, row) {
+    //   console.log(index, row);
+    //   // const data = { addressId: row._id }
+    //   // console.log("handleDelete => row._id", row._id)
+    //   // delAddress(data).then(response => {
+    //   //   this.$message({
+    //   //     type: 'success',
+    //   //     message: response.data.msg
+    //   //   })
+    //   //   this.getData()
+    //   // })
+    // },
+
+    // 打开添加地址窗口
+    openAddress (row) {   // 有row 就是-修改 无就是-添加
+      if (row) {
+        this.alterAddressFrom = row
+      }
+      this.dialogShow = true
     },
-    handleDelete (index, row) {
-      console.log(index, row);
+    // 退出添加地址窗口
+    dialogShowChange (val) {
+      this.dialogShow = val
+      this.alterAddressFrom = {}
+    },
+    // 添加地址成功
+    addOk () {
+      this.getData()
+    },
+    // 删除 -- 收货地址
+    async handleDelete (index, row) {
       const data = { addressId: row._id }
       console.log("handleDelete => row._id", row._id)
-      delAddress(data).then(response => {
+      await delAddress(data).then(response => {
         this.$message({
           type: 'success',
           message: response.data.msg
         })
-        this.getData()
       })
-    }
+      await this.getData()
+    },
+    // 设置默认收货地址
+    async setDefaultAddress (index, row) {
+      const data = { addressId: row._id }
+      console.log("setDefaultAddress => row._id", row._id)
+      await setDefaultAddress(data).then(response => {
+        this.$message({
+          type: 'success',
+          message: response.data.msg
+        })
+      })
+      await this.getData()
+    },
   }
 }
 </script>

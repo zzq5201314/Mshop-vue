@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-23 01:36:15
+ * @LastEditTime: 2022-10-23 20:51:23
  * @LastEditors: you name
  * @Description: 
  */
@@ -10,13 +10,15 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
+import Vant from 'vant';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/tailwind.css'
+import 'vant/lib/index.css';
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import '@/permission' // permission control
 
-
+Vue.use(Vant);
 import {
   baseUrl
 } from '@/config'

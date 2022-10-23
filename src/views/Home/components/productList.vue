@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 11:06:48
- * @LastEditTime: 2022-09-14 16:30:52
+ * @LastEditTime: 2022-10-23 21:40:54
  * @LastEditors: you name
  * @Description: 
 -->
@@ -9,7 +9,7 @@
 <template>
   <div>
     <div
-      class="grid grid-cols-4 gap-4"
+      class="grid grid-cols-4 gap-4 "
       v-if="data[0]!==undefined"
     >
       <div
@@ -89,7 +89,6 @@
         </el-card>
       </div>
     </div>
-
   </div>
 </template>
 
