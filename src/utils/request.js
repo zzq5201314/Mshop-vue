@@ -1,12 +1,13 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:51:25
- * @LastEditTime: 2022-10-23 02:08:30
+ * @LastEditTime: 2022-10-23 16:22:22
  * @LastEditors: you name
  * @Description: 
  */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import { baseUrl } from './base'
 import store from '@/store'
 import qs from 'qs'
@@ -18,7 +19,7 @@ const service = axios.create({
 	// baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
 	baseURL: baseApi, // url = base url + request url
 	// baseURL: baseUrl,
-	withCredentials: true, // send cookies when cross-domain requests
+	// withCredentials: true, // send cookies when cross-domain requests
 	timeout: 5000, // request timeout
 })
 
@@ -26,7 +27,6 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		// do something before request is sent
-
 
 		if (config.method === 'get') {
 			// 如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
@@ -40,6 +40,8 @@ service.interceptors.request.use(
 			// ['X-Token'] is a custom headers key
 			// please modify it according to the actual situation
 			// config.headers['X-Token'] = getToken()
+			config.headers['authorization'] = 'Bearer ' + getToken()
+			config.headers['Content-Type'] = 'application/json'
 		}
 		return config
 	},
