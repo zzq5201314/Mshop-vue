@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-10-25 20:42:53
+ * @LastEditTime: 2022-10-25 23:30:21
  * @LastEditors: you name
  * @Description: 
  */
@@ -17,7 +17,10 @@ module.exports = {
     extend: {},
     maxWidth: {
       '20': '5rem',
-    }
+    },
+    // height: {
+    //   addressItemHeight: '135px'
+    // }
   },
   plugins: [
     function ({ addBase }) {

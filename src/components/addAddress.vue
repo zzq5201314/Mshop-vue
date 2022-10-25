@@ -1,102 +1,148 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-26 13:13:48
- * @LastEditTime: 2022-10-10 15:54:29
+ * @LastEditTime: 2022-10-26 00:32:05
  * @LastEditors: you name
  * @Description:  添加地址
 -->
 <!-- myAddress 页 -->
 <template>
 
-  <el-dialog
-    :visible.sync="dialogFormVisible"
-    @close="closeDialog"
-    :title="Object.keys(this.alterFrom).length === 0?'添加收货地址':'修改收货地址'"
-  >
-    <div class="myAddress">
-      <div class="max-w-lg">
-        <!-- <button>添加</button> -->
+  <div>
+    <div v-if="innerWidth>768">
+      <el-dialog
+        :visible.sync="dialogFormVisible"
+        @close="closeDialog"
+        :title="Object.keys(this.alterFrom).length === 0?'添加收货地址':'修改收货地址'"
+      >
+        <div class="myAddress">
+          <div class="max-w-lg">
+            <!-- <button>添加</button> -->
 
-        <el-form
-          ref="form"
-          :model="form"
-          label-width="90px"
-        >
+            <el-form
+              ref="form"
+              :model="form"
+              label-width="90px"
+            >
 
-          <el-form-item label="地址信息:">
-            <!-- <provincesCascader
+              <el-form-item label="地址信息:">
+                <!-- <provincesCascader
             @provincesValueChang="provincesValueChang"
             @update:value="form.region=$event"
             style="width: 100%;"
           ></provincesCascader> -->
-            <el-cascader
-              class="w-full"
-              :options='options'
-              v-model='selectedOptions'
-              @change='addressChange'
-              placeholder="请选择 省/市/区"
-            ></el-cascader>
-          </el-form-item>
+                <el-cascader
+                  class="w-full"
+                  :options='options'
+                  v-model='selectedOptions'
+                  @change='addressChange'
+                  placeholder="请选择 省/市/区"
+                ></el-cascader>
+              </el-form-item>
 
-          <el-form-item label="详细地址:">
-            <el-input
-              type="textarea"
-              v-model="form.detailAddress"
-              placeholder="请输入详细地址信息，如道路、门牌号、小区、楼栋号、单元等信息"
-            ></el-input>
-          </el-form-item>
+              <el-form-item label="详细地址:">
+                <el-input
+                  type="textarea"
+                  v-model="form.detailAddress"
+                  placeholder="请输入详细地址信息，如道路、门牌号、小区、楼栋号、单元等信息"
+                ></el-input>
+              </el-form-item>
 
-          <el-form-item label="收件人姓名:">
-            <el-input
-              v-model="form.addressee"
-              placeholder="长度不超过25个字符"
-              maxlength="25"
-              show-word-limit
-            ></el-input>
-          </el-form-item>
+              <el-form-item label="收件人姓名:">
+                <el-input
+                  v-model="form.addressee"
+                  placeholder="长度不超过25个字符"
+                  maxlength="25"
+                  show-word-limit
+                ></el-input>
+              </el-form-item>
 
-          <el-form-item label="手机号码:">
-            <el-input
-              v-model="form.phone"
-              placeholder="电话、手机号码"
-            ></el-input>
-          </el-form-item>
+              <el-form-item label="手机号码:">
+                <el-input
+                  v-model="form.phone"
+                  placeholder="电话、手机号码"
+                ></el-input>
+              </el-form-item>
 
-          <el-form-item>
-            <div class="container">
-              <label class="flex items-center space-x-3 ">
-                <input
-                  type="checkbox"
-                  v-model="form.isDefault"
-                  class="appearance-none form-tick h-6 w-6 border bg-white border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
-                />
-                <span class="text-gray-900 font-medium">设置为默认收货地址</span>
-              </label>
-            </div>
-          </el-form-item>
+              <el-form-item>
+                <div class="container">
+                  <label class="flex items-center space-x-3 ">
+                    <input
+                      type="checkbox"
+                      v-model="form.isDefault"
+                      class="appearance-none form-tick h-6 w-6 border bg-white border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
+                    />
+                    <span class="text-gray-900 font-medium">设置为默认收货地址</span>
+                  </label>
+                </div>
+              </el-form-item>
 
-          <el-form-item>
-            <button
-              type="button"
-              class="px-4  rounded-md bg-blue-600 text-white"
-              @click="save"
-            >保存</button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <!-- 头部end -->
+              <el-form-item>
+                <button
+                  type="button"
+                  class="px-4  rounded-md bg-blue-600 text-white"
+                  @click="save"
+                >保存</button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!-- 头部end -->
 
-      <div>
+          <div>
 
-      </div>
-      <!-- 内容end -->
+          </div>
+          <!-- 内容end -->
+        </div>
+      </el-dialog>
     </div>
-  </el-dialog>
+
+    <div
+      v-else
+      class="bg-gray-50"
+    >
+      <!-- 图标位置 -->
+      <van-popup
+        v-model="dialogFormVisible"
+        position="bottom"
+        :style="{ height: '100%' }"
+      >
+        <header class=" font-semibold text-black  h-12 flex items-center">
+          <div class="flex items-center">
+            <i
+              class="el-icon-arrow-left p-3 "
+              @click="closeDialog"
+            ></i>
+            <div>添加收货地址</div>
+          </div>
+        </header>
+
+        <div>
+          <!-- 输入任意文本 -->
+          <van-field
+            v-model="form.addressee"
+            label="收货人"
+          />
+          <!-- 输入手机号，调起手机号键盘 -->
+          <van-field
+            v-model="form.phone"
+            type="tel"
+            label="手机号"
+          />
+          <!-- 允许输入正整数，调起纯数字键盘 -->
+          <!-- <van-field v-model="digit" type="digit" label="整数" /> -->
+          <!-- 允许输入数字，调起带符号的纯数字键盘 -->
+          <!-- <van-field v-model="number" type="number" label="数字" /> -->
+          <!-- 输入密码 -->
+          <!-- <van-field v-model="password" type="password" label="密码" /> -->
+        </div>
+      </van-popup>
+    </div>
+  </div>
 
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import provincesCascader from '@/components/cascader.vue'
 import { addAddress, updateAddress } from '@/api/Address'
 import { regionData, CodeToText } from 'element-china-area-data'
@@ -131,6 +177,11 @@ export default {
     }
   },
   components: { provincesCascader },
+  computed: {
+    ...mapGetters([
+      'innerWidth'
+    ])
+  },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -269,5 +320,10 @@ export default {
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
 .myAddress {
+}
+
+.van-popup {
+  --tw-bg-opacity: 1;
+  background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
 }
 </style>
