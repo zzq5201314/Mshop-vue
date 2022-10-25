@@ -1,0 +1,99 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3725827 */
+  src: url('iconfont.woff2?t=1666602406750') format('woff2'),
+       url('iconfont.woff?t=1666602406750') format('woff'),
+       url('iconfont.ttf?t=1666602406750') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-comment:before {
+  content: "\e667";
+}
+
+.icon-deliver:before {
+  content: "\e671";
+}
+
+.icon-send:before {
+  content: "\e675";
+}
+
+.icon-filter:before {
+  content: "\e69c";
+}
+
+.icon-recharge:before {
+  content: "\e6ed";
+}
+
+.icon-vipcard:before {
+  content: "\e6ee";
+}
+
+.icon-message_light:before {
+  content: "\e7db";
+}
+
+.icon-comment_light:before {
+  content: "\e7e0";
+}
+
+.icon-expressman:before {
+  content: "\e7ef";
+}
+
+.icon-favor:before {
+  content: "\e64c";
+}
+
+.icon-pay:before {
+  content: "\e673";
+}
+
+.icon-footprint:before {
+  content: "\e69d";
+}
+
+.icon-squarecheck:before {
+  content: "\e6d6";
+}
+
+.icon-my:before {
+  content: "\e78b";
+}
+
+.icon-myfill:before {
+  content: "\e78c";
+}
+
+.icon-circlefill:before {
+  content: "\e7b0";
+}
+
+.icon-circle:before {
+  content: "\e7b1";
+}
+
+.icon-home_light:before {
+  content: "\e7d4";
+}
+
+.icon-cart_light:before {
+  content: "\e7d6";
+}
+
+.icon-home_fill_light:before {
+  content: "\e7d8";
+}
+
+.icon-cart_fill_light:before {
+  content: "\e7d9";
+}
+

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-23 20:51:23
+ * @LastEditTime: 2022-10-24 19:01:11
  * @LastEditors: you name
  * @Description: 
  */
@@ -17,6 +17,10 @@ import 'vant/lib/index.css';
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import '@/permission' // permission control
+import './assets/icon/font/iconfont.css'
+
+// Window.onresize 事件  动态调整窗口
+import "@/assets/js/onresize";
 
 Vue.use(Vant);
 import {

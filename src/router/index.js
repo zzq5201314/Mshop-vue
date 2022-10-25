@@ -1,14 +1,15 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-16 18:29:13
+ * @LastEditTime: 2022-10-25 19:22:03
  * @LastEditors: you name
  * @Description: 
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeLayout from '../layout/Home/Home.vue'
-
+import AppLayout from '../layout/App/AppLayout.vue'
+import appRouter from './modules/App'
 const originalPush = VueRouter.prototype.push
 
 VueRouter.prototype.push = function push (location) {
@@ -42,6 +43,8 @@ const routes = [
     component: () => import('@/views/ApplyBusiness/ApplyBusiness'),
     meta: { title: '入驻商家' },
   },
+
+  ...appRouter,
 
   {
     path: '/',
@@ -123,7 +126,7 @@ const routes = [
           path: '/',
           name: 'myInfo',
           component: () => import('@/views/My/components/myInfo.vue'),
-          meta: { title: '我的主页' },
+          meta: { title: '我的主页', index: 1 },
         },
         {
           path: '/address',
@@ -146,6 +149,7 @@ const routes = [
       ]
     }]
   },
+
 
 
   {

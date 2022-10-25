@@ -1,30 +1,32 @@
 <!--
  * @Author: 清羽
- * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-10-24 18:12:26
+ * @Date: 2022-10-25 19:12:57
+ * @LastEditTime: 2022-10-25 19:13:51
  * @LastEditors: you name
- * @Description: 
+ * @Description: app的返回头部
 -->
-<!-- Home 页 -->
+<!-- appBack 页 -->
 <template>
-  <div class="Home relative">
-    <Header class="" />
-    <router-view />
-    <AppTab class="md:hidden" />
+  <div class="appBack">
+    <header class="p-3 font-semibold text-black">
+      <i
+        class="el-icon-arrow-left"
+        @click="back"
+      ></i>
+    </header>
   </div>
 </template>
 
 <script>
-import AppTab from './components/appTab.vue'
-import Header from './components/Header.vue'
+
 export default {
-  name: "Home",
+  name: "appBack",
   data () {
     return {
 
     }
   },
-  components: { Header, AppTab },
+  components: {},
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -35,10 +37,14 @@ export default {
   },
   // 函数
   methods: {
-
+    back () {
+      this.$router.go(-1)
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
+.appBack {
+}
 </style>

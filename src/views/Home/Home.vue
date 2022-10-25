@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:42:03
- * @LastEditTime: 2022-10-23 23:26:57
+ * @LastEditTime: 2022-10-24 14:55:21
  * @LastEditors: you name
  * @Description: 主页
 -->
@@ -16,17 +16,6 @@
         name="back-top"
         size="1.125rem"
       />
-      <!-- <div style="{
-        height: 100%;
-        width: 100%;
-        background-color: #f2f5f6;
-        box-shadow: 0 0 6px rgba(0,0,0, .12);
-        text-align: center;
-        line-height: 40px;
-        color: #1989fa;
-      }">
-        UP
-      </div> -->
     </el-backtop>
 
     <van-swipe
@@ -42,12 +31,13 @@
           <img
             draggable="false"
             src="https://res.vmallres.com/cmscdn/CN/2022-09/43725456ac344dadb829bfd4903e3dbf.jpg"
-            class="object-scale-down h-full mx-auto"
+            class="object-scale-down mx-auto"
           >
         </div>
       </van-swipe-item>
     </van-swipe>
     <!-- 移动端主页轮播图 end -->
+
     <div class="relative w-full hidden md:block">
 
       <el-carousel height="550px">
@@ -121,7 +111,8 @@
 
     <love class="container mx-auto max-w-7xl py-4" />
     <!-- 猜你喜欢end -->
-    <div class="bg-white">
+
+    <div class="bg-white hidden md:block">
       <div class="h-32 flex items-center">
         <server class="container mx-auto max-w-7xl py-4 " />
       </div>

@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-23 19:11:11
+ * @LastEditTime: 2022-10-25 18:59:13
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- My 页 -->
 <template>
   <div class="My bg-gray-100 min-h-screen">
-    <div class="container mx-auto max-w-7xl py-5">
+    <div class="container mx-auto max-w-7xl py-5 hidden md:block">
       <div class="flex space-x-5">
         <div class="w-1/5 bg-white rounded-xl h-full">
           <div class="px-6 py-4 flex justify-center flex-col items-center">
@@ -68,6 +68,67 @@
         <!-- 右边内容 -->
       </div>
     </div>
+    <!-- pc端 -->
+
+    <div class="space-y-3 md:hidden">
+      <header class="flex pt-1">
+        <div class="w-3/12 flex items-center justify-center">
+          <el-avatar
+            :size="70"
+            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          ></el-avatar>
+        </div>
+        <div class="w-7/12 font-semibold px-2 text-black">{{name}}</div>
+        <div class="w-2/12 flex items-center justify-center">
+          <div
+            class="text-center"
+            @click="goSetting"
+          >
+            <i class="el-icon-setting text-2xl"></i>
+            <p class="">设置</p>
+          </div>
+        </div>
+      </header>
+      <!-- 我的信息end -->
+
+      <div class="grid grid-cols-4 text-center text-black px-3">
+        <router-link
+          v-for="(item,index) in cardList"
+          :key="index"
+          :to="{name:item.routerName}"
+        >
+          <i
+            class="iconfont"
+            :class="item.icon"
+          ></i>
+          <p class="text-sm">{{item.title}}</p>
+        </router-link>
+      </div>
+
+      <div class="mx-3 bg-white rounded-lg p-2">
+        <div class="flex justify-between text-sm">
+          <span class="text-black font-bold">我的订单</span>
+          <span
+            class="text-xs"
+            @click="goOrder"
+          >全部<i class='el-icon-arrow-right' /></span>
+        </div>
+        <!-- title end -->
+
+        <div class="grid grid-cols-5 text-center text-black mt-2">
+          <div
+            v-for="(orderBtnItem,orderBtnIndex) in orderBtnList"
+            :key="orderBtnIndex"
+          >
+            <i
+              class="iconfont"
+              :class="orderBtnItem.icon"
+            ></i>
+            <p class="text-sm">{{orderBtnItem.title}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,12 +138,54 @@ export default {
   name: "My",
   data () {
     return {
-      checkRouter: this.$route.path
+      checkRouter: this.$route.path,
+      cardList: [
+        {
+          icon: 'icon-favor',
+          routerName: 'productCollect',
+          title: '收藏'
+        },
+        {
+          icon: 'icon-squarecheck',
+          title: '订阅店铺'
+        },
+        {
+          icon: 'icon-footprint',
+          title: '足迹'
+        },
+        {
+          icon: 'icon-pay',
+          title: '零钱'
+        },
+      ],
+      orderBtnList: [
+        {
+          icon: 'icon-vipcard',
+          title: '待付款'
+        },
+        {
+          icon: 'icon-send',
+          title: '待发货'
+        },
+        {
+          icon: 'icon-deliver',
+          title: '待收货'
+        },
+        {
+          icon: 'icon-comment',
+          title: '待评价'
+        },
+        {
+          icon: 'icon-recharge',
+          title: '退款/售后'
+        },
+      ]
     }
   },
   computed: {
     ...mapGetters([
-      'avatar'
+      'avatar',
+      'name',
     ])
   },
   components: {},
@@ -109,20 +212,37 @@ export default {
     },
     goBusiness () {
       window.location.href = "http://localhost:9520/"
-    }
+    },
+    goOrder () {
+      this.$router.push({
+        name: 'appMyOrder'
+      })
+    },
+    goSetting () {
+      this.$router.push({
+        name: 'appSetting'
+      })
+    },
   },
   watch: {
 
-    $route (to, from) {
-      console.log(from.path);//从哪来
-      console.log(to.path);//到哪去
-      this.checkRouter = to.path
-    }
+    // $route (to, from) {
+    //   console.log(from.path);//从哪来
+    //   console.log(to.path);//到哪去
+    //   this.checkRouter = to.path
+    // }
   }
 }
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
 .My {
+  .iconfont {
+    font-size: 1.5rem;
+  }
+  .van-popup,
+  :deep .van-overlay {
+    margin: 0;
+  }
 }
 </style>

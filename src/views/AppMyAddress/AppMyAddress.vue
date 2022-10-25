@@ -1,30 +1,31 @@
 <!--
  * @Author: 清羽
- * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-10-24 18:12:26
+ * @Date: 2022-10-25 19:08:10
+ * @LastEditTime: 2022-10-25 19:31:56
  * @LastEditors: you name
  * @Description: 
 -->
-<!-- Home 页 -->
+<!-- AppMyAddress 页 -->
 <template>
-  <div class="Home relative">
-    <Header class="" />
-    <router-view />
-    <AppTab class="md:hidden" />
+  <div class="AppMyAddress bg-gray-100 min-h-screen">
+    <header class="flex items-center bg-transparent">
+      <back />
+      <div>{{title}}</div>
+    </header>
+    AppMyAddress 页
   </div>
 </template>
 
 <script>
-import AppTab from './components/appTab.vue'
-import Header from './components/Header.vue'
+import back from '@/components/appBack.vue'
 export default {
-  name: "Home",
+  name: "AppMyAddress",
   data () {
     return {
-
+      title: this.$route.meta.title
     }
   },
-  components: { Header, AppTab },
+  components: { back },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -41,4 +42,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
+.AppMyAddress {
+}
 </style>

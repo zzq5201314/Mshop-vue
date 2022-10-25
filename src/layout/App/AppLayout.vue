@@ -1,30 +1,34 @@
 <!--
  * @Author: 清羽
- * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-10-24 18:12:26
+ * @Date: 2022-10-24 18:27:31
+ * @LastEditTime: 2022-10-25 18:47:33
  * @LastEditors: you name
  * @Description: 
 -->
-<!-- Home 页 -->
+<!-- AppLayout 页 -->
 <template>
-  <div class="Home relative">
-    <Header class="" />
+  <div class="AppLayout">
+    <header class="p-3 font-semibold text-black">
+      <i
+        class="el-icon-arrow-left"
+        @click="back"
+      ></i>
+    </header>
+
     <router-view />
-    <AppTab class="md:hidden" />
+
   </div>
 </template>
 
 <script>
-import AppTab from './components/appTab.vue'
-import Header from './components/Header.vue'
 export default {
-  name: "Home",
+  name: "AppLayout",
   data () {
     return {
 
     }
   },
-  components: { Header, AppTab },
+  components: {},
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -35,10 +39,17 @@ export default {
   },
   // 函数
   methods: {
+    back () {
+      this.$router.go(-1)
+    }
+  },
+  watch: {
 
   }
 }
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
+.AppLayout {
+}
 </style>

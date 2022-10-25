@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-09-29 14:59:09
+ * @LastEditTime: 2022-10-25 20:42:53
  * @LastEditors: you name
  * @Description: 
  */
@@ -15,6 +15,9 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    maxWidth: {
+      '20': '5rem',
+    }
   },
   plugins: [
     function ({ addBase }) {

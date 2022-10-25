@@ -1,30 +1,28 @@
 <!--
  * @Author: 清羽
- * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-10-24 18:12:26
+ * @Date: 2022-10-24 23:31:50
+ * @LastEditTime: 2022-10-25 19:15:44
  * @LastEditors: you name
- * @Description: 
+ * @Description: app的订单页
 -->
-<!-- Home 页 -->
+<!-- AppOrder 页 -->
 <template>
-  <div class="Home relative">
-    <Header class="" />
-    <router-view />
-    <AppTab class="md:hidden" />
+  <div class="AppOrder">
+    <back />
+    AppOrder 页
   </div>
 </template>
 
 <script>
-import AppTab from './components/appTab.vue'
-import Header from './components/Header.vue'
+import back from '@/components/appBack.vue'
 export default {
-  name: "Home",
+  name: "AppOrder",
   data () {
     return {
 
     }
   },
-  components: { Header, AppTab },
+  components: { back },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 
@@ -35,10 +33,11 @@ export default {
   },
   // 函数
   methods: {
-
   }
 }
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
+.AppOrder {
+}
 </style>

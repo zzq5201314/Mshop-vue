@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-16 15:38:14
- * @LastEditTime: 2022-10-22 23:24:29
+ * @LastEditTime: 2022-10-25 19:47:37
  * @LastEditors: you name
  * @Description: 
  */
@@ -26,6 +26,31 @@ const whiteList = ['/login', '/404', '/register', '/home']
 
 
 router.beforeEach(async (to, from, next) => {
+	console.log("router.beforeEach => from", from)
+	console.log("router.beforeEach => to", to)
+	// console.log('document.documentElement.clientWidth =>', document.documentElement.clientWidth);
+	const windowWidth = document.documentElement.clientWidth
+
+	if (windowWidth < 768) {
+		if (to.name == 'myOrder') {
+			next({ name: 'appMyOrder' })
+		}
+		else if (to.name == 'address') {
+			next({ name: 'appAddress' })
+		}
+	} else {
+		if (to.name == 'appMyOrder') {
+			next({ name: 'myOrder' })
+		}
+		else if (to.name == 'appSetting') {
+			next({ name: 'myInfo' })
+		}
+		else if (to.name == 'appAddress') {
+			next({ name: 'address' })
+		}
+	}
+
+
 	// 请求路由时进度条开始
 	NProgress.start()
 
@@ -34,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
 
 	// 这里的getToken()就是在上面导入的auth.js里的getToken()方法
 	const hasToken = getToken()
-	console.log("router.beforeEach => hasToken", hasToken)
+	// console.log("router.beforeEach => hasToken", hasToken)
 
 	//如果存在token，即存在已登陆的令牌
 	if (hasToken) {

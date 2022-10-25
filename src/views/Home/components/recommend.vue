@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 21:56:09
- * @LastEditTime: 2022-10-23 23:55:11
+ * @LastEditTime: 2022-10-24 16:22:16
  * @LastEditors: you name
  * @Description: 热门推荐列表
 -->
@@ -12,8 +12,7 @@
       class="bg-white md:bg-transparent mx-4 md:mx-0 rounded-lg md:rounded-none p-3 md:p-0"
     >
       <div class="mb-2 md:mb-4 flex justify-between items-center ">
-        <p
-          class="text-base font-semibold md:font-medium md:text-2xl text-gray-800">
+        <p class="text-base font-bold md:font-medium md:text-2xl text-gray-800">
           热门推荐：</p>
         <p class="cursor-pointer text-xs md:text-sm">更多<i
             class='el-icon-arrow-right'
@@ -38,19 +37,19 @@
           <div>
             <img
               :src="baseUrl+ productItem.image"
-              class="h-52 w-full object-scale-down"
+              class="h-52 w-full object-scale-down px-2"
             />
             <!-- <div>{{productItem.price}}</div> -->
             <div class="space-y-1 pb-3 pt-1">
               <div class="font-semibold text-black">{{productItem.name}}
               </div>
               <div class="text-xs">商品详情</div>
-              <div class="flex items-center">
-                <div class="w-8/12 text-xs text-black font-semibold">
-                  ￥{{productItem.price.toFixed(2)}}起
+              <div class="flex items-center justify-between">
+                <div class=" text-xs text-black font-semibold">
+                  ￥{{productItem.price.toFixed(2)}} 起
                 </div>
                 <div
-                  class="mx-auto bg-gray-100 text-xs text-black font-semibold px-4 py-2 rounded-full "
+                  class=" bg-gray-100 text-xs text-black font-semibold px-4 py-2 rounded-full "
                   @click="jumpProductInfo(productItem._id)"
                 >立即购买</div>
               </div>
