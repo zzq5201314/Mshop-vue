@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-25 18:59:13
+ * @LastEditTime: 2022-10-26 11:32:03
  * @LastEditors: you name
  * @Description: 
 -->
@@ -79,13 +79,13 @@
           ></el-avatar>
         </div>
         <div class="w-7/12 font-semibold px-2 text-black">{{name}}</div>
-        <div class="w-2/12 flex items-center justify-center">
+        <div class="w-2/12 flex items-center justify-center ">
           <div
             class="text-center"
             @click="goSetting"
           >
             <i class="el-icon-setting text-2xl"></i>
-            <p class="">设置</p>
+            <p class="text-sm leading-3">设置</p>
           </div>
         </div>
       </header>
@@ -107,9 +107,9 @@
 
       <div class="mx-3 bg-white rounded-lg p-2">
         <div class="flex justify-between text-sm">
-          <span class="text-black font-bold">我的订单</span>
+          <span class="text-black font-bold text-base">我的订单</span>
           <span
-            class="text-xs"
+            class="text-xs flex items-center"
             @click="goOrder"
           >全部<i class='el-icon-arrow-right' /></span>
         </div>

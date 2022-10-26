@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-27 10:34:01
- * @LastEditTime: 2022-10-26 00:08:24
+ * @LastEditTime: 2022-10-26 15:09:32
  * @LastEditors: you name
  * @Description: 
 -->
@@ -192,7 +192,7 @@
             <!-- 地址/收件人 end -->
             <div class="w-1/12"><i
                 class="el-icon-edit"
-                @click="openAppAddress(addressItem)"
+                @click="openAddress(addressItem)"
               /></div>
             <!-- 修改按钮 end -->
           </div>
@@ -291,6 +291,7 @@ export default {
     dialogShowChange (val) {
       this.dialogShow = val
       this.alterAddressFrom = {}
+      if (innerWidth < 768) this.getData
     },
     // 添加地址成功
     addOk () {

@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:42:03
- * @LastEditTime: 2022-10-24 14:55:21
+ * @LastEditTime: 2022-10-26 15:41:17
  * @LastEditors: you name
  * @Description: 主页
 -->
@@ -128,6 +128,7 @@
         nobis fugit perspiciatis laudantium aut?
       </div>
     </div>
+
   </div>
 </template>
 
@@ -142,7 +143,7 @@ export default {
   data () {
     return {
       categoryList: [],
-      categoryChildList: []
+      categoryChildList: [],
     }
   },
   components: { recommend, server, love },
@@ -167,6 +168,7 @@ export default {
         }
       })
     },
+
 
 
     enterFun (value) { // 鼠标移入

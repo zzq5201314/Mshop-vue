@@ -1,11 +1,12 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:51:25
- * @LastEditTime: 2022-10-23 16:22:22
+ * @LastEditTime: 2022-10-26 15:23:55
  * @LastEditors: you name
  * @Description: 
  */
 import axios from 'axios'
+import { Toast } from 'vant';
 import { MessageBox, Message } from 'element-ui'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { baseUrl } from './base'
@@ -69,31 +70,48 @@ service.interceptors.response.use(
 		return res
 	},
 	error => {
+
 		// console.log('err' + error) // for debug
 		console.log("error.response", error)
 		if (error.response !== undefined) {
 			const validateErr = error.response.data.errors // validate 验证是否审核失败
 			const err = error.response.data.msg
 			if (validateErr) {
-				Message({
-					message: validateErr[0].msg,
-					type: 'error',
-					duration: 5 * 1000
-				})
+				if (store.getters.innerWidth > 768) {
+					Message({
+						message: validateErr[0].msg,
+						type: 'error',
+						duration: 5 * 1000
+					})
+				} else {
+
+					Toast(validateErr[0].msg);
+				}
+
 			}
 			else if (err) {
-				Message({
-					message: error.response.data.msg,
-					type: 'error',
-					duration: 5 * 1000
-				})
+				if (store.getters.innerWidth > 768) {
+					Message({
+						message: error.response.data.msg,
+						type: 'error',
+						duration: 5 * 1000
+					})
+				} else {
+					Toast(error.response.data.msg);
+				}
+
 			}
 			else {
-				Message({
-					message: error.message,
-					type: 'error',
-					duration: 5 * 1000
-				})
+				if (store.getters.innerWidth > 768) {
+					Message({
+						message: error.message,
+						type: 'error',
+						duration: 5 * 1000
+					})
+				} else {
+					Toast(error.message);
+				}
+
 			}
 			return Promise.reject(error)
 		}

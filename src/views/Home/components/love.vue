@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 16:03:55
- * @LastEditTime: 2022-10-24 16:19:01
+ * @LastEditTime: 2022-10-26 15:30:58
  * @LastEditors: you name
  * @Description: 
 -->
@@ -32,11 +32,12 @@
           <div class="h-44 sm:h-56 flex items-center justify-center">
             <img
               :src="baseUrl+ productItem.image"
-              class="h-32 w-32 object-scale-down sm:h-48 sm:w-48"
+              class="h-32 w-32 object-cover sm:h-48 sm:w-48"
             />
           </div>
           <!-- {{productItem}} -->
-          <p class="font-semibold text-black text-left h-9 text-sm productName">
+          <p
+            class="font-semibold text-black text-left max-h-9 text-sm productName">
             {{productItem.name}}
           </p>
           <p class="text-red-600 text-xs mt-1">￥<span

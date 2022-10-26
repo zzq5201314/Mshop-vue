@@ -1,41 +1,42 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-10-23 19:10:29
+ * @LastEditTime: 2022-10-26 22:12:30
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- index 页 -->
 <template>
   <div class="index container mx-auto max-w-7xl">
-    <div class="flex justify-between">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item> -->
-        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-      </el-breadcrumb>
-      <div
-        class="text-sm"
-        v-if="productData.business"
-      >
-        <router-link
-          :to="'/business/info/'+businessId"
-          class="mx-2 cursor-pointer"
-        >{{productData.business.company_name}}</router-link>
-        <span class="mx-2 cursor-pointer">
-          <i class="el-icon-star-on text-xl" />
-          关注店铺
-        </span>
+    <div class="hidden md:block">
+      <div class="flex justify-between">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item> -->
+          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+          <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+          <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+        </el-breadcrumb>
+        <div
+          class="text-sm"
+          v-if="productData.business"
+        >
+          <router-link
+            :to="'/business/info/'+businessId"
+            class="mx-2 cursor-pointer"
+          >{{productData.business.company_name}}</router-link>
+          <span class="mx-2 cursor-pointer">
+            <i class="el-icon-star-on text-xl" />
+            关注店铺
+          </span>
+        </div>
       </div>
-    </div>
 
-    <div class="flex">
-      <!-- <img
+      <div class="flex">
+        <!-- <img
         src="https://res.vmallres.com/pimages//uomcdn/CN/pms/202209/gbom/6941487276684/group//800_800_F55EDC89E7E00574B05940F069CD15D2.png"
         alt=""
       > -->
-      <!-- <el-carousel
+        <!-- <el-carousel
           height="450px"
           width="450px"
         >
@@ -47,7 +48,7 @@
           </el-carousel-item>
         </el-carousel> -->
 
-      <!-- <div
+        <!-- <div
           class="spec-preview"
           v-if="productData.slider_image[0]!==undefined"
         >
@@ -69,31 +70,31 @@
           ></div>
         </div> -->
 
-      <div class="h-full w-full">
-        <el-carousel
-          :interval="4000"
-          height="400px"
-        >
-          <el-carousel-item
-            class="flex items-center"
-            v-for="(item,index) in productData.slider_image"
-            :key=index
+        <div class="h-full w-full">
+          <el-carousel
+            :interval="4000"
+            height="400px"
           >
-            <el-image
-              :src=baseUrl+item.img_url
-              @click="onPreview(index,productData.slider_image)"
+            <el-carousel-item
+              class="flex items-center"
+              v-for="(item,index) in productData.slider_image"
+              :key=index
             >
-            </el-image>
-          </el-carousel-item>
-          <elImageViewer
-            v-if="showViewer"
-            :on-close="closeViewer"
-            :url-list=viewerImgList
-            :z-index=3000
-          >
-          </elImageViewer>
+              <el-image
+                :src=baseUrl+item.img_url
+                @click="onPreview(index,productData.slider_image)"
+              >
+              </el-image>
+            </el-carousel-item>
+            <elImageViewer
+              v-if="showViewer"
+              :on-close="closeViewer"
+              :url-list=viewerImgList
+              :z-index=3000
+            >
+            </elImageViewer>
 
-          <!-- <el-image
+            <!-- <el-image
             v-if="showViewer"
             :on-close="closeViewer"
             :url-list="viewerImgList"
@@ -101,119 +102,223 @@
             :preview-src-list="viewerImgList"
           >
           </el-image> -->
-        </el-carousel>
+          </el-carousel>
 
-        <span
-          class="cursor-pointer"
-          :class="{'text-red-400':productData.collect}"
-          @click="addCollect"
-        >
-          <i class="el-icon-star-on" />{{productData.collect?'已收藏':'收藏商品'}}
-        </span>
-      </div>
-      <!-- 左侧商品轮播图end -->
-
-      <div class="ml-6 w-full">
-        <p class="text-2xl text-black my-2">{{productData.name}}</p>
-        <!-- 商品名称end -->
-        <span class=" flex flex-col bg-gray-100 px-2 py-4 my-2 ">
-          <div class="flex items-center">
-            <p class="tracking-widest text-sm">商品价格：</p>
-            <p class="text-base text-red-600 ">￥</p>
-            <p
-              class="price text-red-600 text-2xl"
-              v-if="productData.price"
-            >
-              {{productData.price.toFixed(2)}}</p>
-          </div>
-          <!-- 商品价格end -->
-
-          <div class="flex items-center">
-            <div class="tracking-widest text-sm">商品库存:</div>
-            <div class="text-base ml-2">
-              <span class="text-lg text-red-600">{{productData.stock}}</span>
-              <span>{{productData.unit}}</span>
-            </div>
-          </div>
-          <!-- 商品库存end -->
-
-        </span>
-        <!-- 商品信息end -->
-
-        <div class="">
-          <div
-            v-for="(groupItem,groupIndex) in productData.sku"
-            :key="groupIndex"
-            class="grid layout gap-4 my-2"
+          <span
+            class="cursor-pointer"
+            :class="{'text-red-400':productData.collect}"
+            @click="addCollect"
           >
-            <!-- checkedList[groupIndex]=>{{checkedList[groupIndex]}} -->
-            <span
-              class="text-xs flex items-center">选择{{groupItem.product_group_name}}
-            </span>
-            <div class="">
-              <el-radio
-                v-for="(keyItem,keyIndex) in groupItem.key"
-                :key="keyIndex"
-                v-model="checkedList[groupIndex].name"
-                @change="select(keyItem._id,keyItem.product_key_name,groupIndex)"
-                size="small"
-                border
-                :label="keyItem.product_key_name"
+            <i class="el-icon-star-on" />{{productData.collect?'已收藏':'收藏商品'}}
+          </span>
+        </div>
+        <!-- 左侧商品轮播图end -->
+
+        <div class="ml-6 w-full">
+          <p class="text-2xl text-black my-2">{{productData.name}}</p>
+          <!-- 商品名称end -->
+          <span class=" flex flex-col bg-gray-100 px-2 py-4 my-2 ">
+            <div class="flex items-center">
+              <p class="tracking-widest text-sm">商品价格：</p>
+              <p class="text-base text-red-600 ">￥</p>
+              <p
+                class="price text-red-600 text-2xl"
+                v-if="productData.price"
               >
-              </el-radio>
+                {{productData.price.toFixed(2)}}</p>
+            </div>
+            <!-- 商品价格end -->
+
+            <div class="flex items-center">
+              <div class="tracking-widest text-sm">商品库存:</div>
+              <div class="text-base ml-2">
+                <span class="text-lg text-red-600">{{productData.stock}}</span>
+                <span>{{productData.unit}}</span>
+              </div>
+            </div>
+            <!-- 商品库存end -->
+
+          </span>
+          <!-- 商品信息end -->
+
+          <div class="">
+            <div
+              v-for="(groupItem,groupIndex) in productData.sku"
+              :key="groupIndex"
+              class="grid layout gap-4 my-2"
+            >
+              <!-- checkedList[groupIndex]=>{{checkedList[groupIndex]}} -->
+              <span
+                class="text-xs flex items-center">选择{{groupItem.product_group_name}}
+              </span>
+              <div class="">
+                <el-radio
+                  v-for="(keyItem,keyIndex) in groupItem.key"
+                  :key="keyIndex"
+                  v-model="checkedList[groupIndex].name"
+                  @change="select(keyItem._id,keyItem.product_key_name,groupIndex)"
+                  size="small"
+                  border
+                  :label="keyItem.product_key_name"
+                >
+                </el-radio>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- 规格end -->
+          <!-- 规格end -->
 
-        <div class="my-2">
-          <span class="text-xs">
-            数量：
-          </span>
-          <el-input-number
-            controls-position="right"
-            v-model="productNum"
-            :min="1"
-            :max="productData.stock"
-          ></el-input-number>
-          {{productData.unit}}
-        </div>
-        <!-- 数量end -->
-
-        <div class="text-xs layout grid gap-4 my-2">
-          <span class="mr-6:">已选择商品:</span>
-          <div>
-            <span
-              class="text-red-500 mx-1"
-              v-for="(item,index) in checkedList"
-              :key="index"
-            >
-              {{item.name}}
+          <div class="my-2">
+            <span class="text-xs">
+              数量：
             </span>
+            <el-input-number
+              controls-position="right"
+              v-model="productNum"
+              :min="1"
+              :max="productData.stock"
+            ></el-input-number>
+            {{productData.unit}}
+          </div>
+          <!-- 数量end -->
+
+          <div class="text-xs layout grid gap-4 my-2">
+            <span class="mr-6:">已选择商品:</span>
+            <div>
+              <span
+                class="text-red-500 mx-1"
+                v-for="(item,index) in checkedList"
+                :key="index"
+              >
+                {{item.name}}
+              </span>
+            </div>
+          </div>
+
+          <div class="my-2">
+            <button
+              class="py-2 px-12 bg-yellow-500 text-white text-xl hover:text-yellow-500 hover:bg-white shadow-md rounded my-4 w-56 transition duration-300"
+              @click="addShoppingCart"
+            >加入购物车</button>
+            <button
+              class="py-2 px-12 bg-red-500 text-white text-xl hover:text-red-500 hover:bg-white shadow-md rounded mx-4 w-56 transition duration-300"
+              @click="goConfirmOrder"
+            >立即下单</button>
           </div>
         </div>
+        <!-- 右侧商品规格名称等详情end -->
+      </div>
 
-        <div class="my-2">
-          <button
-            class="py-2 px-12 bg-yellow-500 text-white text-xl hover:text-yellow-500 hover:bg-white shadow-md rounded my-4 w-56 transition duration-300"
-            @click="addShoppingCart"
-          >加入购物车</button>
-          <button
-            class="py-2 px-12 bg-red-500 text-white text-xl hover:text-red-500 hover:bg-white shadow-md rounded mx-4 w-56 transition duration-300"
-            @click="goConfirmOrder"
-          >立即下单</button>
+      <el-divider></el-divider>
+      <div v-html="productData.info"></div>
+    </div>
+    <!-- pc端 end -->
+
+    <div class="md:hidden bg-gray-100 min-h-screen">
+
+      <header class="flex items-center bg-gray-100">
+        <back />
+      </header>
+      <!-- 头部 end -->
+
+      <div>
+        <van-swipe @change="onChange">
+          <van-swipe-item
+            v-for="(item,index) in productData.slider_image"
+            :key=index
+          >
+            <img
+              :src="baseUrl+item.img_url"
+              class="h-72 w-full object-cover"
+            >
+          </van-swipe-item>
+          <template #indicator>
+            <div
+              class="absolute bottom-3 right-3 bg-black rounded-full px-2 bg-opacity-25 text-white text-xs"
+            >
+              {{ current + 1 }}/{{amount}}</div>
+          </template>
+        </van-swipe>
+      </div>
+      <!-- 轮播图 end -->
+
+      <div class=" bg-white rounded-lg p-3 m-2">
+        <p class="text-red-500 text-2xl font-bold">
+          <span class="text-xs">￥</span>{{productData.price}}
+        </p>
+        <p class="text-black font-semibold">{{productData.name}}</p>
+      </div>
+      <!-- 价格/名字 end -->
+
+      <div class="bg-white rounded-lg p-3 m-2 text-xs space-y-2">
+        <div class="flex">
+          <span class="w-8 mr-3">选择</span>
+          <div class=" text-black w-full flex justify-between">
+            <span>颜色分类</span>
+            <span><i class="el-icon-arrow-right text-gray-400"></i></span>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="w-8 mr-3">发货</div>
+          <div class="w-full text-black">
+            <div class="flex">
+              <div class="w-full flex divide-x ">
+                <div class="pr-3">广东东莞</div>
+                <div class="pl-3">快递：免运费</div>
+              </div>
+              <div class="w-3/12 text-right text-gray-400">销量 31</div>
+            </div>
+            <div class="mt-1">现货，付款后48小时内发货</div>
+          </div>
         </div>
       </div>
-      <!-- 右侧商品规格名称等详情end -->
+
+      <div class="flex justify-center my-2">
+        <van-divider
+          class="w-2/3 "
+          style="margin:0;"
+        >
+          <div class="text-xs text-gray-700">宝贝详情</div>
+        </van-divider>
+      </div>
+      <!-- <div v-if="!productData.info">&nbsp;</div> -->
+      <div
+        v-html="productData.info"
+        :style="{marginBottom:tabH}"
+      ></div>
+      <van-goods-action ref="tab">
+        <van-goods-action-icon
+          icon="shop-o"
+          text="店铺"
+          color="#ee0a24"
+          :to="'/business/info/'+businessId"
+        />
+        <van-goods-action-icon
+          icon="cart-o"
+          text="购物车"
+          :to="{name:'shoppingCartList'}"
+        />
+        <van-goods-action-icon
+          :icon="productData.collect?'star':'star-o'"
+          :text="productData.collect?'已收藏':'收藏'"
+          :color="productData.collect?'#ff5000':''"
+          @click="addCollect"
+        />
+        <van-goods-action-button
+          type="warning"
+          text="加入购物车"
+        />
+        <van-goods-action-button
+          type="danger"
+          text="立即购买"
+        />
+      </van-goods-action>
     </div>
 
-    <el-divider></el-divider>
-
-    <div v-html="productData.info"></div>
   </div>
 </template>
 
 <script>
+import back from '@/components/appBack.vue'
 import elImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { getProductInfo, getProductSpecification } from '@/api/productInfo'
 import { addShoppingCart } from '@/api/ShoppingCart'
@@ -233,10 +338,13 @@ export default {
       checkedList: [], // 选择了的【规格项】数组
       productNum: 1,
       specificationId: null, // 规格id
-      businessId: null
+      businessId: null,
+      current: 0, // 当前轮播图索引
+      amount: 0, // 轮播图总长度
+      tabH: '', // tab高度
     }
   },
-  components: { elImageViewer },
+  components: { elImageViewer, back },
   computed: {
   },
   // 生命周期 - 创建完成（访问当前this实例）
@@ -245,7 +353,10 @@ export default {
   },
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-
+    this.$nextTick(() => {
+      this.tabH = this.$refs.tab.$el.offsetHeight + 'px'
+      console.log("this.$nextTick => this.tabH", this.tabH)
+    })
   },
 
   // 函数
@@ -253,6 +364,7 @@ export default {
     async getProductData () { // 获取商品数据
       await getProductInfo(this.productId).then(response => {
         this.productData = response.data.data
+        this.amount = this.productData.slider_image.length
         console.log("getProductInfo => this.productData", this.productData)
         for (const i in this.productData.sku) {
           this.checkedList.push({ name: null })
@@ -398,23 +510,31 @@ export default {
         const query = { type: 'product' }
         const data = { productId: this.productId }
         addCollect(query, data).then(response => {
-          this.$message({
-            type: 'success',
-            message: '收藏成功'
-          })
+          if (this.$store.getters.innerWidth > 768) {
+            this.$message({
+              type: 'success',
+              message: '收藏成功'
+            })
+          }
           this.getProductData()
         })
       } else {
         delCollect({ collectId: this.productData.collect }).then(response => {
-          this.$message({
-            type: 'success',
-            message: '取消成功'
-          })
+          if (this.$store.getters.innerWidth > 768) {
+            this.$message({
+              type: 'success',
+              message: '取消成功'
+            })
+          }
           this.getProductData()
         })
 
       }
 
+    },
+
+    onChange (index) {
+      this.current = index;
     },
   }
 

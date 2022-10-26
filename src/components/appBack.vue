@@ -1,16 +1,16 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-25 19:12:57
- * @LastEditTime: 2022-10-25 19:13:51
+ * @LastEditTime: 2022-10-26 21:58:20
  * @LastEditors: you name
  * @Description: app的返回头部
 -->
 <!-- appBack 页 -->
 <template>
   <div class="appBack">
-    <header class="p-3 font-semibold text-black">
+    <header class="p-2 font-semibold text-black">
       <i
-        class="el-icon-arrow-left"
+        class="el-icon-back text-lg"
         @click="back"
       ></i>
     </header>
