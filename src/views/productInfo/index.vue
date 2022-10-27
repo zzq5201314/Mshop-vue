@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-10-26 22:12:30
+ * @LastEditTime: 2022-10-27 21:49:40
  * @LastEditors: you name
  * @Description: 
 -->
@@ -306,12 +306,96 @@
         <van-goods-action-button
           type="warning"
           text="加入购物车"
+          @click="buyPopupShow('addShoppingCart')"
         />
         <van-goods-action-button
           type="danger"
           text="立即购买"
+          @click="buyPopupShow('buy')"
         />
       </van-goods-action>
+
+      <van-popup
+        v-model="skuShow"
+        position="bottom"
+        closeable
+        close-icon="close"
+      >
+        <div class="flex p-2 space-x-3">
+          <img
+            :src="baseUrl+productData.image"
+            class="w-20 h-20 object-cover"
+          >
+          <div
+            class="text-red-600 font-bold text-xl"
+            v-if="productData.price"
+          ><span class="text-xs">￥</span>{{productData.price.toFixed(2)}}
+            <div class="text-xs text-gray-500 font-medium">
+              库存：{{productData.stock}}
+            </div>
+          </div>
+
+        </div>
+        <!-- 顶部商品价格/图片 end -->
+        <div class="p-2">
+          <div
+            v-for="(skuGroupItem,skuGroupIndex) in productData.sku"
+            :key="skuGroupIndex"
+            class="py-2 flex text-xs items-center"
+          >
+            <label class="text-black w-9 pr-1">
+              {{skuGroupItem.product_group_name}}
+            </label>
+            <div class="flex space-x-3 items-center">
+              <div
+                :class="{}"
+                v-for="(keyItem,keyIndex) in skuGroupItem.key"
+                :key="keyIndex"
+              >
+                <span
+                  class="bg-gray-100 px-3 text-black rounded-3xl h-7 flex items-center"
+                  @click="select(keyItem._id,keyItem.product_key_name,skuGroupIndex)"
+                  :class="[
+                    checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'bg-red-100':'',
+                    checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'text-red-600':'',
+                    checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'bg-opacity-60':''
+                    ]"
+                >
+                  <!-- {{checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1}} -->
+                  {{keyItem.product_key_name}}
+                </span>
+              </div>
+              <!-- 规格选项 按钮  end-->
+            </div>
+          </div>
+          <!-- 商品规格 end -->
+          <div class="flex h-9 items-center">
+            <label class="text-black w-9 pr-1 text-xs">
+              数量
+            </label>
+            <div>
+              <van-stepper
+                v-model="productNum"
+                theme="round"
+                :max="productData.stock"
+                button-size="22"
+                disable-input
+              />
+            </div>
+          </div>
+          <!-- 数量 end -->
+        </div>
+        <!-- 商品规格and数量 end -->
+
+        <div class="mb-2">
+          <div
+            class="mx-auto w-10/12 text-center bg-red-500 text-white rounded-3xl py-1"
+            @click="notarize"
+          >确认
+          </div>
+        </div>
+
+      </van-popup>
     </div>
 
   </div>
@@ -324,8 +408,8 @@ import { getProductInfo, getProductSpecification } from '@/api/productInfo'
 import { addShoppingCart } from '@/api/ShoppingCart'
 import { getToken } from '@/utils/auth'
 import { addCollect, delCollect } from '@/api/Collect'
+import { mapGetters } from 'vuex'
 // import { data, province, city, area, town } = require('province-city-china/data');
-
 export default {
   name: "index",
   data () {
@@ -342,10 +426,15 @@ export default {
       current: 0, // 当前轮播图索引
       amount: 0, // 轮播图总长度
       tabH: '', // tab高度
+      skuShow: false, // app端的规格显示
+      appButtonValidate: ''
     }
   },
   components: { elImageViewer, back },
   computed: {
+    // ...mapGetters([
+    //   'innerWidth',
+    // ])
   },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
@@ -355,7 +444,7 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.tabH = this.$refs.tab.$el.offsetHeight + 'px'
-      console.log("this.$nextTick => this.tabH", this.tabH)
+      // console.log("this.$nextTick => this.tabH", this.tabH)
     })
   },
 
@@ -398,7 +487,11 @@ export default {
     },
 
     async select (keyId, keyName, index) {  // 选择商品规格值
-      console.log("select => 选择商品规格值")
+      // console.log("select => index", index)
+      // console.log("select => keyId", keyId)
+      // console.log("select => keyName", keyName)
+      console.log('库存 =>', this.productData.stock);
+      // console.log("select => 选择商品规格值")
       var count = null  // 计算已选择了几个项
       for (var i in this.checkedList) { // 循环已选择的规格项数组
         if (this.checkedList[i].name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
@@ -415,6 +508,8 @@ export default {
         this.getProductSpecification(data)
       }
       this.checkedList[index].name = keyName
+      console.log("select => this.checkedList", this.checkedList)
+
     },
 
 
@@ -533,9 +628,26 @@ export default {
 
     },
 
+    // 滑动轮播图
     onChange (index) {
       this.current = index;
     },
+
+    // 弹出规格选择
+    buyPopupShow (value) {
+      this.skuShow = true
+      this.appButtonValidate = value
+    },
+
+    // app 弹出窗口的确认
+    notarize () {
+      if (this.appButtonValidate == 'addShoppingCart') {
+        this.addShoppingCart() // 添加购物车
+      } else if (this.appButtonValidate == 'buy') {
+        this.goConfirmOrder() // 立即购买
+      }
+    }
+
   }
 
 }
