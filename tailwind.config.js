@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-10-25 23:30:21
+ * @LastEditTime: 2022-10-29 23:26:36
  * @LastEditors: you name
  * @Description: 
  */
@@ -36,7 +36,9 @@ module.exports = {
       backgroundColor: ['checked'],
       borderColor: ['checked'],
       appearance: ['hover', 'focus'],
-      display: ['group-hover']
+      display: ['group-hover'],
+      borderStyle: ['last'],
+      borderWidth: ['last']
     }
   },
   // 配置前缀, 防止类名与其他UI框架冲突

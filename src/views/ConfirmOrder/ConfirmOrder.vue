@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-28 20:46:16
+ * @LastEditTime: 2022-10-29 23:39:56
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -118,38 +118,38 @@
           <div>
             <div
               class="flex space-x-6 border h-36 text-black"
-              v-for="(productItem,productIndex) in productList"
+              v-for="(businessItem,productIndex) in productList"
               :key="productIndex"
             >
               <span
                 class="w-40 flex items-center justify-center"
-                v-if="productItem"
+                v-if="businessItem"
               >
                 <img
                   class="w-36"
-                  :src="baseUrl+productItem.specification.product_pic"
+                  :src="baseUrl+businessItem.specification.product_pic"
                 >
               </span>
               <!-- 商品图片end -->
               <span
                 class="w-80 py-6"
-                v-if="productItem"
-              >{{productItem.product_id.name}}</span>
+                v-if="businessItem"
+              >{{businessItem.product_id.name}}</span>
               <!-- 商品名称end -->
               <span
-                v-if="productItem"
+                v-if="businessItem"
                 class="w-44 text-sm py-6"
-              >{{productItem.specification.product_specs}}</span>
+              >{{businessItem.specification.product_specs}}</span>
               <!-- 商品规格end -->
               <span
                 class="w-8 text-sm py-6"
-                v-if="productItem"
-              >X{{productItem.product_num}}</span>
+                v-if="businessItem"
+              >X{{businessItem.product_num}}</span>
               <!-- 商品数量end -->
               <span
-                v-if="productItem"
+                v-if="businessItem"
                 class="w-24 text-sm py-6"
-              >￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}</span>
+              >￥{{(businessItem.specification.product_price*businessItem.product_num).toFixed(2)}}</span>
               <!-- 商品金额end -->
             </div>
           </div>
@@ -227,29 +227,52 @@
       <div>
         <div
           class="bg-white p-3 mx-3 mt-3 rounded-lg"
-          v-for="(productItem,productIndex) in productList"
-          :key="productIndex"
+          v-for="(businessItem,businessIndex) in appProductList"
+          :key="businessIndex"
         >
           <div class="flex items-center">
             <div class="w-7 h-7 ">
               <img
-                :src="baseUrl+productItem.business_id.company_logo"
+                :src="baseUrl+businessItem.business.company_logo"
                 class="h-full w-full object-cover rounded-full"
               >
             </div>
-            <div>{{productItem.business_id.company_name}}</div>
+            <div class="mx-2">{{businessItem.business.company_name}}</div>
           </div>
           <!-- 店铺 end -->
-          {{productItem}}
-          <div class="flex ">
-            <div>商品图片</div>
-            <div>
-              <p>商品名称</p>
-              <p>商品规格</p>
-            </div>
-            <div>
-              <p>￥商品价格</p>
-              <p>X 商品数量</p>
+          <!-- {{businessItem}} -->
+          <div>
+            <div
+              class="flex py-4 border-b last:border-none"
+              v-for="(productItem,productIndex) in businessItem.product"
+              :key="productIndex"
+            >
+              <div class="w-24 h-24 mr-3">
+                <img
+                  :src="baseUrl+productItem.specification.product_pic"
+                  class="w-24 h-24 object-cover"
+                >
+              </div>
+              <div class="w-52">
+                <p class="text-sm font-bold text-black h-8">
+                  {{productItem.product_id.name}}</p>
+                <!-- 商品名称 end -->
+                <div class="flex text-xs space-x-2 mt-1">
+                  <p
+                    v-for="item in productItem.specification.product_specs"
+                    :key="item"
+                  >{{item}}</p>
+                </div>
+                <!-- 规格 end -->
+                <div class="flex items-center justify-between mt-1">
+                  <p class="text-lg text-red-700 font-bold ml-1"><span
+                      class="text-sm"
+                    >¥</span>{{productItem.specification.product_price}}</p>
+                  <p class="text-sm">×{{productItem.product_num}}</p>
+                </div>
+                <!-- 商品价格、数量 end -->
+              </div>
+
             </div>
           </div>
         </div>
@@ -328,73 +351,238 @@ export default {
       console.log("awaitgetProductOrderInfo => this.productList", this.productList)
       this.appProductList = []
       let productList = this.productList
-      productList.forEach(async (productItem, index) => {
+
+
+      // for (var i = 0; i < productList.length; i++) {
+      //   const value = JSON.parse(JSON.stringify(productList)).splice(i, 1)
+      //   if (this.appProductList.length == 0) {
+      //     this.appProductList.push({
+      //       business: value[0].business_id,
+      //       product: [...value]
+      //     })
+      //   }
+
+      //   this.appProductList.forEach((businessItem, businessIndex) => {
+
+      //     // 判断店铺是否相同
+      //     if (businessItem.business._id == value[0].business_id._id) {
+
+      //       // 判断商品是否已经添加
+      //       businessItem.product.forEach(item => {
+
+      //         console.log("this.appProductList.forEach => value[0]._id", value[0]._id)
+      //         console.log("this.appProductList.forEach => item._id", item._id)
+
+      //         if (item._id !== value[0]._id) {
+      //           console.log("this.appProductList.forEach => value[0]", value[0])
+      //           console.log("this.appProductList.forEach => item", item)
+      //           console.log('添加了a');
+      //           businessItem.product.push(value[0])
+
+      //         }
+
+      //       })
+
+      //     } else {
+
+      //       this.appProductList.push({
+      //         business: value[0].business_id,
+      //         product: [...value]
+      //       })
+
+      //     }
+
+
+      //   })
+
+
+      // }
+
+
+      // for (let index in productList) {
+
+      //   const value = JSON.parse(JSON.stringify(productList)).splice(index, 1)
+
+      //   if (this.appProductList.length == 0) {
+      //     console.log('无');
+      //     this.appProductList.push({
+      //       business: value[0].business_id,
+      //       product: [...value]
+      //     })
+      //   }
+
+      //   this.appProductList.forEach((appProductItem, appProductIndex) => {
+
+      //     appProductItem.product.forEach((listItem, listIndex) => {
+      //       // console.log("appProductItem.product.forEach => listItem", listItem)
+      //       // console.log(" 列表里 商品的 id => listItem", listItem._id)
+
+      //       // if (value[0].business_id._id == listItem.business_id._id) {
+
+
+
+      //       if (listItem._id !== value[0]._id) {
+      //         // console.log(" 列表里 商品的 id => listItem", listItem._id)
+      //         // console.log(" 需要验证的 商品 id => value[0]._id", value[0]._id)
+      //         // console.log('没有');
+
+      //         // console.log(" 列表里的 店铺 id => ", listItem.business_id._id)
+      //         // console.log(" 需要验证的 店铺 id => ", value[0].business_id._id)
+      //         // console.log('是同个店铺');
+      //         console.log("appProductItem.product.forEach => value[0]", value[0])
+      //         appProductItem.product.push(value[0])
+
+
+
+      //       }
+
+      //       // }
+
+
+
+      //     })
+
+      //   })
+
+
+
+      //   // if (this.appProductList.length == 0) {
+
+      //   //   this.appProductList = [...[{
+      //   //     business: value[0].business_id,
+      //   //     product: [...value]
+      //   //   }]]
+
+
+      //   // }
+
+      //   // else {
+
+
+
+      //   // for (let newArrIndex in this.appProductList) {
+
+      //   //   for (let _index in this.appProductList[newArrIndex].product) {
+      //   //     console.log("getData => _index", _index)
+      //   //     console.log("getData => this.appProductList[newArrIndex].product", this.appProductList[newArrIndex].product)
+
+      //   //     console.log("getData => this.appProductList[newArrIndex].product[_index]._id", this.appProductList[newArrIndex].product[_index]._id)
+      //   //     console.log("getData => value[0]._id", value[0]._id)
+      //   //     // if (this.appProductList[newArrIndex].product[_index]._id !== value[0]._id) {
+
+      //   //     //   if (this.appProductList[newArrIndex].business._id == value[0].business_id._id) {
+      //   //     //     // this.appProductList[newArrIndex].product.splice(this.appProductList[newArrIndex].product.length, 0, productList[index])
+      //   //     //     this.appProductList[newArrIndex].product.push(value[0])
+      //   //     //     // productList[index].isAdd = true
+      //   //     //     // console.log("getData => productList[index]", productList[index])
+      //   //     //     // console.log("getData => this.appProductList[newArrIndex].product", this.appProductList[newArrIndex].product)
+      //   //     //   }
+
+      //   //     //   // else {
+
+      //   //     //   //   const obj = {
+      //   //     //   //     business: productList[index].business_id,
+      //   //     //   //     product: [...[productList[index]]]
+      //   //     //   //   }
+      //   //     //   //   this.appProductList.splice(this.productList.length, 0, obj)
+
+      //   //     //   // }
+      //   //     // }
+      //   //   }
+
+
+      //   // }
+      //   // }
+
+      // }
+
+
+      productList.forEach(async (businessItem, index) => {
+
+        const value = JSON.parse(JSON.stringify(productList)).splice(index, 1)
+
         if (index == 0) {
           this.appProductList.push({
-            business: productList[index].business_id,
-            product: [productList[index]]
+            business: value[0].business_id,
+            product: [...value]
           })
-          // const obj = JSON.parse(JSON.stringify(this.appProductList[index]))
-          // obj.business.product = new Array
-          // await obj.business.product.push(JSON.parse(JSON.stringify(productList[index])))
-          // this.appProductList[index] = obj
-
-          // this.appProductList[index].business.product = new Array
-          // this.appProductList[index].business.product.push(productList[index])
         }
         else {
-          this.appProductList.forEach((_Item, _index) => {
-            if (_Item.business._id == productList[index].business_id._id) {
-              _Item.product.push(productList[index])
-            } else {
-              console.log('添加店铺');
-              console.log("index ", index)
-              this.appProductList.push({
-                business: productList[index].business_id,
-                product: [productList[index]]
-              })
-              // this.appProductList.push({
-              //   business: productList[index].business_id,
-              //   product: [productList[index]]
-              // })
-              // console.log("productList.forEach => productList[index]", productList[index])
+
+
+          function validateBusiness (value, arr) {
+
+            for (let index in arr) {
+              if (arr[index].business !== undefined) { // 防止 bug
+
+                if (arr[index].business._id == value.business_id._id) {
+                  return index
+                }
+
+              }
             }
-          })
+
+          }
+
+          const arr = JSON.parse(JSON.stringify(this.appProductList))
+          const a = validateBusiness(value[0], arr)
+          console.log("productList.forEach => a", a)
+
+
+          if (a) {
+            this.appProductList[a].product.push(value[0])
+          } else {
+            this.appProductList.push({
+              business: value[0].business_id,
+              product: [...value]
+            })
+
+          }
 
         }
+
+
+        // console.log("this.appProductList.forEach => this.appProductList", this.appProductList)
+        // for (let a = 0, len = this.appProductList.length; a < len; a++) {
+
+        //   if (this.appProductList[a].business._id == b[0].business_id._id) {
+        //     this.appProductList[a].product.push(b[0])
+        //   }
+        //   else {
+        //     this.appProductList.push({
+        //       business: b[0].business_id,
+        //       product: [b[0]]
+        //     })
+        //     console.log("当前需要判断的是 = > ", b[0])
+        //   }
+        // }
+
+        // this.appProductList.forEach((_Item, _index) => {
+        //   console.log("this.appProductList.map => _Item", _Item, _index)
+        //   if (_Item.business._id == b[0].business_id._id) {
+        //     _Item.product.push(b)
+        //   } else {
+        //     // console.log('需要 - >添加店铺');
+        //     console.log("当前需要判断的是 = > ", b[0])
+        //     // console.log("当前是 => ", index)
+        //     // console.log("index ", index)
+        //     this.appProductList.push({
+        //       business: b[0].business_id,
+        //       product: [b[0]]
+        //     })
+        //     // this.appProductList.push({
+        //     //   business: productList[index].business_id,
+        //     //   product: [productList[index]]
+        //     // })
+        //     // console.log("productList.forEach => productList[index]", productList[index])
+        //   }
+        // })
+
+
 
       })
 
-      // for (var i = 0; i < productList.length; i++) {
-      //   if (i == 0) {
-      //     this.appProductList.push({
-      //       business: this.productList[i].business_id
-      //     })
 
-      //     console.log("getData => productList[i]", productList[i])
-      //     const obj = productList[i]
-      //     console.log("getData => obj", obj)
-      //     this.appProductList[i].business['product'] = new Array
-      //     this.appProductList[i].business['product'].push(JSON.parse(JSON.stringify(obj)))
-      //     // this.appProductList[i].business['product'].push(productList[i])
-      //     // this.appProductList[i].business['product'].push(productList[i]) 
-      //   } else {
-
-      //     // const temp_arr = this.productList
-      //     // const temp_obj = temp_arr.splice(1, i)
-
-      //     // if (this.productList[i].business_id._id == this.appProductList[i].business._id) {
-      //     //   this.appProductList[i].business['product'].push(productList[i])
-      //     // }
-      //     // else {
-      //     //   this.appProductList.push({
-      //     //     business: this.productList[i].business_id
-      //     //   })
-      //     //   this.appProductList[i].business['product'] = []
-      //     //   this.appProductList[i].business['product'].push(productList[i])
-      //     // }
-      //   }
-      // }
       console.log("getData => this.appProductList", this.appProductList)
     },
 
@@ -517,9 +705,9 @@ export default {
     // 计算总金额 -- 运费 -- 订单
     countMoney () {
       console.log('计算总金额');
-      this.productList.forEach(productItem => {
-        this.freightMoney = this.freightMoney + Number(productItem.product_id.postage)
-        this.sumMoney = this.sumMoney + (productItem.specification.product_price * productItem.product_num)
+      this.productList.forEach(businessItem => {
+        this.freightMoney = this.freightMoney + Number(businessItem.product_id.postage)
+        this.sumMoney = this.sumMoney + (businessItem.specification.product_price * businessItem.product_num)
 
       })
 
@@ -527,13 +715,13 @@ export default {
     // 提交订单
     submitOrder () {
       this.order = []
-      this.productList.forEach(productItem => {
+      this.productList.forEach(businessItem => {
         const temp_obj = {
-          product_id: productItem.product_id._id,
-          business_id: productItem.business_id._id,
-          num: productItem.product_num,
-          specification_id: productItem.specification._id,
-          shopping_cart_id: productItem._id
+          product_id: businessItem.product_id._id,
+          business_id: businessItem.business_id._id,
+          num: businessItem.product_num,
+          specification_id: businessItem.specification._id,
+          shopping_cart_id: businessItem._id
         }
         this.order.push(temp_obj)
       })
