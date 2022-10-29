@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-15 16:29:44
- * @LastEditTime: 2022-10-23 16:20:05
+ * @LastEditTime: 2022-10-28 21:42:46
  * @LastEditors: you name
  * @Description: 用户token
  */
@@ -49,10 +49,10 @@ const actions = {
 		const { phone, password } = userInfo
 		return new Promise((resolve, reject) => {
 			login(userInfo).then(response => {
-				console.log("login => response", response)
+				// console.log("login => response", response)
 				// const token = getToken()
 				const token = response.data.data.token
-				console.log("login => token", token)
+				// console.log("login => token", token)
 				setToken(token)  // 保存到cookie
 				commit('SET_TOKEN', token) // 保存vuex
 				// commit('SET_USER_ID', data.session.user_id)

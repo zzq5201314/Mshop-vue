@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-28 15:03:50
- * @LastEditTime: 2022-10-02 14:14:39
+ * @LastEditTime: 2022-10-28 22:10:01
  * @LastEditors: you name
  * @Description: 
 -->
@@ -445,7 +445,7 @@ export default {
         console.log("upShelfBusiness => response", response)
         this.$message({ type: 'success', message: response.data.msg })
       }).finally(_ => {
-        window.location.href = "http://localhost:9520/"
+        window.location.href = "http://112.74.54.76:9520/"
       })
     },
 

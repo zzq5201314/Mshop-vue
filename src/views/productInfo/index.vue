@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-10-27 21:49:40
+ * @LastEditTime: 2022-10-28 15:24:41
  * @LastEditors: you name
  * @Description: 
 -->
@@ -409,6 +409,8 @@ import { addShoppingCart } from '@/api/ShoppingCart'
 import { getToken } from '@/utils/auth'
 import { addCollect, delCollect } from '@/api/Collect'
 import { mapGetters } from 'vuex'
+import { Toast } from 'vant';
+import { msg } from '@/assets/js/msg'
 // import { data, province, city, area, town } = require('province-city-china/data');
 export default {
   name: "index",
@@ -432,9 +434,9 @@ export default {
   },
   components: { elImageViewer, back },
   computed: {
-    // ...mapGetters([
-    //   'innerWidth',
-    // ])
+    ...mapGetters([
+      'innerWidth',
+    ])
   },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
@@ -490,8 +492,9 @@ export default {
       // console.log("select => index", index)
       // console.log("select => keyId", keyId)
       // console.log("select => keyName", keyName)
-      console.log('库存 =>', this.productData.stock);
+      // console.log('库存 =>', this.productData.stock);
       // console.log("select => 选择商品规格值")
+      this.checkedList[index].name = keyName
       var count = null  // 计算已选择了几个项
       for (var i in this.checkedList) { // 循环已选择的规格项数组
         if (this.checkedList[i].name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
@@ -499,7 +502,7 @@ export default {
         }
       }
       if (count == this.productData.sku.length) { // 判断是否选择完全部规格项
-        console.log('相同');
+        console.log('全选中了');
         const data = []
         for (var i in this.checkedList) {
           data.push(this.checkedList[i].name)
@@ -507,7 +510,7 @@ export default {
         // console.log("select => productSpecs", data)
         this.getProductSpecification(data)
       }
-      this.checkedList[index].name = keyName
+
       console.log("select => this.checkedList", this.checkedList)
 
     },
@@ -539,16 +542,10 @@ export default {
         this.$router.push({
           path: `/login`
         })
-        this.$message({
-          type: 'error',
-          message: '请先登录'
-        })
+        msg('请先登录', 'error')
       }
       else if (!this.specificationId) { // 判断是否选择商品规格
-        this.$message({
-          type: 'error',
-          message: '请选择商品规格'
-        })
+        msg('请选择商品规格', 'error')
       } else {
         const data = {
           productId: this.productId,
@@ -558,11 +555,8 @@ export default {
         }
         addShoppingCart(data).then(response => {
           // console.log("addShoppingCart => response", response)
-          this.$message({
-            type: 'success',
-            message: response.data.msg
-          })
-
+          msg('添加成功，在购物车等亲哦~', 'success')
+          // Toast.success('成功文案');
         })
       }
     },
@@ -574,16 +568,10 @@ export default {
         this.$router.push({
           path: `/login`
         })
-        this.$message({
-          type: 'error',
-          message: '请先登录'
-        })
+        msg('请先登录', 'error')
       }
       else if (!this.specificationId) { // 判断是否选择商品规格
-        this.$message({
-          type: 'error',
-          message: '请选择商品规格'
-        })
+        msg('请选择商品规格', 'error')
       } else {
         const temp_obj = {
           product_id: this.productId,
@@ -605,22 +593,12 @@ export default {
         const query = { type: 'product' }
         const data = { productId: this.productId }
         addCollect(query, data).then(response => {
-          if (this.$store.getters.innerWidth > 768) {
-            this.$message({
-              type: 'success',
-              message: '收藏成功'
-            })
-          }
+          msg('收藏成功', 'success', 'pc')
           this.getProductData()
         })
       } else {
         delCollect({ collectId: this.productData.collect }).then(response => {
-          if (this.$store.getters.innerWidth > 768) {
-            this.$message({
-              type: 'success',
-              message: '取消成功'
-            })
-          }
+          msg('取消成功', 'success', 'pc')
           this.getProductData()
         })
 
@@ -654,6 +632,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
+
 .index {
   .layout {
     grid-template-columns: 0.2fr 1.5fr;

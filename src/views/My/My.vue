@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-25 21:41:09
- * @LastEditTime: 2022-10-26 11:32:03
+ * @LastEditTime: 2022-10-28 22:11:10
  * @LastEditors: you name
  * @Description: 
 -->
@@ -211,7 +211,7 @@ export default {
       })
     },
     goBusiness () {
-      window.location.href = "http://localhost:9520/"
+      window.location.href = "http://112.74.54.76:9520/"
     },
     goOrder () {
       this.$router.push({
