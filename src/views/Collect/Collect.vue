@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-24 14:44:21
- * @LastEditTime: 2022-10-31 00:04:38
+ * @LastEditTime: 2022-10-31 00:05:58
  * @LastEditors: you name
  * @Description: 收藏页
 -->
@@ -217,6 +217,7 @@ export default {
           check: false
         }))
         this.dataLoading = false
+        this.checkedData = []
       })
     },
 
