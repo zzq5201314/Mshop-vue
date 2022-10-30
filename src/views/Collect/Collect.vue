@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-24 14:44:21
- * @LastEditTime: 2022-10-30 17:43:35
+ * @LastEditTime: 2022-10-31 00:04:38
  * @LastEditors: you name
  * @Description: 收藏页
 -->
@@ -82,30 +82,58 @@
       >
         <back />
         <div class="w-full">{{title}}</div>
+        <div class="w-12 text-sm">
+          <span @click="check=!check">{{check?'完成':'管理'}}</span>
+        </div>
       </header>
 
-      <div class="bg-white mt-11">
+      <div
+        class="bg-white mt-11 "
+        :class="check ?'mb-10':''"
+      >
         <div
           v-for="(productItem, productIndex) in list "
           :key="productIndex"
           class="flex px-3 py-1 "
         >
-          <div>
+
+          <div
+            v-show="check"
+            class="mr-2"
+          >
+
+            <!-- <van-checkbox
+              v-model="productItem.checkAll"
+              @change="(val) => selectChange(val, productItem)"
+            >全选</van-checkbox> -->
+
+            <van-checkbox
+              v-model="productItem.check"
+              @change="(val) => selectChange(val, productItem)"
+            ></van-checkbox>
+
+          </div>
+
+          <div @click="goProductInfo(productItem.product_id._id)">
             <img
               :src="baseUrl+productItem.product_id.image"
               class="w-32 h-32 rounded-lg"
             >
           </div>
 
-          <div class="ml-2 space-y-3 relative w-7/12">
+          <div
+            class="ml-2 space-y-3 relative w-7/12"
+            @click="goProductInfo(productItem.product_id._id)"
+          >
             <p class="text-sm text-black font-bold">
               {{productItem.product_id.name}}</p>
             <p class="text-xl text-red-600 font-bold">
               <span class="text-xs">¥</span>{{productItem.product_id.price}}
             </p>
             <p class="text-xs absolute bottom-2 right-2"><span
+                v-show="!check"
                 class="border p-2 py-1 rounded-full border-gray-300"
-                @click="goBusiness(productItem.product_id.business)"
+                @click.stop="goBusiness(productItem.product_id.business)"
               >去店铺</span>
             </p>
           </div>
@@ -113,6 +141,14 @@
         </div>
       </div>
       <!-- 商品列表 end -->
+
+      <div
+        v-show="check"
+        class="flex justify-between px-3 py-2 fixed bottom-0 bg-white w-full"
+      >
+        <van-checkbox v-model="checkAll">全选</van-checkbox>
+        <span @click="del()">删除</span>
+      </div>
     </div>
     <!-- 移动端 end -->
   </div>
@@ -129,7 +165,9 @@ export default {
       list: [],
       baseUrl: this.$baseUrl,
       dataLoading: false,
-      title: this.$route.meta.title
+      title: this.$route.meta.title, // app顶部title名称
+      check: false, // 全选显示
+      checkedData: [], //选择多选框时选中的值
     }
   },
   components: { back },
@@ -141,30 +179,85 @@ export default {
   mounted () {
     this.getCollectList()
   },
+  computed: {
+    checkAll: {
+      get () {
+        console.log("get => this.checkedData.length", this.checkedData.length)
+        return this.checkedData.length == this.list.length
+      },
+      set (v) {
+        if (v) { // 全选
+          this.list.forEach((item, index, arr) => {
+            arr[index].check = true;
+          })
+        } else { // 反选
+          this.list = this.list.map((v) => ({
+            ...v,
+            check: false
+          }))
+          this.checkedData = []
+        }
+      }
+    }
+  },
   // 函数
   methods: {
     handleSelect (key, keyPath) {
       console.log(key, keyPath);
     },
     getCollectList () {
+      console.log('获取数据');
       this.dataLoading = true
       const query = { type: 'product' }
       getCollectList(query).then(response => {
         this.list = response.data.data
-        console.log("getCollectList => this.list", this.list)
+        // 添加checkAll是否全选
+        this.list = this.list.map((v) => ({
+          ...v,
+          check: false
+        }))
         this.dataLoading = false
       })
     },
-    del (collectId) {
-      console.log("del => collectId", collectId)
-      delCollect({ collectId }).then(response => {
-        console.log("delCollect => response", response)
-        this.$message({
-          type: 'success',
-          message: response.data.msg
+
+    // 全选
+    selectChange (val, item) {
+
+      if (val) {
+        this.checkedData.push(item)
+      } else {
+
+        this.checkedData.forEach((v, index) => {
+          if (v == item) {
+            this.checkedData.splice(index, 1)
+          }
         })
-        this.getCollectList()
-      })
+
+      }
+    },
+
+    selectAll () {
+      console.log(this.checkedData);
+    },
+
+
+    async del (collectId) {
+      if (!collectId & this.checkedData.length > 0) {
+        await Promise.all(this.checkedData.map((item) => delCollect({ collectId: item._id }))).then(() => {
+          this.getCollectList()
+        });
+
+      } else {
+        delCollect({ collectId }).then(response => {
+          console.log("delCollect => response", response)
+          this.$message({
+            type: 'success',
+            message: response.data.msg
+          })
+          this.getCollectList()
+        })
+      }
+
     },
     goBusiness (businessId) {
       // console.log("goBusiness => businessId", businessId)
