@@ -1,81 +1,125 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-24 14:44:21
- * @LastEditTime: 2022-10-12 10:30:26
+ * @LastEditTime: 2022-10-30 17:43:35
  * @LastEditors: you name
- * @Description: 
+ * @Description: 收藏页
 -->
 <!-- Collect 页 -->
 <template>
-  <div
-    class="Collect  bg-gray-100 h-screen"
-    v-loading="dataLoading"
-    element-loading-text="数据加载中，请稍后……"
-    element-loading-spinner="el-icon-loading"
-    element-loading-custom-class="loading-icon"
-  >
-    <div class="container mx-auto max-w-7xl py-5">
+  <div>
+    <div
+      class="Collect  bg-gray-100 h-screen hidden md:block"
+      v-loading="dataLoading"
+      element-loading-text="数据加载中，请稍后……"
+      element-loading-spinner="el-icon-loading"
+      element-loading-custom-class="loading-icon"
+    >
+      <div class="container mx-auto max-w-7xl py-5">
 
-      <div
-        class="grid grid-cols-7 gap-4"
-        v-if="list.length>0"
-      >
         <div
-          class="bg-white hover:shadow-xl transition duration-300 h-48 productItem select-none"
-          v-for="(item,index) in list"
-          :key="index"
-          @click="goProductInfo(item.product_id._id)"
+          class="grid grid-cols-7 gap-4"
+          v-if="list.length>0"
         >
-          <div class="h-48 relative">
-            <div class="relative">
-              <img
-                :src="baseUrl+item.product_id.image"
-                class="w-full h-32 "
-              />
-              <div
-                class="absolute bottom-0 left-0 bg-black bg-opacity-40 goBusiness"
-              >
-                <button
-                  class="text-white text-xs px-2 py-1 z-50"
-                  @click.stop="goBusiness(item.product_id.business)"
-                >进入店铺</button>
+          <div
+            class="bg-white hover:shadow-xl transition duration-300 h-48 productItem select-none"
+            v-for="(item,index) in list"
+            :key="index"
+            @click="goProductInfo(item.product_id._id)"
+          >
+            <div class="h-48 relative">
+              <div class="relative">
+                <img
+                  :src="baseUrl+item.product_id.image"
+                  class="w-full h-32 "
+                />
+                <div
+                  class="absolute bottom-0 left-0 bg-black bg-opacity-40 goBusiness"
+                >
+                  <button
+                    class="text-white text-xs px-2 py-1 z-50"
+                    @click.stop="goBusiness(item.product_id.business)"
+                  >进入店铺</button>
+                </div>
               </div>
-            </div>
-            <p class="text-center text-sm my-2 font-semibold">
-              {{item.product_id.name}}</p>
-            <p class="text-center text-xs my-2 text-red-400 font-semibold">
-              ￥{{item.product_id.price}}</p>
+              <p class="text-center text-sm my-2 font-semibold">
+                {{item.product_id.name}}</p>
+              <p class="text-center text-xs my-2 text-red-400 font-semibold">
+                ￥{{item.product_id.price}}</p>
 
-            <div
-              class="absolute top-0 right-0 del px-2 py-1 bg-black bg-opacity-40 text-white cursor-pointer"
-              @click.stop="del(item._id)"
+              <div
+                class="absolute top-0 right-0 del px-2 py-1 bg-black bg-opacity-40 text-white cursor-pointer"
+                @click.stop="del(item._id)"
+              >
+                <i class="el-icon-delete"></i>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div
+          v-else
+          class="bg-white rounded-2xl min-h-screen flex items-center justify-center"
+        >
+          <el-empty description="收藏夹空啦">
+            <router-link
+              :to="{path:'/'}"
+              class="bg-blue-600 px-4 py-2 text-white rounded-2xl"
+            >去购物</router-link>
+          </el-empty>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- pc端 end -->
+
+    <div class="">
+      <header
+        class="flex items-center text-xl font-medium text-black fixed bg-gray-100 z-10 w-full top-0"
+      >
+        <back />
+        <div class="w-full">{{title}}</div>
+      </header>
+
+      <div class="bg-white mt-11">
+        <div
+          v-for="(productItem, productIndex) in list "
+          :key="productIndex"
+          class="flex px-3 py-1 "
+        >
+          <div>
+            <img
+              :src="baseUrl+productItem.product_id.image"
+              class="w-32 h-32 rounded-lg"
             >
-              <i class="el-icon-delete"></i>
-            </div>
+          </div>
 
+          <div class="ml-2 space-y-3 relative w-7/12">
+            <p class="text-sm text-black font-bold">
+              {{productItem.product_id.name}}</p>
+            <p class="text-xl text-red-600 font-bold">
+              <span class="text-xs">¥</span>{{productItem.product_id.price}}
+            </p>
+            <p class="text-xs absolute bottom-2 right-2"><span
+                class="border p-2 py-1 rounded-full border-gray-300"
+                @click="goBusiness(productItem.product_id.business)"
+              >去店铺</span>
+            </p>
           </div>
 
         </div>
       </div>
-
-      <div
-        v-else
-        class="bg-white rounded-2xl min-h-screen flex items-center justify-center"
-      >
-        <el-empty description="收藏夹空啦">
-          <router-link
-            :to="{path:'/'}"
-            class="bg-blue-600 px-4 py-2 text-white rounded-2xl"
-          >去购物</router-link>
-        </el-empty>
-      </div>
-
+      <!-- 商品列表 end -->
     </div>
-
+    <!-- 移动端 end -->
   </div>
 </template>
 
 <script>
+import back from '@/components/appBack'
 import { getCollectList, delCollect } from '@/api/Collect'
 export default {
   name: "Collect",
@@ -84,10 +128,11 @@ export default {
       activeIndex: '1',
       list: [],
       baseUrl: this.$baseUrl,
-      dataLoading: false
+      dataLoading: false,
+      title: this.$route.meta.title
     }
   },
-  components: {},
+  components: { back },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
 

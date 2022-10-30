@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-29 23:39:56
+ * @LastEditTime: 2022-10-30 17:14:28
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -198,14 +198,16 @@
       </div>
     </div>
 
-    <div class="md:hidden">
+    <div class="md:hidden min-h-screen">
       <header class="flex items-center text-black font-medium text-xl">
         <back />
         <div>{{title}}</div>
       </header>
 
       <div
-        class="flex p-3 bg-white mx-3 mt-3 rounded-lg space-x-2 items-center">
+        @click="goAddress"
+        class="flex p-3 bg-white mx-3 mt-3 rounded-lg space-x-2 items-center"
+      >
         <div class="w-1/12">
           <i
             class="el-icon-location text-white text-sm bg-gradient-to-r to-red-500 from-yellow-500 rounded-full w-6 h-6 flex items-center justify-center " />
@@ -250,7 +252,7 @@
               <div class="w-24 h-24 mr-3">
                 <img
                   :src="baseUrl+productItem.specification.product_pic"
-                  class="w-24 h-24 object-cover"
+                  class="w-24 h-24 object-cover rounded-lg"
                 >
               </div>
               <div class="w-52">
@@ -265,20 +267,50 @@
                 </div>
                 <!-- 规格 end -->
                 <div class="flex items-center justify-between mt-1">
-                  <p class="text-lg text-red-700 font-bold ml-1"><span
+                  <p class="text-lg text-red-600 font-bold ml-1"><span
                       class="text-sm"
                     >¥</span>{{productItem.specification.product_price}}</p>
                   <p class="text-sm">×{{productItem.product_num}}</p>
                 </div>
                 <!-- 商品价格、数量 end -->
               </div>
-
             </div>
           </div>
+
+          <div class="flex text-sm items-center text-black">
+            <p>配送服务</p>
+            <div class="w-9/12 text-right font-bold">
+              <p>快递免邮</p>
+              <p>现货，付款后48小时内发货</p>
+            </div>
+            <i class="el-icon-arrow-right ml-1"></i>
+          </div>
+
         </div>
       </div>
-
       <!-- 商品信息 end -->
+
+      <van-submit-bar>
+        <template #default>
+
+          <div class=" mx-1 ">
+            <span class="">共{{sum}}件</span>
+            <span class="text-black mx-1">合计:</span>
+            <span class="text-red-500">¥</span>
+            <span class="text-red-500 text-2xl">{{sumMoney.toFixed(2)}}</span>
+          </div>
+
+        </template>
+        <template #button>
+          <div
+            class="text-white bg-gradient-to-r to-red-500 from-yellow-500 px-8 py-2 rounded-full"
+            @click="submitOrder"
+          >提交订单
+          </div>
+        </template>
+      </van-submit-bar>
+      <!-- 底部栏 end  -->
+
     </div>
   </div>
 </template>
@@ -305,12 +337,13 @@ export default {
       foldAddressData: [], // 被折叠住的地址数据
       productList: [],   // 商品数组
       sumMoney: 0,   // 总金额
-      freightMoney: 0,
+      sum: 0,  // 商品总数
+      freightMoney: 0, // 总运费
       alterAddressFrom: {},
       order: [],
       productInfo: this.$route.query.productInfo,
       title: this.$route.meta.title,
-      appProductList: new Array
+      appProductList: new Array,
     }
   },
   components: { addAddress, back },
@@ -589,28 +622,38 @@ export default {
     // 获取收货地址
     async getAddressList (value) {  // value :验证是否需要执行折叠  true:不需要执行折叠 \ 其余的要执行
       this.foldAddressData = []  // 初始化折叠的数据
-      await getAddressList().then(response => {
-        this.addressList = response.data.data
-        var count = 0
-        this.addressList.forEach(addressItem => {  // 循环高亮默认收货地址 
-          addressItem['selectAddressId'] = null
-          if (addressItem.selectAddressId == null && addressItem.isDefault == true) {
-            this.addressId = addressItem.selectAddressId = addressItem._id
-          } else {   // 没有默认地址
-            count++
+
+      if (this.$route.query.address) {
+        this.addressList.push(this.$route.query.address) // 获取到数据存入地址列表中
+        this.addressId = this.$route.query.address._id  // 获取收货地址id
+      } else {
+
+        await getAddressList().then(response => {
+          this.addressList = response.data.data
+          var count = 0
+          this.addressList.forEach(addressItem => {  // 循环高亮默认收货地址 
+            addressItem['selectAddressId'] = null
+            if (addressItem.selectAddressId == null && addressItem.isDefault == true) {
+              this.addressId = addressItem.selectAddressId = addressItem._id
+            } else {   // 没有默认地址
+              count++
+            }
+          })
+          if (count == this.addressList.length) {  // 当数组里没有默认收货地址的数长度等于总数组长度，代表没有默认数组，就高亮第一个数据
+            this.addressId = this.addressList[0].selectAddressId = this.addressList[0]._id
+          }
+
+          // console.log("getAddressList => this.addressList", this.addressList)
+          // console.log('this.addressId => ', this.addressId);
+          if (value !== true) {  // 折叠起来的
+            // console.log('执行了');
+            this.fold()
           }
         })
-        if (count == this.addressList.length) {  // 当数组里没有默认收货地址的数长度等于总数组长度，代表没有默认数组，就高亮第一个数据
-          this.addressId = this.addressList[0].selectAddressId = this.addressList[0]._id
-        }
 
-        // console.log("getAddressList => this.addressList", this.addressList)
-        // console.log('this.addressId => ', this.addressId);
-        if (value !== true) {  // 折叠起来的
-          // console.log('执行了');
-          this.fold()
-        }
-      })
+      }
+
+
 
     },
     // 打开添加地址窗口
@@ -708,34 +751,37 @@ export default {
       this.productList.forEach(businessItem => {
         this.freightMoney = this.freightMoney + Number(businessItem.product_id.postage)
         this.sumMoney = this.sumMoney + (businessItem.specification.product_price * businessItem.product_num)
-
+        this.sum = this.sum + businessItem.product_num
       })
 
     },
     // 提交订单
     submitOrder () {
-      this.order = []
-      this.productList.forEach(businessItem => {
-        const temp_obj = {
-          product_id: businessItem.product_id._id,
-          business_id: businessItem.business_id._id,
-          num: businessItem.product_num,
-          specification_id: businessItem.specification._id,
-          shopping_cart_id: businessItem._id
-        }
-        this.order.push(temp_obj)
-      })
-      const data = {
-        addressId: this.addressId,
-        order: this.order
-      }
-      buyOrder(data).then(response => {
-        this.$message({
-          type: 'success',
-          message: response.data.msg
+      if (this.addressId) {
+        this.order = []
+        this.productList.forEach(businessItem => {
+          const temp_obj = {
+            product_id: businessItem.product_id._id,
+            business_id: businessItem.business_id._id,
+            num: businessItem.product_num,
+            specification_id: businessItem.specification._id,
+            shopping_cart_id: businessItem._id
+          }
+          this.order.push(temp_obj)
         })
+        const data = {
+          addressId: this.addressId,
+          order: this.order
+        }
+        buyOrder(data).then(response => {
+          this.$message({
+            type: 'success',
+            message: response.data.msg
+          })
 
-      })
+        })
+      }
+
     },
     // 设置默认收货地址
     setDefaultAddress (addressId) {
@@ -752,6 +798,11 @@ export default {
     alterAddress (addressItem) {
       console.log("alterAddress => addressItem", addressItem)
       this.dialogShow = true
+    },
+
+    // 移动端跳转到我的地址页面
+    goAddress () {
+      this.$router.push({ name: 'appAddress', query: 'select' })
     }
   }
 }

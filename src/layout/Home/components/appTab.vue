@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-23 23:43:23
- * @LastEditTime: 2022-10-26 21:59:15
+ * @LastEditTime: 2022-10-30 17:06:40
  * @LastEditors: you name
  * @Description: 手机端的tab选项卡
 -->
@@ -9,7 +9,7 @@
 <template>
   <div
     class="appTab"
-    v-if="this.$route.name!=='productInfo'"
+    v-if="this.$route.name=='Home'|this.$route.name=='myInfo' |this.$route.name=='shoppingCartList'"
   >
     <div
       :style="{ height: tabH }"
@@ -84,7 +84,7 @@ export default {
   },
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-    if (this.$route.name !== 'productInfo') {
+    if (this.$route.name == 'Home' | this.$route.name == 'myInfo' | this.$route.name == 'shoppingCartList') {
 
       // 获取tab高度
       this.$nextTick(() => {

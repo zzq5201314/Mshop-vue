@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-27 10:34:01
- * @LastEditTime: 2022-10-26 15:09:32
+ * @LastEditTime: 2022-10-30 16:50:40
  * @LastEditors: you name
  * @Description: 
 -->
@@ -148,6 +148,7 @@
           :key="addressIndex"
           class="divide-y bg-white px-4 rounded-lg py-3"
           :class="{'h-addressItemHeight':operation==true}"
+          @click="select(addressItem)"
         >
           <div
             class="flex items-center "
@@ -192,7 +193,7 @@
             <!-- 地址/收件人 end -->
             <div class="w-1/12"><i
                 class="el-icon-edit"
-                @click="openAddress(addressItem)"
+                @click.stop="openAddress(addressItem)"
               /></div>
             <!-- 修改按钮 end -->
           </div>
@@ -254,7 +255,9 @@ export default {
       dialogShow: false,
       alterAddressFrom: {},
       title: this.$route.meta.title,
-      operation: false   // 手机端的操作显示是否打开
+      operation: false,   // 手机端的操作显示是否打开
+      toRouteName: '',
+      order: null,
     }
   },
   components: { addAddress, back },
@@ -270,6 +273,13 @@ export default {
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
     this.getData()
+    // this.$route.query
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.toRouteName = from.name
+      vm.order = from.query.shoppingCartIdList
+    })
   },
   // 函数
   methods: {
@@ -336,6 +346,16 @@ export default {
         console.log('修改地址');
       }
       console.log('打开手机端的添加地址');
+    },
+
+    // 移动端选择地址
+    select (items) {
+      if (this.$route.query == 'select' && this.toRouteName == 'confirmOrder') {
+        this.$router.push({
+          name: 'confirmOrder',
+          query: { shoppingCartIdList: this.order, address: items }
+        })
+      }
     }
   }
 }
