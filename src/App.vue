@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-25 19:11:57
+ * @LastEditTime: 2022-10-31 21:47:26
  * @LastEditors: you name
  * @Description: 
 -->
@@ -29,16 +29,29 @@ export default {
       transitionName: ''
     };
   },
+  deleted () {
+    window.onresize = null;
+  },
   methods: {
     _isMobile () {
       let flag = navigator.userAgent.match(
         /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
       );
       return flag;
-    }
+    },
   },
+
+
+
   //App.vue
   mounted () {
+
+    //初始化自适应  ----在刚显示的时候就开始适配一次
+    handleScreenAuto();
+    //绑定自适应函数   ---防止浏览器栏变化后不再适配
+    window.onresize = () => handleScreenAuto();
+
+
     // console.log("监听", this.$store.state.innerWH.innerWidth);
     if (this._isMobile()) {
       console.log('手机端');
@@ -53,6 +66,8 @@ export default {
       //跳转到PC端路由
       // this.$router.replace("/main");
     }
+
+
 
 
 

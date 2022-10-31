@@ -1,168 +1,256 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-18 22:30:04
- * @LastEditTime: 2022-10-08 15:08:05
+ * @LastEditTime: 2022-10-31 18:32:20
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- index 页 -->
 <template>
-  <div class="index bg-gray-200">
-    <div class="container mx-auto max-w-7xl py-5">
-      <div
-        class="bg-white rounded-2xl"
-        v-if="shoppingCartData.length>0"
-      >
-        <div class="flex justify-between items-center border-b-2 p-5">
-          <div class="text-xl text-black">
-            购物车 (全部<span class="font-semibold">{{dataLength}}</span>)
+  <div>
+    <div class="index bg-gray-200 hidden md:block">
+      <div class="container mx-auto max-w-7xl py-5">
+        <div
+          class="bg-white rounded-2xl"
+          v-if="shoppingCartData.length>0"
+        >
+          <div class="flex justify-between items-center border-b-2 p-5">
+            <div class="text-xl text-black">
+              购物车 (全部<span class="font-semibold">{{dataLength}}</span>)
+            </div>
+            <div>
+              已选商品(不含运费)
+              <span
+                class="text-red-500 text-xl mx-2 font-normal">{{total_prices?total_prices.toFixed(2):'00.00'}}</span>
+              <button
+                class="bg-gray-400 text-white px-4 py-2 rounded-full tracking-widest"
+                :class="{'bg-blue-500':checkedProduct.length>0,'cursor-not-allowed':checkedProduct.length<=0}"
+                :disabled="checkedProduct.length<=0"
+                @click="checkOut"
+              >结算</button>
+            </div>
           </div>
-          <div>
-            已选商品(不含运费)
-            <span
-              class="text-red-500 text-xl mx-2 font-normal">{{total_prices?total_prices.toFixed(2):'00.00'}}</span>
-            <button
-              class="bg-gray-400 text-white px-4 py-2 rounded-full tracking-widest"
-              :class="{'bg-blue-500':checkedProduct.length>0,'cursor-not-allowed':checkedProduct.length<=0}"
-              :disabled="checkedProduct.length<=0"
-              @click="checkOut"
-            >结算</button>
-          </div>
-        </div>
-        <!-- 头部end -->
+          <!-- 头部end -->
 
-        <div class="flex p-5">
-          <div class="flex-auto">
+          <div class="flex p-5">
+            <div class="flex-auto">
 
-            <!-- <el-checkbox
+              <!-- <el-checkbox
               v-model="checkAll"
               label="全选"
               @change="handlerChange(0,null,null,$event)"
             ></el-checkbox> -->
 
-            <el-checkbox
-              label="全选"
-              v-model="checkAll"
-              @change="handlerChange(0, null, $event)"
-            >
-            </el-checkbox>
+              <el-checkbox
+                label="全选"
+                v-model="checkAll"
+                @change="handlerChange(0, null, $event)"
+              >
+              </el-checkbox>
 
+            </div>
+            <div class="flex-auto w-96">商品信息</div>
+            <div class="flex-auto">单价</div>
+            <div class="flex-auto">数量</div>
+            <div class="flex-auto">金额</div>
+            <div class="flex-auto">操作</div>
           </div>
-          <div class="flex-auto w-96">商品信息</div>
-          <div class="flex-auto">单价</div>
-          <div class="flex-auto">数量</div>
-          <div class="flex-auto">金额</div>
-          <div class="flex-auto">操作</div>
-        </div>
-        <!-- 表头end -->
+          <!-- 表头end -->
 
-        <div
-          class="p-5"
-          v-for="item in shoppingCartData"
-          :key="item._id"
-        >
-          <!-- <el-checkbox-group
+          <div
+            class="p-5"
+            v-for="item in shoppingCartData"
+            :key="item._id"
+          >
+            <!-- <el-checkbox-group
           class="flex flex-col px-5"
           v-model="checkedBusiness"
           @change="selectBusiness"
         >
         </el-checkbox-group> -->
 
-          <div class="flex">
+            <div class="flex">
+              <el-checkbox
+                :label="item._id"
+                v-model="checkedBusiness"
+                @change="handlerChange(1, item, $event)"
+              >
+                &#12288;
+              </el-checkbox>
+              <div> 店铺：{{item.name}}</div>
+            </div>
+            <div class="text-sm m-5 divide-y divide-light-blue-400">
+              <div
+                class="bg-gray-100 p-5 flex-auto productItem"
+                v-for="(productItem, productIndex) in item.shopping_cart_list"
+                :key="productIndex"
+              >
+
+                <div class="multi-check-item flex">
+                  <el-checkbox
+                    v-model="checkedProduct"
+                    @change="handlerChange(2, productItem, $event,item)"
+                    :label="productItem._id"
+                  > &#12288;</el-checkbox>
+                  <!-- 选择按钮end -->
+                  <div class="flex flex-auto w-96">
+                    <img
+                      :src="baseUrl+productItem.specification.product_pic"
+                      class="w-20 h-20 bg-cover bg-center mx-2"
+                    />
+                    <p class="mx-2 flex-1">
+                      {{productItem.product_id.name}}
+                    </p>
+                    <p class="flex-initial">
+                      {{productItem.specification.product_specs}}
+                    </p>
+                  </div>
+                  <!-- 商品信息end -->
+
+                  <div
+                    class="flex-1 flex justify-center text-gray-800 font-semibold"
+                  >
+                    ￥{{productItem.specification.product_price}}
+                  </div>
+                  <!-- 单价end -->
+
+                  <div class="flex-1 flex justify-center">
+                    <!-- {{productItem.product_num}} -->
+                    <el-input-number
+                      v-model="productItem.product_num"
+                      @change="updateShoppingCart(productItem)"
+                      :min="1"
+                      :max="productItem.specification.product_stock"
+                    ></el-input-number>
+                  </div>
+                  <!-- 数量end -->
+
+                  <div
+                    class="flex-1 flex justify-center text-red-500 font-semibold"
+                  >
+                    ￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}
+                  </div>
+                  <!-- 金额end -->
+
+                  <div class="flex-1 flex justify-center flex-col">
+                    <button
+                      class="transition duration-300 hover:text-blue-500"
+                      @click="addCollect(productItem)"
+                    >移入收藏</button>
+                    <button
+                      class="transition duration-300 hover:text-red-500"
+                      @click="del(productItem,item._id)"
+                    >删除</button>
+                  </div>
+                  <!-- 操作end -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 店铺end -->
+
+        </div>
+
+        <div
+          v-else
+          class="bg-white rounded-2xl min-h-screen flex items-center justify-center"
+        >
+          <el-empty description="购物车空啦">
+            <router-link
+              :to="{path:'/'}"
+              class="bg-blue-600 px-4 py-2 text-white rounded-2xl"
+            >去购物</router-link>
+          </el-empty>
+        </div>
+      </div>
+    </div>
+    <!-- pc端 -->
+
+    <div class="md:hidden px-3 py-4 bg-gray-100 min-h-screen ">
+      <header>
+        <div class="text-xl text-black">
+          购物车
+        </div>
+      </header>
+
+      <main>
+        <div
+          v-for="(businessItem,businessIndex) in shoppingCartData"
+          :key="businessIndex"
+          class="bg-white p-3 rounded-2xl my-3 space-y-3"
+        >
+
+          <div class="text-sm text-black flex space-x-3 py-3">
             <el-checkbox
-              :label="item._id"
+              :label="businessItem._id"
               v-model="checkedBusiness"
-              @change="handlerChange(1, item, $event)"
+              @change="handlerChange(1, businessItem, $event)"
+              class="checkbox"
             >
               &#12288;
             </el-checkbox>
-            <div> 店铺：{{item.name}}</div>
+
+            <span>{{businessItem.name}}</span>
           </div>
-          <div class="text-sm m-5 divide-y divide-light-blue-400">
-            <div
-              class="bg-gray-100 p-5 flex-auto productItem"
-              v-for="(productItem, productIndex) in item.shopping_cart_list"
-              :key="productIndex"
-            >
+          <!-- 店铺名称 end -->
 
-              <div class="multi-check-item flex">
-                <el-checkbox
-                  v-model="checkedProduct"
-                  @change="handlerChange(2, productItem, $event,item)"
-                  :label="productItem._id"
-                > &#12288;</el-checkbox>
-                <!-- 选择按钮end -->
-                <div class="flex flex-auto w-96">
-                  <img
-                    :src="baseUrl+productItem.specification.product_pic"
-                    class="w-20 h-20 bg-cover bg-center mx-2"
-                  />
-                  <p class="mx-2 flex-1">
-                    {{productItem.product_id.name}}
-                  </p>
-                  <p class="flex-initial">
-                    {{productItem.specification.product_specs}}
-                  </p>
-                </div>
-                <!-- 商品信息end -->
-
-                <div
-                  class="flex-1 flex justify-center text-gray-800 font-semibold"
+          <div
+            v-for="(productItem,productIndex) in businessItem.shopping_cart_list"
+            :key="productIndex"
+          >
+            <div class="flex">
+              <el-checkbox
+                v-model="checkedProduct"
+                @change="handlerChange(2, productItem, $event,businessItem)"
+                :label="productItem._id"
+                size="medium"
+                class="checkbox"
+              > &#12288;</el-checkbox>
+              <div class="px-3">
+                <img
+                  :src="baseUrl+productItem.specification.product_pic"
+                  class="w-20 h-20 rounded-lg object-cover"
                 >
-                  ￥{{productItem.specification.product_price}}
-                </div>
-                <!-- 单价end -->
-
-                <div class="flex-1 flex justify-center">
-                  <!-- {{productItem.product_num}} -->
-                  <el-input-number
-                    v-model="productItem.product_num"
-                    @change="updateShoppingCart(productItem)"
-                    :min="1"
-                    :max="productItem.specification.product_stock"
-                  ></el-input-number>
-                </div>
-                <!-- 数量end -->
-
-                <div
-                  class="flex-1 flex justify-center text-red-500 font-semibold"
-                >
-                  ￥{{(productItem.specification.product_price*productItem.product_num).toFixed(2)}}
-                </div>
-                <!-- 金额end -->
-
-                <div class="flex-1 flex justify-center flex-col">
-                  <button
-                    class="transition duration-300 hover:text-blue-500"
-                    @click="addCollect(productItem)"
-                  >移入收藏</button>
-                  <button
-                    class="transition duration-300 hover:text-red-500"
-                    @click="del(productItem,item._id)"
-                  >删除</button>
-                </div>
-                <!-- 操作end -->
               </div>
+              <div class="flex-grow">
+                <p class="font-medium text-black">
+                  {{productItem.product_id.name}}
+                </p>
+                <!-- 商品名称 end -->
+                <p class="flex space-x-2">
+                  <span
+                    class="text-xs"
+                    v-for="(skuItem,skuIndex) in productItem.specification.product_specs"
+                    :key="skuIndex"
+                  >{{skuItem}}</span>
+                </p>
+                <!-- 规格 end -->
 
+                <div class="flex">
+                  <span class="text-red-600 font-medium text-base flex-grow">
+                    <small>¥</small>{{productItem.specification.product_price}}
+                  </span>
+                  <span>
+                    <van-stepper
+                      v-model="productItem.product_num"
+                      theme="round"
+                      button-size="22"
+                      disable-input
+                      @change="updateShoppingCart(productItem)"
+                      :min="1"
+                      :max="productItem.specification.product_stock"
+                    />
+                  </span>
+                </div>
+                <!-- 商品价格 and 步进器 end -->
+              </div>
             </div>
           </div>
+          <!-- 商品 end -->
         </div>
-
-        <!-- 店铺end -->
-
-      </div>
-
-      <div
-        v-else
-        class="bg-white rounded-2xl min-h-screen flex items-center justify-center"
-      >
-        <el-empty description="购物车空啦">
-          <router-link
-            :to="{path:'/'}"
-            class="bg-blue-600 px-4 py-2 text-white rounded-2xl"
-          >去购物</router-link>
-        </el-empty>
-      </div>
+      </main>
     </div>
   </div>
 </template>
@@ -526,12 +614,37 @@ export default {
     border-bottom-left-radius: 0.75rem;
   }
   .multi-check-item {
-    :deep .el-checkbox {
+    ::v-deep .el-checkbox {
       .el-checkbox__label {
         // display: none;
         padding: 0;
       }
     }
+  }
+}
+.checkbox {
+  ::v-deep .el-checkbox__inner {
+    //把输入框变大
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /deep/ .el-checkbox__inner::after {
+    border: 3px solid #fff;
+    border-left: 0;
+    border-top: 0;
+    top: 0.2rem;
+    left: 0.3rem;
+  }
+
+  //把边框尺寸变大
+  /deep/ .el-checkbox__input.is-checked .el-checkbox__inner::after {
+    transform: rotate(45deg) scaleY(1.25);
+  }
+
+  ::v-deep .el-checkbox__label {
+    width: 0;
+    padding: 0;
   }
 }
 </style>

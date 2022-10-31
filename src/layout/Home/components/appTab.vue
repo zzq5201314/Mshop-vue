@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-23 23:43:23
- * @LastEditTime: 2022-10-30 17:06:40
+ * @LastEditTime: 2022-10-31 14:42:03
  * @LastEditors: you name
  * @Description: 手机端的tab选项卡
 -->
@@ -19,6 +19,7 @@
       v-model="active"
       ref="tab"
       route
+      class="py-1"
     >
       <van-tabbar-item
         v-for="(item, index) in tabbarList"
@@ -84,7 +85,7 @@ export default {
   },
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-    if (this.$route.name == 'Home' | this.$route.name == 'myInfo' | this.$route.name == 'shoppingCartList') {
+    if (this.$route.name == 'Home' | this.$route.name == 'myInfo') {
 
       // 获取tab高度
       this.$nextTick(() => {

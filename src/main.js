@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-24 19:01:11
+ * @LastEditTime: 2022-10-31 21:57:54
  * @LastEditors: you name
  * @Description: 
  */
@@ -18,6 +18,8 @@ import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import '@/permission' // permission control
 import './assets/icon/font/iconfont.css'
+
+// import 'amfe-flexible'
 
 // Window.onresize 事件  动态调整窗口
 import "@/assets/js/onresize";
