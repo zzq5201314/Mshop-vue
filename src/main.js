@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-31 21:57:54
+ * @LastEditTime: 2022-11-04 15:24:33
  * @LastEditors: you name
  * @Description: 
  */
@@ -17,9 +17,11 @@ import 'vant/lib/index.css';
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import '@/permission' // permission control
-import './assets/icon/font/iconfont.css'
+import './assets/icon/font/iconfont.css'  // 使用阿里巴巴图标库
 
-// import 'amfe-flexible'
+import 'amfe-flexible'
+
+//import 'amfe-flexible '
 
 // Window.onresize 事件  动态调整窗口
 import "@/assets/js/onresize";

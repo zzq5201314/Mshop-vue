@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-18 22:30:04
- * @LastEditTime: 2022-10-31 18:32:20
+ * @LastEditTime: 2022-11-04 20:12:03
  * @LastEditors: you name
  * @Description: 
 -->
@@ -175,7 +175,7 @@
         </div>
       </header>
 
-      <main>
+      <main class="pb-24">
         <div
           v-for="(businessItem,businessIndex) in shoppingCartData"
           :key="businessIndex"
@@ -250,8 +250,41 @@
           </div>
           <!-- 商品 end -->
         </div>
+
       </main>
+
+      <footer
+        class="h-14 fixed bottom-12 left-0 bg-white w-full z-50 border-b flex items-center px-4"
+      >
+        <div class="flex items-center w-full ">
+          <div class="flex items-center">
+            <el-checkbox
+              v-model="checkAll"
+              @change="handlerChange(0, null, $event)"
+              class="checkbox"
+              size="medium"
+            >
+            </el-checkbox>
+            <p class="text-sm px-1">全选</p>
+          </div>
+
+          <div class=" flex-auto">
+            <span class="text-sm">已选{{productNum}}件,</span>
+            <span class="text-black mx-1 text-sm">合计:</span>
+            <!-- <span class="text-red-500 text-sm">¥</span>
+          <span
+            class="text-red-500 text-base prices">{{total_prices?total_prices.toFixed(2):0}}</span> -->
+            <span v-html="prices"></span>
+          </div>
+          <div
+            class="text-white bg-gradient-to-r to-red-500 from-yellow-500 px-5 py-2 rounded-full"
+            @click="checkOut"
+          >结算
+          </div>
+        </div>
+      </footer>
     </div>
+
   </div>
 </template>
 
@@ -259,6 +292,7 @@
 import { getShoppingCartList, removeShoppingCart, updateShoppingCart } from '@/api/ShoppingCart'
 import { buyOrder, getProductOrderInfo } from '@/api/Order'
 import { addCollect } from '@/api/Collect'
+import { decimalPoint } from '@/assets/js/common.js'
 export default {
   name: "index",
   data () {
@@ -272,7 +306,9 @@ export default {
       shoppingCartIdList: [],  // 全部商品id
       checkedProductInfo: [],
       dataLength: null,
-      total_prices: null,
+      total_prices: 0,
+      prices: null,
+      productNum: 0  // 选中商品总数
     }
   },
   components: {},
@@ -282,7 +318,10 @@ export default {
   },
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-
+    // var dom = document.querySelector('.prices');
+    // console.log("mounted => dom", dom)
+    // console.log(dom.getAttribute('class'))
+    // console.log(dom.className)
   },
   // 函数
   methods: {
@@ -319,48 +358,39 @@ export default {
         })
       })
     },
-    async countMoney () {  // 计算总金额
-      var total_arr = []
-      this.total_prices = null
-      if (this.checkedProduct.length == 0) {
-        // console.log("没有选择商品 => ")
-        this.total_prices = null
-        this.total_arr = []
-      }
-      this.checkedProduct.forEach((productItemId) => {
+    async countMoney () {     // 计算总金额 / 数量
+      this.productNum = 0     // 重置商品数量
+      this.total_prices = 0   // 重置总金额
+      if (this.checkedProduct.length !== 0) {  // 选中商品时
+        this.checkedProduct.forEach((productItemId) => {
 
-        this.shoppingCartData.forEach((businessItem) => {
-          businessItem.shopping_cart_list.forEach((item) => {
+          this.shoppingCartData.forEach((businessItem) => {
+            // console.log("this.shoppingCartData.forEach => businessItem", businessItem)
+            businessItem.shopping_cart_list.forEach((item) => {
 
-            if (productItemId == item._id) {
-              if (this.checkedProduct.length == 1) {
-
-                // console.log("选择了一个商品 => ")
-                this.total_prices = item.product_num * item.specification.product_price
-
+              if (productItemId == item._id) {
+                this.total_prices += item.product_num * item.specification.product_price
+                this.productNum += item.product_num
               }
-              else {
-                // console.log("选择了多个商品 =>  计算总数 =>", item.product_num * item.specification.product_price)
-                total_arr.push(item.product_num * item.specification.product_price)
-              }
-            }
 
 
+            })
           })
+
+
+
         })
-
-
-        // if (this.checkedProduct.length > 1) {
-        //   this.total_prices = total + total
-        // }
-
-      })
+      }
 
 
 
-      total_arr.forEach((item) => {
-        this.total_prices = this.total_prices + item
-      })
+
+      // total_arr.forEach((item) => {  // 计算总金额
+      //   // console.log("total_arr.forEach => item", item)
+      //   this.total_prices = this.total_prices + item
+      // })
+
+      this.prices = decimalPoint(this.total_prices)  // 00.00 => 小数点变小
 
     },
     async updateShoppingCart (productItem) { // 修改商品数量
@@ -591,6 +621,8 @@ export default {
             this.shoppingCartIdList.push(product._id)
           })
         })
+
+        this.prices = decimalPoint(this.total_prices)  // 00.00 => 小数点变小
         // console.log("item.forEach => this.shoppingCartIdList", this.shoppingCartIdList)
         // for (var i in this.shoppingCartData) {
         // }

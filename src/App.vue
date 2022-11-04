@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-31 21:47:26
+ * @LastEditTime: 2022-11-04 15:23:02
  * @LastEditors: you name
  * @Description: 
 -->
@@ -29,9 +29,6 @@ export default {
       transitionName: ''
     };
   },
-  deleted () {
-    window.onresize = null;
-  },
   methods: {
     _isMobile () {
       let flag = navigator.userAgent.match(
@@ -45,11 +42,6 @@ export default {
 
   //App.vue
   mounted () {
-
-    //初始化自适应  ----在刚显示的时候就开始适配一次
-    handleScreenAuto();
-    //绑定自适应函数   ---防止浏览器栏变化后不再适配
-    window.onresize = () => handleScreenAuto();
 
 
     // console.log("监听", this.$store.state.innerWH.innerWidth);

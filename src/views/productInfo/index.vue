@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-10-28 15:24:41
+ * @LastEditTime: 2022-11-04 23:00:05
  * @LastEditors: you name
  * @Description: 
 -->
@@ -448,6 +448,8 @@ export default {
       this.tabH = this.$refs.tab.$el.offsetHeight + 'px'
       // console.log("this.$nextTick => this.tabH", this.tabH)
     })
+
+    console.log(this._data);
   },
 
   // 函数
@@ -456,10 +458,9 @@ export default {
       await getProductInfo(this.productId).then(response => {
         this.productData = response.data.data
         this.amount = this.productData.slider_image.length
-        console.log("getProductInfo => this.productData", this.productData)
-        for (const i in this.productData.sku) {
+        this.productData.sku.forEach((item) => {
           this.checkedList.push({ name: null })
-        }
+        })
         // console.log("getProductInfo => this.checkedList", this.checkedList)
         this.businessId = this.productData.business._id
         // const { data, province, city, area, town } = require('province-city-china/data');

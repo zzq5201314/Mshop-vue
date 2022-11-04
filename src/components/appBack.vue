@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-25 19:12:57
- * @LastEditTime: 2022-10-26 21:58:20
+ * @LastEditTime: 2022-11-04 20:21:37
  * @LastEditors: you name
  * @Description: app的返回头部
 -->
@@ -10,7 +10,7 @@
   <div class="appBack">
     <header class="p-2 font-semibold text-black">
       <i
-        class="el-icon-back text-lg"
+        class="el-icon-arrow-left text-lg"
         @click="back"
       ></i>
     </header>
