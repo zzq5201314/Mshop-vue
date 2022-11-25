@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-23 19:08:30
+ * @LastEditTime: 2022-11-25 20:51:50
  * @LastEditors: you name
  * @Description: 店铺首页
 -->
@@ -21,12 +21,15 @@
     <!-- pc 端 -->
 
     <div class="md:hidden bg-gray-50 min-h-screen">
-      <header class="">
+      <header
+        class="sticky top-0 border-b border-gray-100 z-50 bg-white"
+        ref="businessHeader"
+      >
         <back />
       </header>
       <main>
         <div>
-          小米旗舰店
+          {{business.company_name}}
         </div>
         <!-- 店铺名称 -->
 
@@ -108,7 +111,7 @@ export default {
       baseUrl: this.$baseUrl,
       showCategory: [],  // 店铺推荐显示的分类列表
       categoryList: [],
-      business: {} // 店铺信息
+      business: {}, // 店铺信息
     }
   },
   components: { back, businessHeader },
@@ -119,9 +122,13 @@ export default {
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
     this.getData()
+
+
+
   },
   // 函数
   methods: {
+
     async getData () {
 
       // this.$route.meta.title
@@ -157,6 +164,7 @@ export default {
       })
 
     },
+
     jumpProductInfo (productId) {
       this.$router.push({
         path: '/product/info/' + productId

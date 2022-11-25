@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-11-23 18:13:33
- * @LastEditTime: 2022-11-25 19:07:14
+ * @LastEditTime: 2022-11-25 19:31:37
  * @LastEditors: you name
  * @Description: 头部logo 分类
 -->
@@ -19,7 +19,7 @@
       </div>
     </div>
     <!-- 店铺logo end -->
-    <div class="bg-gray-300 bg-opacity-70 h-10 flex items-center">
+    <div class="bg-gray-200 bg-opacity-70 h-10 flex items-center">
       <ul class="flex container mx-auto items-center">
 
         <li

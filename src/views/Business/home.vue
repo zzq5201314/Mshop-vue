@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-23 18:51:19
+ * @LastEditTime: 2022-11-25 20:06:59
  * @LastEditors: you name
  * @Description: 店铺首页
 -->
@@ -68,7 +68,7 @@
               <div class="relative w-36">
                 <img
                   :src="baseUrl+productItem.image"
-                  class="w-36 h-36 absolute bottom-0 right-0"
+                  class="w-36 h-36 absolute bottom-0 right-0 object-cover"
                 >
               </div>
             </div>
