@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-11-23 18:13:33
- * @LastEditTime: 2022-11-24 22:35:02
+ * @LastEditTime: 2022-11-25 19:07:14
  * @LastEditors: you name
  * @Description: 头部logo 分类
 -->
@@ -12,8 +12,9 @@
     <div class="bg-white h-28">
       <div class="container mx-auto flex items-center h-full">
         <img
+          @click="jumpHome()"
           :src="baseUrl+business.company_logo"
-          class="w-64 h-24 object-contain"
+          class="w-64 h-24 object-contain cursor-pointer"
         >
       </div>
     </div>
