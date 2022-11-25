@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:47:15
- * @LastEditTime: 2022-10-22 22:29:53
+ * @LastEditTime: 2022-11-20 14:27:55
  * @LastEditors: you name
  * @Description: 登录页
 -->
@@ -9,7 +9,7 @@
 <template>
   <div class="Login">
     <el-container>
-      <el-header class="bg-gray-100 ">
+      <el-header class="bg-gray-100 hidden md:block">
         <div class="container mx-auto max-w-7xl">
           <div>
             <router-link
@@ -22,8 +22,9 @@
           </div>
         </div>
       </el-header>
-      <el-main>
-        <div class="container mx-auto max-w-7xl flex justify-center">
+
+      <el-main class="">
+        <div class="container mx-auto max-w-7xl flex justify-center ">
           <div class="w-96">
             <div class="text-3xl text-gray-700 text-center pt-4 pb-6">账户登录</div>
             <el-row>
@@ -56,7 +57,9 @@
                 />
                 <p class="text-xs text-red-500 absolute -bottom-5">{{pswMsg}}
                 </p>
-                <div class="absolute top-0 left-80 h-full flex items-center ">
+                <div
+                  class="absolute top-0 right-3 md:right-5 h-full flex items-center "
+                >
                   <span
                     class="el-icon-view cursor-pointer"
                     @click='psw=!psw'
@@ -64,6 +67,10 @@
                 </div>
               </el-col>
               <!-- 密码输入框end -->
+
+              <el-col class="md:hidden flex justify-end text-blue-600">
+                <div>忘记密码</div>
+              </el-col>
 
               <el-col
                 :span="24"
@@ -75,20 +82,42 @@
                 >登录</button>
               </el-col>
 
-              <el-col :span="24">
+              <el-col
+                :span="24"
+                class="hidden md:block"
+              >
                 <div
                   class="w-full grid grid-cols-3 text-center cursor-pointer text-red-500"
                 >
                   <span @click="register">注册</span>
-                  <span class="border-solid border-r-2 border-l-2">忘记密码</span>
+                  <span class="border-solid border-r-2 border-l-2 ">忘记密码</span>
                   <span>遇到问题</span>
                 </div>
               </el-col>
+
+              <el-col class="md:hidden">
+                <button
+                  class="text-blue-600 bg-gray-200 w-full py-3 rounded-lg"
+                  @click="register"
+                >注册</button>
+              </el-col>
+
+              <!-- <el-col
+                class="md:hidden text-blue-600 flex justify-center fixed bottom-0"
+              >
+                
+              </el-col> -->
 
             </el-row>
           </div>
         </div>
       </el-main>
+
+      <el-footer
+        class="md:hidden text-blue-600 flex justify-center w-full fixed bottom-0"
+      >
+        <div>遇到问题</div>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -116,6 +145,17 @@ export default {
   mounted () {
 
   },
+
+
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+
+      console.log(to)
+      console.log(from)
+      // vm.pathUrl = from.fullPath;
+    })
+  },
+
   // 函数
   methods: {
     login () {
@@ -129,6 +169,7 @@ export default {
         this.$store.dispatch('user/login', data).then(() => {
           console.log('已经登录成功');
           // this.$router.push({ path: '/' })
+          // if ()
           this.$router.go(-1)
         })
         // .catch(() => {

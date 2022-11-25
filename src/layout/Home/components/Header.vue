@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:58:43
- * @LastEditTime: 2022-10-23 21:31:38
+ * @LastEditTime: 2022-11-22 16:31:56
  * @LastEditors: you name
  * @Description: 
 -->
@@ -81,60 +81,63 @@
           </ul>
         </nav>
       </header>
-      <div
-        class="sticky top-0 w-full bg-white flex justify-between items-center mx-auto max-w-7xl "
-      >
-        <!-- <img
+      <div class="container mx-auto">
+        <div
+          class="sticky top-0 w-full bg-white flex justify-between items-center mx-auto max-w-7xl "
+        >
+          <!-- <img
         alt=""
         draggable="false"
         src="https://res.vmallres.com/portal/1.22.7.302/h5/images/logo_app.png"
         class="w-36"
       /> -->
-        <div class="w-36 h-20 flex items-center">
-          <router-link
-            class="italic cursor-pointer"
-            :to="{path:'/'}"
-          >
-            <span class="text-5xl relative -right-1 text-blue-600">M</span>
-            <span class="text-black">商城</span>
-          </router-link>
-        </div>
-        <nav>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-          <a
-            href="#"
-            class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
-          >专区</a>
-        </nav>
-        <div class="w-9 cursor-pointer text-center">
-          <i
-            class="el-icon-search text-xl text-gray-400 hover:text-gray-800 transition duration-300" />
-        </div>
+          <div class="w-36 h-20 flex items-center">
+            <router-link
+              class="italic cursor-pointer"
+              :to="{path:'/'}"
+            >
+              <span class="text-5xl relative -right-1 text-blue-600">M</span>
+              <span class="text-black">商城</span>
+            </router-link>
+          </div>
+          <nav>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+            <a
+              href="#"
+              class="xl:mx-14 md:mx-8 hover:text-blue-600 transition duration-300 text-lg"
+            >专区</a>
+          </nav>
+          <div class="w-9 cursor-pointer text-center">
+            <i
+              class="el-icon-search text-xl text-gray-400 hover:text-gray-800 transition duration-300" />
+          </div>
 
+        </div>
       </div>
+
     </div>
 
     <!-- <div class="h-screen"></div> -->

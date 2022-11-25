@@ -1,15 +1,45 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-04 20:22:25
+ * @LastEditTime: 2022-11-23 16:10:24
  * @LastEditors: you name
- * @Description: 
+ * @Description: 店铺首页
 -->
 <!-- businessHome 页 -->
 <template>
   <div>
     <div class="businessHome bg-gray-100 hidden md:block">
-      <!-- businessHome 页 -->
+
+      <div class="bg-white h-28">
+        <div class="container mx-auto flex items-center h-full">
+          <img
+            :src="baseUrl+business.company_logo"
+            class="w-64 h-24 object-contain"
+          >
+        </div>
+      </div>
+      <!-- 店铺logo end -->
+
+      <div class="bg-gray-300 bg-opacity-70 h-10 flex items-center">
+        <ul class="flex container mx-auto items-center">
+
+          <li
+            class="px-4 cursor-pointer hover:bg-gray-800 rounded-full hover:text-white transition duration-200 text-black font-bold"
+          >首页</li>
+
+          <li
+            class="px-4 cursor-pointer hover:bg-gray-800 rounded-full hover:text-white transition duration-200 text-black"
+          >全部分类</li>
+
+          <li
+            class="px-4 cursor-pointer hover:bg-gray-800 rounded-full hover:text-white transition duration-200 text-black "
+            v-for="(categoryItem ,categoryIndex) in categoryList"
+            :key="categoryIndex"
+          >{{categoryItem.cate_name}}</li>
+        </ul>
+      </div>
+      <!-- 店铺分类 end -->
+
       <el-carousel
         height="550px"
         class="mx-auto "
@@ -116,15 +146,75 @@
     </div>
     <!-- pc 端 -->
 
-    <div class="md:hidden">
-      <header>
+    <div class="md:hidden bg-gray-50 min-h-screen">
+      <header class="">
         <back />
       </header>
       <main>
         <div>
-
+          小米旗舰店
         </div>
         <!-- 店铺名称 -->
+
+        <div class="px-2">
+          <van-swipe
+            class="my-swipe relative w-full md:hidden"
+            :autoplay="3000"
+            indicator-color="white"
+          >
+            <van-swipe-item
+              v-for="(slideshowItem,slideshowIndex) in businessSlideshowList"
+              :key="slideshowIndex"
+            >
+              <div class=" rounder-lg h-64 rounded-xl">
+                <img
+                  v-if="businessSlideshowList.length>0"
+                  draggable="false"
+                  :src="baseUrl+slideshowItem.slideshow_path"
+                  class="object-cover mx-auto h-full rounded-xl"
+                >
+              </div>
+            </van-swipe-item>
+          </van-swipe>
+        </div>
+        <!-- 轮播图 end -->
+
+        <div class="px-2 m-2 ">
+
+          <div
+            v-for="(showCategoryItem , showCategoryIndex) in showCategory"
+            :key="showCategoryIndex"
+          >
+            <p class="font-bold text-black py-2 text-lg">
+              {{showCategoryItem.cate_name}}
+            </p>
+            <div
+              v-if="showCategoryItem.children.length>0"
+              class="grid grid-cols-2 gap-2"
+            >
+              <div
+                class="bg-white p-2"
+                v-for="(productItem,productIndex) in showCategoryItem.children"
+                :key="productIndex"
+              >
+                <p class="pb-2 text-black font-semibold text-sm">
+                  {{productItem.name}}
+                </p>
+                <div class="w-36 h-36">
+                  <img
+                    :src="baseUrl+productItem.image"
+                    class="h-full object-cover"
+                  >
+                </div>
+              </div>
+              <!-- 商品item end -->
+            </div>
+
+          </div>
+          <!-- 分类组 end -->
+
+        </div>
+        <!-- 推荐 end -->
       </main>
     </div>
     <!-- app 端 -->
@@ -133,15 +223,17 @@
 
 <script>
 import back from '@/components/appBack'
-import { getBusinessSlideshow, getBusinessCategoryList } from '@/api/Business'
+import { getBusinessSlideshow, getBusinessRecommendCategoryList, getBusinessCategoryList, getBusinessInfo } from '@/api/Business'
 export default {
   name: "businessHome",
   data () {
     return {
       businessId: this.$route.params.businessId,
-      businessSlideshowList: [],
+      businessSlideshowList: [],  // 店铺轮播图
       baseUrl: this.$baseUrl,
-      showCategory: []
+      showCategory: [],  // 店铺推荐显示的分类列表
+      categoryList: [],
+      business: {} // 店铺信息
     }
   },
   components: { back },
@@ -156,9 +248,16 @@ export default {
   // 函数
   methods: {
     async getData () {
+
+      await getBusinessInfo(this.businessId).then(response => {
+        this.business = response.data.data
+        console.log("awaitgetBusinessInfo => this.business", this.business)
+      })
+
       // 获取店铺轮播图
       await getBusinessSlideshow(this.businessId).then(response => {
         this.businessSlideshowList = response.data.data
+        console.log("awaitgetBusinessSlideshow => this.businessSlideshowList", this.businessSlideshowList)
         if (this.businessSlideshowList.length == 0) {
           this.businessSlideshowList = 2
         }
@@ -167,11 +266,17 @@ export default {
           this.$router.replace({ path: '/' })
         }
       })
-      // 获取店铺显示分类列表
-      await getBusinessCategoryList(this.businessId).then(response => {
+      // 获取店铺推荐分类列表
+      await getBusinessRecommendCategoryList(this.businessId).then(response => {
         this.showCategory = response.data.data
-        console.log("awaitgetBusinessCategoryList => this.showCategory", this.showCategory)
       })
+
+      // 获取店铺分类列表
+      await getBusinessCategoryList(this.businessId).then(response => {
+        this.categoryList = response.data.data
+        console.log("awaitgetBusinessCategoryList => this.categoryList", this.categoryList)
+      })
+
     },
     jumpProductInfo (productId) {
       this.$router.push({

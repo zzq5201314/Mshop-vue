@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-10-31 16:34:10
+ * @LastEditTime: 2022-11-25 14:54:09
  * @LastEditors: you name
  * @Description: 
  */
@@ -17,6 +17,15 @@ module.exports = {
     extend: {},
     maxWidth: {
       '20': '5rem',
+    },
+    container: {
+      // padding: {
+      //   DEFAULT: '1rem',
+      //   sm: '2rem',
+      //   lg: '4rem',
+      //   xl: '5rem',
+      //   '2xl': '6rem',
+      // },
     },
     // height: {
     //   addressItemHeight: '135px'
@@ -39,7 +48,8 @@ module.exports = {
       display: ['group-hover'],
       borderStyle: ['last'],
       borderWidth: ['last'],
-    }
+      scale: ['active', 'group-hover'],
+    },
   },
   // 配置前缀, 防止类名与其他UI框架冲突
   // prefix: 'el-'

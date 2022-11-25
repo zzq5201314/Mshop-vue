@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-11-04 23:00:05
+ * @LastEditTime: 2022-11-23 18:34:30
  * @LastEditors: you name
  * @Description: 
 -->
@@ -21,7 +21,7 @@
           v-if="productData.business"
         >
           <router-link
-            :to="'/business/info/'+businessId"
+            :to="'/business/'+businessId"
             class="mx-2 cursor-pointer"
           >{{productData.business.company_name}}</router-link>
           <span class="mx-2 cursor-pointer">
@@ -215,7 +215,7 @@
 
     <div class="md:hidden bg-gray-100 min-h-screen">
 
-      <header class="flex items-center bg-gray-100">
+      <header class="flex items-center bg-gray-100 sticky top-0 z-50">
         <back />
       </header>
       <!-- 头部 end -->
@@ -290,7 +290,7 @@
           icon="shop-o"
           text="店铺"
           color="#ee0a24"
-          :to="'/business/info/'+businessId"
+          :to="'/business/'+businessId"
         />
         <van-goods-action-icon
           icon="cart-o"
@@ -316,82 +316,86 @@
       </van-goods-action>
 
       <van-popup
+        round
         v-model="skuShow"
         position="bottom"
         closeable
         close-icon="close"
+        :style="{ height: '60%' }"
       >
-        <div class="flex p-2 space-x-3">
-          <img
-            :src="baseUrl+productData.image"
-            class="w-20 h-20 object-cover"
-          >
-          <div
-            class="text-red-600 font-bold text-xl"
-            v-if="productData.price"
-          ><span class="text-xs">￥</span>{{productData.price.toFixed(2)}}
-            <div class="text-xs text-gray-500 font-medium">
-              库存：{{productData.stock}}
+        <div class="">
+          <div class="flex p-2 space-x-3">
+            <img
+              :src="baseUrl+productData.image"
+              class="w-20 h-20 object-cover"
+            >
+            <div
+              class="text-red-600 font-bold text-xl"
+              v-if="productData.price"
+            ><span class="text-xs">￥</span>{{productData.price.toFixed(2)}}
+              <div class="text-xs text-gray-500 font-medium">
+                库存：{{productData.stock}}
+              </div>
             </div>
-          </div>
 
-        </div>
-        <!-- 顶部商品价格/图片 end -->
-        <div class="p-2">
-          <div
-            v-for="(skuGroupItem,skuGroupIndex) in productData.sku"
-            :key="skuGroupIndex"
-            class="py-2 flex text-xs items-center"
-          >
-            <label class="text-black w-9 pr-1">
-              {{skuGroupItem.product_group_name}}
-            </label>
-            <div class="flex space-x-3 items-center">
-              <div
-                :class="{}"
-                v-for="(keyItem,keyIndex) in skuGroupItem.key"
-                :key="keyIndex"
-              >
-                <span
-                  class="bg-gray-100 px-3 text-black rounded-3xl h-7 flex items-center"
-                  @click="select(keyItem._id,keyItem.product_key_name,skuGroupIndex)"
-                  :class="[
+          </div>
+          <!-- 顶部商品价格/图片 end -->
+          <div class="p-2">
+            <div
+              v-for="(skuGroupItem,skuGroupIndex) in productData.sku"
+              :key="skuGroupIndex"
+              class="py-2 flex text-xs items-center"
+            >
+              <label class="text-black w-9 pr-1">
+                {{skuGroupItem.product_group_name}}
+              </label>
+              <div class="flex space-x-3 items-center">
+                <div
+                  :class="{}"
+                  v-for="(keyItem,keyIndex) in skuGroupItem.key"
+                  :key="keyIndex"
+                >
+                  <span
+                    class="bg-gray-100 px-3 text-black rounded-3xl h-7 flex items-center"
+                    @click="select(keyItem._id,keyItem.product_key_name,skuGroupIndex)"
+                    :class="[
                     checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'bg-red-100':'',
                     checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'text-red-600':'',
                     checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1?'bg-opacity-60':''
                     ]"
-                >
-                  <!-- {{checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1}} -->
-                  {{keyItem.product_key_name}}
-                </span>
+                  >
+                    <!-- {{checkedList.map(item=>{ return item.name}).indexOf(keyItem.product_key_name) !== -1}} -->
+                    {{keyItem.product_key_name}}
+                  </span>
+                </div>
+                <!-- 规格选项 按钮  end-->
               </div>
-              <!-- 规格选项 按钮  end-->
             </div>
-          </div>
-          <!-- 商品规格 end -->
-          <div class="flex h-9 items-center">
-            <label class="text-black w-9 pr-1 text-xs">
-              数量
-            </label>
-            <div>
-              <van-stepper
-                v-model="productNum"
-                theme="round"
-                :max="productData.stock"
-                button-size="22"
-                disable-input
-              />
+            <!-- 商品规格 end -->
+            <div class="flex h-9 items-center">
+              <label class="text-black w-9 pr-1 text-xs">
+                数量
+              </label>
+              <div>
+                <van-stepper
+                  v-model="productNum"
+                  theme="round"
+                  :max="productData.stock"
+                  button-size="22"
+                  disable-input
+                />
+              </div>
             </div>
+            <!-- 数量 end -->
           </div>
-          <!-- 数量 end -->
-        </div>
-        <!-- 商品规格and数量 end -->
+          <!-- 商品规格and数量 end -->
 
-        <div class="mb-2">
-          <div
-            class="mx-auto w-10/12 text-center bg-red-500 text-white rounded-3xl py-1"
-            @click="notarize"
-          >确认
+          <div class="mb-2 absolute w-full bottom-0">
+            <div
+              class="mx-auto w-10/12 text-center bg-red-500 text-white rounded-3xl py-1"
+              @click="notarize"
+            >确认
+            </div>
           </div>
         </div>
 
@@ -590,19 +594,30 @@ export default {
 
     addCollect () { // 添加收藏
 
-      if (!this.productData.collect) {
-        const query = { type: 'product' }
-        const data = { productId: this.productId }
-        addCollect(query, data).then(response => {
-          msg('收藏成功', 'success', 'pc')
-          this.getProductData()
-        })
-      } else {
-        delCollect({ collectId: this.productData.collect }).then(response => {
-          msg('取消成功', 'success', 'pc')
-          this.getProductData()
-        })
 
+      const hasToken = getToken()
+      if (!hasToken) { // 判断是否登录
+        this.$router.push({
+          path: `/login`
+        })
+        msg('请先登录', 'error')
+      }
+      else {
+        // 判断是否已经在收藏列表里
+        if (!this.productData.collect) {
+          const query = { type: 'product' }
+          const data = { productId: this.productId }
+          addCollect(query, data).then(response => {
+            msg('收藏成功', 'success', 'pc')
+            this.getProductData()
+          })
+        } else {
+          delCollect({ collectId: this.productData.collect }).then(response => {
+            msg('取消成功', 'success', 'pc')
+            this.getProductData()
+          })
+
+        }
       }
 
     },

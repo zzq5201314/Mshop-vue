@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-15 09:16:03
- * @LastEditTime: 2022-09-15 16:12:43
+ * @LastEditTime: 2022-11-20 14:15:51
  * @LastEditors: you name
  * @Description: 
 -->
@@ -9,9 +9,10 @@
 <template>
   <div class="Register">
     <el-container>
-      <el-header class="bg-gray-100 ">
+      <el-header class="bg-gray-100 hidden md:block">
         <div class="container mx-auto max-w-7xl">Header</div>
       </el-header>
+
       <el-main>
         <div class="container mx-auto max-w-7xl flex justify-center">
           <div class="w-96">
@@ -76,7 +77,9 @@
                 />
                 <p class="text-xs text-red-500 absolute -bottom-5">{{pswMsg}}
                 </p>
-                <div class="absolute top-0 left-80 h-full flex items-center ">
+                <div
+                  class="absolute top-0 right-3 md:right-5 h-full flex items-center "
+                >
                   <span
                     class="el-icon-view cursor-pointer"
                     @click='psw=!psw'
@@ -98,7 +101,9 @@
                 />
                 <p class="text-xs text-red-500 absolute -bottom-5">
                   {{pawValidateMsg}}</p>
-                <div class="absolute top-0 left-80 h-full flex items-center ">
+                <div
+                  class="absolute top-0 right-3 md:right-5 h-full flex items-center "
+                >
                   <span
                     class="el-icon-view cursor-pointer"
                     @click='pswValidate=!pswValidate'

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-16 15:38:14
- * @LastEditTime: 2022-10-25 19:47:37
+ * @LastEditTime: 2022-11-23 19:10:22
  * @LastEditors: you name
  * @Description: 
  */
@@ -59,16 +59,15 @@ router.beforeEach(async (to, from, next) => {
 
 	// 这里的getToken()就是在上面导入的auth.js里的getToken()方法
 	const hasToken = getToken()
-	// console.log("router.beforeEach => hasToken", hasToken)
 
 	//如果存在token，即存在已登陆的令牌
 	if (hasToken) {
 		//如果用户存在令牌的情况请求登录页面，就让用户直接跳转到首页，避免存在重复登录的情况
-		if (to.path === '/login') {
+		if (to.name == 'login' | to.name == 'register') {
 			// 直接跳转到首页，当然取决于你的路由重定向到哪里
-			// next({ path: '/' })
-			// await store.dispatch('user/getInfo')
-			next()
+			await store.dispatch('user/getInfo')
+			next({ path: '/' })
+			// next('/')
 			//一定要关闭进度条
 			NProgress.done()
 		} else {
@@ -77,7 +76,6 @@ router.beforeEach(async (to, from, next) => {
 			// const hasGetUserInfo = store.getters.name
 			const hasGetUserInfo = store.getters.name
 			if (hasGetUserInfo) {
-
 				await store.dispatch('user/getInfo')
 
 				//信息拿到后，用户请求哪就跳转哪
@@ -105,9 +103,9 @@ router.beforeEach(async (to, from, next) => {
 	} else {
 		//这里是没有令牌的情况
 
-		if (to.path.substr(0, 13) == "/product/info") { // 判断是否商品详情页
+		if (to.path.substr(0, 13) == "/product/info" | to.name == "business" | to.name == 'businessCategory') { // 判断是否商品详情页或店铺页
 			// whiteList.indexOf(to.path)
-			console.log(true);
+			// console.log(true);
 			next()
 			NProgress.done()
 		}

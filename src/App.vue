@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-11-04 15:23:02
+ * @LastEditTime: 2022-11-22 16:48:47
  * @LastEditors: you name
  * @Description: 
 -->
@@ -101,6 +101,7 @@ export default {
         if (to.meta.index > from.meta.index) {
           //设置动画名称
           this.transitionName = 'slide-left';
+        } else if (to.meta.index == undefined) {
         } else {
           this.transitionName = 'slide-right';
         }

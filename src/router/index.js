@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-10-30 17:06:03
+ * @LastEditTime: 2022-11-23 19:31:38
  * @LastEditors: you name
  * @Description: 
  */
@@ -28,12 +28,14 @@ const routes = [
 
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/Login/Login'),
     meta: { title: '登录' },
   },
 
   {
     path: '/register',
+    name: 'register',
     component: () => import('@/views/Register/Register'),
     meta: { title: '注册' },
   },
@@ -167,15 +169,30 @@ const routes = [
 
   {
     path: '/business',
-    name: 'business',
     component: HomeLayout,
-    redirect: '/info',
-    children: [{
-      path: '/business/info/:businessId',
-      name: 'businessInfo',
-      component: () => import('@/views/Business/businessHome.vue'),
-      meta: { title: '店铺详情' },
-    }]
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'business',
+        component: () => import('@/views/Business/index.vue'),
+        redirect: '/',
+        children: [
+          {
+            path: '/business/:businessId',
+            name: 'business',
+            component: () => import('@/views/Business/home.vue'),
+            meta: { title: '店铺首页' },
+          },
+          {
+            path: '/business/:businessId/:categoryId',
+            name: 'businessCategory',
+            component: () => import('@/views/Business/cate.vue'),
+            // meta: { title: '店铺分类' }
+          }
+        ]
+      }
+    ]
   },
 
 
