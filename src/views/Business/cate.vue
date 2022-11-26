@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-11-23 18:03:11
- * @LastEditTime: 2022-11-25 19:27:59
+ * @LastEditTime: 2022-11-27 00:24:35
  * @LastEditors: you name
- * @Description:  店铺 父类页
+ * @Description:  店铺 分类页
 -->
 <!-- cate 页 -->
 <template>
-  <div class="cate bg-white">
-    <div class="container mx-auto ">
+  <div class="cate bg-white ">
+    <div class="container mx-auto hidden md:block ">
       <div class="pt-5">
 
         <div class="text-center text-2xl text-black tracking-widest pb-3">
@@ -107,6 +107,83 @@
       </div>
 
     </div>
+
+    <div class="md:hidden flex fixed main h-screen">
+
+      <div class="fixed left-0 w-2/12">
+        <van-sidebar v-model="activeKey">
+          <van-sidebar-item
+            v-for="(cateItem,cateIndex) in categoryList.categoryList"
+            :key="cateIndex"
+            :title="cateItem.cate_name"
+            @click="handleMenulist(cateIndex)"
+          />
+        </van-sidebar>
+      </div>
+
+      <div
+        ref="scrollbar"
+        id="scrollbar"
+        class="py-2 px-3 overflow-auto pb-20 scrollbar fixed right-0 w-9/12"
+      >
+        <div
+          v-for="(cateItem,cateIndex) in categoryList.categoryList"
+          :key="cateIndex"
+          :id="'scroll'+cateIndex"
+          :ref="'scroll'+cateIndex"
+        >
+
+          <!-- <p class="text-xs text-black ">
+            <van-divider
+              content-position="left"
+              class="text-black"
+            >{{cateItem.cate_name}}
+            </van-divider>
+          </p> -->
+          <div
+            v-for="(childrenItem,childrenIndex) in cateItem.children"
+            :key="childrenIndex"
+          >
+            <van-divider :id="'divider'+cateIndex">
+              <p class="text-black text-sm text-center py-2">
+                {{childrenItem.cate_name}}
+              </p>
+            </van-divider>
+
+            <div
+              class="grid grid-cols-2 gap-x-5"
+              v-if="childrenItem.product.length>0"
+            >
+              <div
+                v-for="(productItem,productIndex) in childrenItem.product"
+                :key="productIndex"
+                class="py-2"
+                @click="jumpProductInfo(productItem._id)"
+              >
+                <img
+                  :src="baseUrl+productItem.image"
+                  class="h-32 w-32 object-cover rounded-md"
+                >
+                <p class="text-center text-base text-black py-1">
+                  {{productItem.name}}
+                </p>
+              </div>
+            </div>
+
+            <van-empty v-else>
+              <slot name="description">
+                <p class="text-center text-xs">{{childrenItem.cate_name}}</p>
+                <p class="text-center text-xs">毛都没有</p>
+              </slot>
+            </van-empty>
+
+            <!-- <van-divider /> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -122,6 +199,9 @@ export default {
       categoryList: {},
       baseUrl: this.$baseUrl,
       productList: [],  // 商品列表
+
+      // app
+      activeKey: 0,  // 激活的下标
     }
   },
   components: {},
@@ -132,6 +212,11 @@ export default {
   // 生命周期 - 挂载完成（访问DOM元素）
   mounted () {
     this.getCate()
+
+    window.addEventListener('scroll', this.handleScroll, true)
+
+    // let sidebar = this.$refs.sidebar.offsetWidth
+    // console.log("mounted => sidebar", sidebar)
   },
   // 函数
   methods: {
@@ -169,6 +254,7 @@ export default {
           }
         }
 
+        // console.log('productList =>', this.productList);
         console.log("getBusinessCategory => this.categoryList", this.categoryList)
 
       })
@@ -279,10 +365,69 @@ export default {
       console.log("getBusinessCategory => this.categoryList", this.categoryList)
     },
 
-    jumpProductInfo (productId) {
+    async jumpProductInfo (productId) {
       this.$router.push({
         path: '/product/info/' + productId
       })
+    },
+
+
+    async handleMenulist (index) {
+
+      let divider = document.querySelector('#divider' + index)
+      let secMargin = getComputedStyle(divider);
+      let mTop = secMargin.marginTop.replace('px', '')
+      // console.log(secMargin.marginTop);
+      // console.log(mTop);
+
+      this.activeKey = index
+      let navPage = document.querySelector('#scroll' + index)
+      document.querySelector('#scrollbar').scrollTop = navPage.offsetTop - mTop
+
+
+      // console.log(navPagea.offsetTop);
+
+
+
+      // let scrollIndex = `scroll${index}`
+      // let navPage = this.$refs[scrollIndex][0]
+
+
+
+      // this.$refs.scrollbar.scrollTop = navPage.offsetTop
+      // console.log("handleMenulist => this.$refs.scrollbar.scrollTop", this.$refs.scrollbar.scrollTop)
+      // console.log(document.getElementById("scrollbar").scrollTop);
+
+
+      // let navPage = document.querySelector('#scroll' + index)
+      // console.log("handleMenulist => navPage", navPage)
+    },
+
+
+    async handleScroll () {
+      let scrollTop = document.querySelector("#scrollbar").scrollTop
+      // let scrollTop = document.getElementById('scrollbar').scrollTop
+      // let scrollTop = this.$refs.scrollbar.scrollTop
+      // console.log("handleScroll => scrollTop", scrollTop)
+
+      for (var i in this.categoryList.categoryList) {
+
+        // let scrollIndex = `scroll${i}`
+        // let navPage = this.$refs[scrollIndex][0]
+        // if (navPage.offsetTop <= scrollTop) {
+        //   this.activeKey = i
+        // }
+
+        let divider = document.querySelector('#divider' + i)
+        let secMargin = getComputedStyle(divider);
+        let mTop = secMargin.marginTop.replace('px', '')
+
+        if (document.querySelector('#scroll' + i).offsetTop - mTop < scrollTop) {
+          this.activeKey = i
+        }
+      }
+      // console.log("handleScroll => scrollTop", scrollTop)
+
     }
 
   },
@@ -297,5 +442,35 @@ export default {
 <style lang="scss" scoped>
 /* @import url(); 引入css类 */
 .cate {
+}
+
+//去除滚动条
+.main ::-webkit-scrollbar {
+  display: none !important;
+}
+
+#scrollbar {
+  scroll-behavior: smooth;
+  height: 100vh;
+  // overflow-y: auto;
+  overflow: auto;
+}
+
+.main {
+  // height: 400px;
+  overflow: auto;
+  // overflow: hidden;
+}
+
+::v-deep .van-empty__bottom {
+  margin: 0;
+}
+
+::v-deep .van-divider {
+  margin-bottom: 0;
+}
+
+::v-deep .van-empty {
+  padding-top: 0;
 }
 </style>

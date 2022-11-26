@@ -1,14 +1,17 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-25 20:51:50
+ * @LastEditTime: 2022-11-26 23:44:20
  * @LastEditors: you name
  * @Description: 店铺首页
 -->
 <!-- businessHome 页 -->
 <template>
   <div>
-    <div class="businessHome bg-gray-100 hidden md:block">
+    <div
+      class="businessHome bg-gray-100 hidden md:block"
+      v-if="!invokedApp"
+    >
 
       <businessHeader />
       <!-- 头部logo 分类 end -->
@@ -20,85 +23,41 @@
     </div>
     <!-- pc 端 -->
 
-    <div class="md:hidden bg-gray-50 min-h-screen">
+    <div class="md:hidden bg-gray-50 min-h-screen block">
       <header
         class="sticky top-0 border-b border-gray-100 z-50 bg-white"
         ref="businessHeader"
       >
         <back />
       </header>
-      <main>
-        <div>
-          {{business.company_name}}
-        </div>
-        <!-- 店铺名称 -->
+      <div id="content">
+        <router-view></router-view>
 
-        <div class="px-2">
-          <van-swipe
-            class="my-swipe relative w-full md:hidden"
-            :autoplay="3000"
-            indicator-color="white"
-          >
-            <van-swipe-item
-              v-for="(slideshowItem,slideshowIndex) in businessSlideshowList"
-              :key="slideshowIndex"
-            >
-              <div class=" rounder-lg h-64 rounded-xl">
-                <img
-                  v-if="businessSlideshowList.length>0"
-                  draggable="false"
-                  :src="baseUrl+slideshowItem.slideshow_path"
-                  class="object-cover mx-auto h-full rounded-xl"
-                >
-              </div>
-            </van-swipe-item>
-          </van-swipe>
-        </div>
-        <!-- 轮播图 end -->
+      </div>
 
-        <div class="px-2 m-2 ">
+      <van-tabbar
+        route
+        ref="tabbar"
+      >
+        <van-tabbar-item
+          replace
+          :to="`/business/${businessId}`"
+          icon="wap-home-o"
+        >首页</van-tabbar-item>
+        <van-tabbar-item
+          replace
+          :to="`/business/${businessId}/all`"
+          icon="apps-o"
+        >分类</van-tabbar-item>
+      </van-tabbar>
 
-          <div
-            v-for="(showCategoryItem , showCategoryIndex) in showCategory"
-            :key="showCategoryIndex"
-          >
-            <p class="font-bold text-black py-2 text-lg">
-              {{showCategoryItem.cate_name}}
-            </p>
-            <div
-              v-if="showCategoryItem.children.length>0"
-              class="grid grid-cols-2 gap-2"
-            >
-              <div
-                class="bg-white p-2"
-                v-for="(productItem,productIndex) in showCategoryItem.children"
-                :key="productIndex"
-              >
-                <p class="pb-2 text-black font-semibold text-sm">
-                  {{productItem.name}}
-                </p>
-                <div class="w-36 h-36">
-                  <img
-                    :src="baseUrl+productItem.image"
-                    class="h-full object-cover"
-                  >
-                </div>
-              </div>
-              <!-- 商品item end -->
-            </div>
-
-          </div>
-          <!-- 分类组 end -->
-
-        </div>
-        <!-- 推荐 end -->
-      </main>
     </div>
     <!-- app 端 -->
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import businessHeader from './components/header.vue'
 import back from '@/components/appBack'
 import { getBusinessSlideshow, getBusinessRecommendCategoryList, getBusinessCategoryList, getBusinessInfo } from '@/api/Business'
@@ -114,6 +73,11 @@ export default {
       business: {}, // 店铺信息
     }
   },
+  computed: {
+    ...mapGetters([
+      'invokedApp',
+    ])
+  },
   components: { back, businessHeader },
   // 生命周期 - 创建完成（访问当前this实例）
   created () {
@@ -123,7 +87,9 @@ export default {
   mounted () {
     this.getData()
 
+    // this.setTabberShow()
 
+    console.log(this.invokedApp);
 
   },
   // 函数
@@ -165,6 +131,12 @@ export default {
 
     },
 
+    // setTabberShow () {
+    //   const tabbarHeight = this.$refs.tabbar.$el.offsetHeight
+    //   const content = document.getElementById('content')
+    //   content.style.paddingBottom = tabbarHeight + 'px'
+    // },
+
     jumpProductInfo (productId) {
       this.$router.push({
         path: '/product/info/' + productId
@@ -177,4 +149,12 @@ export default {
 /* @import url(); 引入css类 */
 .businessHome {
 }
+#content {
+  height: 100%;
+}
+
+// //去除滚动条
+// ::-webkit-scrollbar {
+//   display: none !important;
+// }
 </style>

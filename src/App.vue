@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-11-22 16:48:47
+ * @LastEditTime: 2022-11-26 23:21:20
  * @LastEditors: you name
  * @Description: 
 -->
@@ -140,6 +140,11 @@ export default {
 //       color: #42b983;
 //     }
 //   }
+// }
+
+// //去除滚动条
+// ::-webkit-scrollbar {
+//   display: none !important;
 // }
 
 .view {

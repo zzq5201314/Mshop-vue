@@ -1,121 +1,192 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-25 20:06:59
+ * @LastEditTime: 2022-11-26 15:39:45
  * @LastEditors: you name
  * @Description: 店铺首页
 -->
 <!-- businessHome 页 -->
 <template>
   <div>
-    <el-carousel
-      height="550px"
-      class="mx-auto "
-    >
-      <el-carousel-item
-        v-for="(slideshowItem,slideshowIndex) in businessSlideshowList"
-        :key="slideshowIndex"
+    <div class="hidden md:block">
+      <el-carousel
+        height="550px"
+        class="mx-auto "
       >
-        <img
-          v-if="businessSlideshowList.length>0"
-          draggable="false"
-          :src="baseUrl+slideshowItem.slideshow_path"
-          class="w-full bg-cover"
+        <el-carousel-item
+          v-for="(slideshowItem,slideshowIndex) in businessSlideshowList"
+          :key="slideshowIndex"
         >
-        <p
-          v-else
-          class="w-full h-full flex items-center justify-center text-xl"
-        >暂无设置轮播图</p>
-      </el-carousel-item>
+          <img
+            v-if="businessSlideshowList.length>0"
+            draggable="false"
+            :src="baseUrl+slideshowItem.slideshow_path"
+            class="w-full bg-cover"
+          >
+          <p
+            v-else
+            class="w-full h-full flex items-center justify-center text-xl"
+          >暂无设置轮播图</p>
+        </el-carousel-item>
 
-    </el-carousel>
-    <!-- 轮播图ned -->
+      </el-carousel>
+      <!-- 轮播图ned -->
 
-    <div class="container mx-auto max-w-5xl">
-      <div
-        v-for="(showCategoryItem , showCategoryIndex) in showCategory"
-        :key="showCategoryIndex"
-        class="flex justify-center flex-col"
-      >
-        <span
-          class="text-center text-4xl text-black my-14 mx-auto cursor-pointer"
+      <div class="container mx-auto max-w-5xl">
+        <div
+          v-for="(showCategoryItem , showCategoryIndex) in showCategory"
+          :key="showCategoryIndex"
+          class="flex justify-center flex-col"
         >
-          {{showCategoryItem.cate_name}}专区</span>
-        <div class="grid grid-cols-2 gap-10">
+          <span
+            class="text-center text-4xl text-black my-14 mx-auto cursor-pointer"
+          >
+            {{showCategoryItem.cate_name}}专区</span>
+          <div class="grid grid-cols-2 gap-10">
 
-          <template v-if="showCategoryItem.children.length>0">
-            <div
-              v-for="(productItem,productIndex) in showCategoryItem.children"
-              :key="productIndex"
-              @click="jumpProductInfo(productItem._id)"
-              class="bg-white p-7 rounded-xl flex justify-between h-64 cursor-pointer"
-            >
-              <div class=" p-0 m-0 relative w-72">
-                <p class="text-3xl text-black font-bold ">
-                  {{productItem.name}}</p>
-                <div
-                  class="border-black rounded-full border-2 text-xl py-2 absolute bottom-0 border-r-0"
-                >
-                  <span class="mx-2 text-base text-black ">￥
-                    <i class="text-xl">{{productItem.price}}</i>
-                    起</span>
-                  <span
-                    class="rounded-full bg-black text-white border-black border-2 text-xl py-2 px-3 "
-                  >立即抢购</span>
+            <template v-if="showCategoryItem.children.length>0">
+              <div
+                v-for="(productItem,productIndex) in showCategoryItem.children"
+                :key="productIndex"
+                @click="jumpProductInfo(productItem._id)"
+                class="bg-white p-7 rounded-xl flex justify-between h-64 cursor-pointer"
+              >
+                <div class=" p-0 m-0 relative w-72">
+                  <p class="text-3xl text-black font-bold ">
+                    {{productItem.name}}</p>
+                  <div
+                    class="border-black rounded-full border-2 text-xl py-2 absolute bottom-0 border-r-0"
+                  >
+                    <span class="mx-2 text-base text-black ">￥
+                      <i class="text-xl">{{productItem.price}}</i>
+                      起</span>
+                    <span
+                      class="rounded-full bg-black text-white border-black border-2 text-xl py-2 px-3 "
+                    >立即抢购</span>
+                  </div>
+                </div>
+
+                <div class="relative w-36">
+                  <img
+                    :src="baseUrl+productItem.image"
+                    class="w-36 h-36 absolute bottom-0 right-0 object-cover"
+                  >
                 </div>
               </div>
+            </template>
+            <!-- 商品item end -->
 
-              <div class="relative w-36">
-                <img
-                  :src="baseUrl+productItem.image"
-                  class="w-36 h-36 absolute bottom-0 right-0 object-cover"
-                >
-              </div>
-            </div>
-          </template>
-          <!-- 商品item end -->
-
-          <div
-            v-else
-            v-for="item in 4"
-            :key="item"
-            class="bg-white p-7 flex justify-between h-64 rounded-xl cursor-not-allowed"
-          >
-            <!-- <el-skeleton-item
+            <div
+              v-else
+              v-for="item in 4"
+              :key="item"
+              class="bg-white p-7 flex justify-between h-64 rounded-xl cursor-not-allowed"
+            >
+              <!-- <el-skeleton-item
               variant="image"
               class="w-36 h-36"
             /> -->
 
-            <div class=" p-0 m-0 relative w-72">
-              <el-skeleton-item
-                variant="text"
-                class="w-44"
-              />
-              <div class="text-xl py-2 absolute bottom-0">
+              <div class=" p-0 m-0 relative w-72">
                 <el-skeleton-item
                   variant="text"
-                  class="w-32"
+                  class="w-44"
+                />
+                <div class="text-xl py-2 absolute bottom-0">
+                  <el-skeleton-item
+                    variant="text"
+                    class="w-32"
+                  />
+                </div>
+              </div>
+
+              <div class="relative w-36">
+                <el-skeleton-item
+                  variant="image"
+                  class="w-36 h-36 absolute bottom-0 right-0"
                 />
               </div>
-            </div>
 
-            <div class="relative w-36">
-              <el-skeleton-item
-                variant="image"
-                class="w-36 h-36 absolute bottom-0 right-0"
-              />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- pc店铺主页 end -->
+
+    <div class="md:hidden">
+      <div>
+        <div>
+          {{business.company_name}}
+        </div>
+        <!-- 店铺名称 -->
+
+        <div class="px-2">
+          <van-swipe
+            class="my-swipe relative w-full md:hidden"
+            :autoplay="3000"
+            indicator-color="white"
+          >
+            <van-swipe-item
+              v-for="(slideshowItem,slideshowIndex) in businessSlideshowList"
+              :key="slideshowIndex"
+            >
+              <div class=" rounder-lg h-64 rounded-xl">
+                <img
+                  v-if="businessSlideshowList.length>0"
+                  draggable="false"
+                  :src="baseUrl+slideshowItem.slideshow_path"
+                  class="object-cover mx-auto h-full rounded-xl"
+                >
+              </div>
+            </van-swipe-item>
+          </van-swipe>
+        </div>
+        <!-- 轮播图 end -->
+
+        <div class="px-2 m-2 ">
+
+          <div
+            v-for="(showCategoryItem , showCategoryIndex) in showCategory"
+            :key="showCategoryIndex"
+          >
+            <p class="font-bold text-black py-2 text-lg">
+              {{showCategoryItem.cate_name}}
+            </p>
+            <div
+              v-if="showCategoryItem.children.length>0"
+              class="grid grid-cols-2 gap-2"
+            >
+              <div
+                class="bg-white p-2"
+                v-for="(productItem,productIndex) in showCategoryItem.children"
+                :key="productIndex"
+              >
+                <p class="pb-2 text-black font-semibold text-sm">
+                  {{productItem.name}}
+                </p>
+                <div class="w-36 h-36">
+                  <img
+                    :src="baseUrl+productItem.image"
+                    class="h-full object-cover"
+                  >
+                </div>
+              </div>
+              <!-- 商品item end -->
             </div>
 
           </div>
-        </div>
+          <!-- 分类组 end -->
 
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getBusinessSlideshow, getBusinessRecommendCategoryList, } from '@/api/Business'
+import { getBusinessSlideshow, getBusinessRecommendCategoryList, getBusinessInfo } from '@/api/Business'
 export default {
   name: "businessHome",
   data () {
@@ -124,6 +195,7 @@ export default {
       baseUrl: this.$baseUrl,
       businessSlideshowList: [],  // 店铺轮播图
       showCategory: [],  // 店铺推荐显示的分类列表
+      business: {}, // 店铺信息
     }
   },
   components: {},
@@ -138,6 +210,12 @@ export default {
   // 函数
   methods: {
     async getData () {
+
+      // 获取店铺信息
+      await getBusinessInfo(this.businessId).then(response => {
+        this.business = response.data.data
+        console.log("awaitgetBusinessInfo => this.business", this.business)
+      })
 
 
       // 获取店铺轮播图

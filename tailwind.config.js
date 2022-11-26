@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-11-25 14:54:09
+ * @LastEditTime: 2022-11-27 00:08:02
  * @LastEditors: you name
  * @Description: 
  */
@@ -45,7 +45,7 @@ module.exports = {
       backgroundColor: ['checked'],
       borderColor: ['checked'],
       appearance: ['hover', 'focus'],
-      display: ['group-hover'],
+      display: ['group-hover', 'last'],
       borderStyle: ['last'],
       borderWidth: ['last'],
       scale: ['active', 'group-hover'],
