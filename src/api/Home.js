@@ -1,17 +1,26 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-10 15:29:54
- * @LastEditTime: 2022-09-14 16:17:58
+ * @LastEditTime: 2022-11-29 18:12:42
  * @LastEditors: you name
  * @Description: 
  */
 import request from '@/utils/request'
 
 // 获取商品分类
-export function getCategory () {
+export function getCategory (params) {
+	if (params) {
+
+		const { categoryId, categoryName } = params
+		console.log("getCategory => categoryName", categoryName)
+		console.log("getCategory => categoryId", categoryId)
+	}
+	console.log("getCategory => params", params)
+
 	return request({
 		url: `/category`,
-		method: 'get'
+		method: 'get',
+		params
 	})
 }
 

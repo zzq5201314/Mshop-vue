@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:42:03
- * @LastEditTime: 2022-10-26 15:41:17
+ * @LastEditTime: 2022-11-29 17:53:40
  * @LastEditors: you name
  * @Description: 主页
 -->
@@ -80,7 +80,8 @@
                 <div
                   v-for="(cateItem,cateIndex) in categoryChildList"
                   :key="cateIndex"
-                  class=""
+                  class="cursor-pointer"
+                  @click="jumpCategory(cateItem._id,cateItem.cateName)"
                 >
                   <span class="flex items-center">
                     <el-skeleton-item
@@ -159,6 +160,7 @@ export default {
   // 函数
   methods: {
     getCategoryList () {
+      // 获取分类列表
       getCategory().then(response => {
         // console.log("getCategory => response", response)
         this.categoryList = response.data.data
@@ -169,6 +171,19 @@ export default {
       })
     },
 
+    jumpCategory (id, name) {
+      console.log("jumpCategory => name", name)
+      console.log("jumpCategory => id", id)
+
+      this.$router.push({
+        name: "category",
+        query: {
+          id: id,
+          name: name
+        }
+      })
+
+    },
 
 
     enterFun (value) { // 鼠标移入

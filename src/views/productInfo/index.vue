@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-11-23 18:34:30
+ * @LastEditTime: 2022-11-28 16:12:29
  * @LastEditors: you name
  * @Description: 
 -->
@@ -499,24 +499,36 @@ export default {
       // console.log("select => keyName", keyName)
       // console.log('库存 =>', this.productData.stock);
       // console.log("select => 选择商品规格值")
+      // console.log("select => this.productData.sku.length", this.productData.sku.length)
       this.checkedList[index].name = keyName
-      var count = null  // 计算已选择了几个项
-      for (var i in this.checkedList) { // 循环已选择的规格项数组
-        if (this.checkedList[i].name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
+      var count = 0  // 计算已选择了几个项
+      // console.log("select => this.checkedList", this.checkedList)
+      this.checkedList.forEach((item) => { //循环已选择的规格项数组
+        if (item.name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
           count = count + 1
+          // console.log('成立');
         }
-      }
+      })
+      // for (var i in this.checkedList) { // 循环已选择的规格项数组
+      //   console.log("select => i", i)
+      //   if (this.checkedList[i].name !== null) {  // 如果，选择了的【规格项】数组里有名字为空，则表示没有选完全部规格。非空则表示有选择
+      //     console.log('成立');
+      //     count = count + 1
+      //   }
+      // }
       if (count == this.productData.sku.length) { // 判断是否选择完全部规格项
         console.log('全选中了');
         const data = []
-        for (var i in this.checkedList) {
-          data.push(this.checkedList[i].name)
-        }
-        // console.log("select => productSpecs", data)
+        this.checkedList.forEach((item) => {
+          data.push(item.name)
+        })
+        // for (var i in this.checkedList) {
+        //   data.push(this.checkedList[i].name)
+        // }
         this.getProductSpecification(data)
       }
 
-      console.log("select => this.checkedList", this.checkedList)
+      // console.log("select => this.checkedList", this.checkedList)
 
     },
 
@@ -525,7 +537,6 @@ export default {
       const data = { productSpecs, productId: this.productId }
       getProductSpecification(data).then(response => {
         const specificationData = response.data.data
-        // console.log("getProductSpecification => specificationData", specificationData)
         const price = parseFloat(specificationData.product_price) // 规格值价格String类型修改
         const imgList = []
         for (var i in specificationData.product_slider_image) {  // 循环规格值轮播图，让其统一
@@ -539,6 +550,7 @@ export default {
       })
 
     },
+
 
     // 添加购物车
     addShoppingCart () {
@@ -560,6 +572,7 @@ export default {
         }
         addShoppingCart(data).then(response => {
           // console.log("addShoppingCart => response", response)
+          console.log('添加成功');
           msg('添加成功，在购物车等亲哦~', 'success')
           // Toast.success('成功文案');
         })

@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-11-27 00:08:02
+ * @LastEditTime: 2022-11-29 16:43:51
  * @LastEditors: you name
  * @Description: 
  */
@@ -15,9 +15,9 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    maxWidth: {
-      '20': '5rem',
-    },
+    // maxWidth: {
+    //   '20': '5rem',
+    // },
     container: {
       // padding: {
       //   DEFAULT: '1rem',

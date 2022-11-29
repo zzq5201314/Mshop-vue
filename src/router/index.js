@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-11-27 00:26:17
+ * @LastEditTime: 2022-11-29 17:53:19
  * @LastEditors: you name
  * @Description: 
  */
@@ -103,11 +103,10 @@ const routes = [
 
   {
     path: '/category',
-    name: 'category',
     component: HomeLayout,
     redirect: '/',
     children: [{
-      path: '/',
+      path: '/category',
       name: 'category',
       component: () => import('@/views/Category/Category.vue'),
       meta: { title: '商品分类' },

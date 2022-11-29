@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-11-23 18:03:11
- * @LastEditTime: 2022-11-27 00:24:35
+ * @LastEditTime: 2022-11-27 18:15:17
  * @LastEditors: you name
  * @Description:  店铺 分类页
 -->
@@ -110,15 +110,27 @@
 
     <div class="md:hidden flex fixed main h-screen">
 
-      <div class="fixed left-0 w-2/12">
-        <van-sidebar v-model="activeKey">
+      <div class="fixed left-0 w-3/12 bg-white h-full">
+        <!-- <van-sidebar v-model="activeKey">
           <van-sidebar-item
             v-for="(cateItem,cateIndex) in categoryList.categoryList"
             :key="cateIndex"
             :title="cateItem.cate_name"
             @click="handleMenulist(cateIndex)"
           />
-        </van-sidebar>
+        </van-sidebar> -->
+
+        <div class="w-full flex flex-col">
+          <span
+            v-for="(cateItem,cateIndex) in categoryList.categoryList"
+            :key="cateIndex"
+            @click="handleMenulist(cateIndex)"
+            class="py-2 text-center m-1 rounded-md text-black text-sm"
+            :class="{'bg-opacity-80':activeKey==cateIndex,'bg-blue-200':activeKey==cateIndex}"
+          >
+            {{cateItem.cate_name}}
+          </span>
+        </div>
       </div>
 
       <div
@@ -380,9 +392,9 @@ export default {
       // console.log(secMargin.marginTop);
       // console.log(mTop);
 
-      this.activeKey = index
       let navPage = document.querySelector('#scroll' + index)
       document.querySelector('#scrollbar').scrollTop = navPage.offsetTop - mTop
+      // this.activeKey = index
 
 
       // console.log(navPagea.offsetTop);
@@ -422,7 +434,7 @@ export default {
         let secMargin = getComputedStyle(divider);
         let mTop = secMargin.marginTop.replace('px', '')
 
-        if (document.querySelector('#scroll' + i).offsetTop - mTop < scrollTop) {
+        if (document.querySelector('#scroll' + i).offsetTop - mTop - 1 < scrollTop) {
           this.activeKey = i
         }
       }

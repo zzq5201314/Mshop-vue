@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-03 16:27:48
- * @LastEditTime: 2022-11-26 23:44:20
+ * @LastEditTime: 2022-11-27 18:49:06
  * @LastEditors: you name
  * @Description: 店铺首页
 -->
@@ -25,7 +25,7 @@
 
     <div class="md:hidden bg-gray-50 min-h-screen block">
       <header
-        class="sticky top-0 border-b border-gray-100 z-50 bg-white"
+        class="sticky top-0 border-b border-gray-100 z-50 bg-white "
         ref="businessHeader"
       >
         <back />
@@ -36,16 +36,16 @@
       </div>
 
       <van-tabbar
+        v-model="active"
         route
         ref="tabbar"
+        @change="handleChange"
       >
         <van-tabbar-item
-          replace
           :to="`/business/${businessId}`"
           icon="wap-home-o"
         >首页</van-tabbar-item>
         <van-tabbar-item
-          replace
           :to="`/business/${businessId}/all`"
           icon="apps-o"
         >分类</van-tabbar-item>
@@ -71,6 +71,7 @@ export default {
       showCategory: [],  // 店铺推荐显示的分类列表
       categoryList: [],
       business: {}, // 店铺信息
+      active: 0,
     }
   },
   computed: {
@@ -129,6 +130,10 @@ export default {
         console.log("awaitgetBusinessCategoryList => this.categoryList", this.categoryList)
       })
 
+    },
+
+    handleChange () {
+      console.log('active =>', this.active);
     },
 
     // setTabberShow () {

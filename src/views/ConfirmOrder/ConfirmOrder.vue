@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-08 14:46:20
- * @LastEditTime: 2022-10-30 17:14:28
+ * @LastEditTime: 2022-11-28 16:42:26
  * @LastEditors: you name
  * @Description: 确认订单
 -->
@@ -197,12 +197,14 @@
         />
       </div>
     </div>
+    <!-- pc 端 end -->
 
     <div class="md:hidden min-h-screen">
       <header class="flex items-center text-black font-medium text-xl">
         <back />
         <div>{{title}}</div>
       </header>
+      <!-- 头部 返回and标题 end -->
 
       <div
         @click="goAddress"
@@ -359,7 +361,10 @@ export default {
   methods: {
     // 获取数据
     async getData () {
+      console.log("this.$route.query => ", this.$route.query)
+
       if (this.shoppingCartIdList) {      // 购物车--结算 跳转过来的
+        console.log('购物车--结算');
         if (this.shoppingCartIdList.length > 0) {
           // 获取商品数据
           await getProductOrderInfo({ shoppingCartIdList: this.shoppingCartIdList }).then(response => {
@@ -367,7 +372,8 @@ export default {
 
           })
         }
-      } else if (this.productInfo.constructor === Object) {  // 商品页立即下单 跳转过来的
+      } else if (Object.prototype.toString.call(this.productInfo) === '[object Object]') {  // 商品页立即下单 跳转过来的
+        console.log('立即下单');
         await getProductOrderInfo({ productInfo: this.productInfo }).then(response => {
           this.productList = response.data.data
         })

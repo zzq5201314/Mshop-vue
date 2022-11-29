@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-27 10:34:01
- * @LastEditTime: 2022-10-30 16:50:40
+ * @LastEditTime: 2022-11-28 16:46:40
  * @LastEditors: you name
  * @Description: 
 -->
@@ -258,6 +258,8 @@ export default {
       operation: false,   // 手机端的操作显示是否打开
       toRouteName: '',
       order: null,
+      shoppingCartIdList: {},
+      productInfo: {}
     }
   },
   components: { addAddress, back },
@@ -276,9 +278,11 @@ export default {
     // this.$route.query
   },
   beforeRouteEnter (to, from, next) {
+    console.log("beforeRouteEnter => from.query => ", from.query)
     next(vm => {
       vm.toRouteName = from.name
-      vm.order = from.query.shoppingCartIdList
+      vm.shoppingCartIdList = from.query.shoppingCartIdList
+      vm.productInfo = from.query.productInfo
     })
   },
   // 函数
@@ -350,10 +354,11 @@ export default {
 
     // 移动端选择地址
     select (items) {
+      console.log("select => this.$route.query => ", this.$route.query)
       if (this.$route.query == 'select' && this.toRouteName == 'confirmOrder') {
         this.$router.push({
           name: 'confirmOrder',
-          query: { shoppingCartIdList: this.order, address: items }
+          query: { shoppingCartIdList: this.shoppingCartIdList, address: items, productInfo: this.productInfo }
         })
       }
     }
