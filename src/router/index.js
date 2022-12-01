@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-11-29 17:53:19
+ * @LastEditTime: 2022-12-01 21:57:17
  * @LastEditors: you name
  * @Description: 
  */
@@ -110,6 +110,18 @@ const routes = [
       name: 'category',
       component: () => import('@/views/Category/Category.vue'),
       meta: { title: '商品分类' },
+    }]
+  },
+
+  {
+    path: '/search',
+    component: HomeLayout,
+    redirect: '/',
+    children: [{
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/Search/Search.vue'),
+      meta: { title: '搜索' },
     }]
   },
 

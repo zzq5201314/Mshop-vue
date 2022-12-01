@@ -44,7 +44,7 @@
                 <img
                   v-else
                   :src="baseUrl+data[index].image"
-                  class="image w-full"
+                  class="image w-full h-full object-cover"
                 />
               </el-col>
               <!-- 商品图片end -->

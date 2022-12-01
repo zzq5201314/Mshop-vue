@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 16:03:55
- * @LastEditTime: 2022-10-26 15:30:58
+ * @LastEditTime: 2022-11-30 21:55:22
  * @LastEditors: you name
  * @Description: 
 -->
@@ -23,7 +23,7 @@
         class="hidden md:block"
       />
 
-      <div class="md:hidden grid grid-cols-2 p-3 gap-3 sm:grid-cols-3">
+      <div class="md:hidden grid grid-cols-2 p-3 gap-3 ">
         <div
           v-for="(productItem,productIndex) in listData"
           :key="productIndex"

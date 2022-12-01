@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-23 23:43:23
- * @LastEditTime: 2022-10-31 14:42:03
+ * @LastEditTime: 2022-12-01 18:59:45
  * @LastEditors: you name
  * @Description: 手机端的tab选项卡
 -->
@@ -9,7 +9,7 @@
 <template>
   <div
     class="appTab"
-    v-if="this.$route.name=='Home'|this.$route.name=='myInfo' |this.$route.name=='shoppingCartList'"
+    v-if="(this.$route.name=='Home'|this.$route.name=='myInfo' |this.$route.name=='shoppingCartList'|this.$route.name=='category')"
   >
     <div
       :style="{ height: tabH }"
@@ -63,6 +63,7 @@ export default {
           active: 'icon-circlefill',
           inactive: 'icon-circle',
           title: "分类",
+          routeName: "category"
 
         }, {
           active: 'icon-cart_fill_light',
