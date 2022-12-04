@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-08 23:57:13
- * @LastEditTime: 2022-12-01 21:57:17
+ * @LastEditTime: 2022-12-04 17:07:41
  * @LastEditors: you name
  * @Description: 
  */
@@ -218,6 +218,7 @@ const routes = [
 // })
 
 const createRouter = () => new VueRouter({
+  // mode: 'history',
   routes
 })
 

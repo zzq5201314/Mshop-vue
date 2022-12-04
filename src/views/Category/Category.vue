@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-16 18:26:31
- * @LastEditTime: 2022-12-01 21:58:18
+ * @LastEditTime: 2022-12-04 17:20:12
  * @LastEditors: you name
  * @Description: 
 -->
@@ -105,7 +105,10 @@
               >{{categoryItem.cateName}}</p>
             </van-divider>
 
-            <div :id="'scroll'+categoryIndex">
+            <div
+              :id="'scroll'+categoryIndex"
+              v-if="categoryItem.category_child"
+            >
               <div
                 v-for="(fatherCategoryItem,fatherCategoryIndex) in categoryItem.category_child"
                 :key="fatherCategoryIndex"
@@ -146,8 +149,9 @@
                 </div>
               </div>
 
+              <!-- {{categoryItem.category_child.length==0}} -->
               <div
-                v-show="categoryItem.category_child.length==0"
+                v-if="(categoryItem.category_child.length==0)"
                 class="bg-white h-60 flex items-center justify-center rounded-xl"
               >
                 不用看了，这毛都没有
@@ -164,6 +168,7 @@
 </template>
 
 <script>
+// import 
 import back from '@/components/appBack'
 import { getCategory } from '@/api/Home'
 import { decimalPoint } from '@/assets/js/common.js'  // 修改价格样式
@@ -223,6 +228,7 @@ export default {
 
           this.productList = this.categoryList.productList  // 储存全部商品
           this.selectProductList = this.productList  // 选中的列表的商品
+          console.log("getCategory => this.categoryList", this.categoryList)
         }
 
       })
