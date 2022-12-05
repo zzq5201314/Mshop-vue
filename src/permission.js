@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-16 15:38:14
- * @LastEditTime: 2022-11-29 16:36:18
+ * @LastEditTime: 2022-12-05 22:31:56
  * @LastEditors: you name
  * @Description: 
  */
@@ -22,7 +22,7 @@ NProgress.configure({ showSpinner: false })
 
 
 //路由白名单列表，把路由添加到这个数组，不用登陆也可以访问
-const whiteList = ['/login', '/404', '/register', '/home', '/category']
+const whiteList = ['/login', '/404', '/register', '/home', '/category', '/search']
 
 
 router.beforeEach(async (to, from, next) => {

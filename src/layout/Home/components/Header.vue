@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:58:43
- * @LastEditTime: 2022-11-22 16:31:56
+ * @LastEditTime: 2022-12-05 22:39:04
  * @LastEditors: you name
  * @Description: 
 -->
@@ -81,8 +81,38 @@
           </ul>
         </nav>
       </header>
-      <div class="container mx-auto">
+      <div class="container mx-auto ">
+
+        <transition name="searchInput">
+          <div
+            class="flex items-center justify-center h-20 w-full "
+            v-if="isSearch"
+          >
+            <div class="bg-gray-100 p-2 rounded-xl">
+              <i
+                class="el-icon-search px-2 hover:text-black cursor-pointer"
+                @mousedown="search"
+              ></i>
+              <input
+                type="text"
+                placeholder="搜索商品"
+                class=" input bg-gray-100 "
+                v-model="searchContent"
+                @keyup.enter="search"
+                ref="ipt"
+                @blur="cancel"
+              >
+              <i
+                class="el-icon-close px-2 hover:text-black cursor-pointer"
+                @click="cancel"
+              ></i>
+            </div>
+          </div>
+
+        </transition>
+
         <div
+          v-if="!isSearch"
           class="sticky top-0 w-full bg-white flex justify-between items-center mx-auto max-w-7xl "
         >
           <!-- <img
@@ -132,10 +162,13 @@
           </nav>
           <div class="w-9 cursor-pointer text-center">
             <i
-              class="el-icon-search text-xl text-gray-400 hover:text-gray-800 transition duration-300" />
+              class="el-icon-search text-xl text-gray-400 hover:text-gray-800 transition duration-300"
+              @click="startSearch"
+            />
           </div>
 
         </div>
+
       </div>
 
     </div>
@@ -145,14 +178,15 @@
 </template>
 
 <script>
-
+import { search } from '@/api/Home.js'
 import { mapGetters } from 'vuex'
 
 export default {
   name: "Header",
   data () {
     return {
-
+      isSearch: false,
+      searchContent: ''
     }
   },
   components: {},
@@ -194,6 +228,46 @@ export default {
       this.$router.push({
         path: '/collect/product'
       })
+    },
+
+    startSearch () {
+      this.isSearch = true
+      this.$nextTick(function () {
+        //DOM 更新了
+        this.$refs.ipt.focus()
+      })
+      // let mo = function (e) { e.preventDefault(); };
+      document.body.style.overflow = 'hidden';
+      // document.addEventListener("touchmove", mo, false);//禁止页面滑动
+    },
+
+    cancel () {
+      this.isSearch = false
+      console.log('取消');
+      // let mo = function (e) { e.preventDefault(); };
+      document.body.style.overflow = '';//出现滚动条
+      // document.removeEventListener("touchmove", mo, false);
+
+      this.searchContent = ''
+    },
+
+    search () {
+      // search({ productName: this.searchContent }).then(response => {
+      //   console.log("search => response", response.data)
+
+      // })
+
+      let routeData = this.$router.resolve({
+        name: 'search',
+        query: { productName: this.searchContent }
+      })
+
+      // console.log("search => routeData.href", routeData.href)
+      window.open(routeData.href, '_blank')  // 新建一个页面并跳转过去
+
+
+
+      console.log('搜索');
     }
   }
 }
@@ -209,4 +283,29 @@ export default {
   left: 0;
   z-index: 1000000000;
 }
+
+.input {
+  width: 512px;
+}
+
+.searchInput-enter-active {
+  transition: opacity 0.6s;
+}
+
+.searchInput-enter {
+  opacity: 0;
+}
+
+.searchInput-leave {
+  display: none;
+}
+
+// @keyframes move {
+//   from {
+//     // transform: translateX(-100%);
+//   }
+//   to {
+//     // transform: translateX(0);
+//   }
+// }
 </style>

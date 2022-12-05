@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-10 15:29:54
- * @LastEditTime: 2022-11-29 18:12:42
+ * @LastEditTime: 2022-12-05 17:55:02
  * @LastEditors: you name
  * @Description: 
  */
@@ -37,5 +37,14 @@ export function getProductList () {
 	return request({
 		url: `/products`,
 		method: 'get'
+	})
+}
+
+// 搜索
+export function search (data) {
+	return request({
+		url: `/search`,
+		method: 'post',
+		params: data
 	})
 }
