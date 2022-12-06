@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:50:40
- * @LastEditTime: 2022-10-24 18:12:26
+ * @LastEditTime: 2022-12-06 17:12:44
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- Home 页 -->
 <template>
   <div class="Home relative">
-    <Header class="" />
+    <Header class="sticky top-0 z-50" />
     <router-view />
     <AppTab class="md:hidden" />
   </div>

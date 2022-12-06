@@ -1,14 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:58:43
- * @LastEditTime: 2022-12-05 22:39:04
+ * @LastEditTime: 2022-12-06 17:27:27
  * @LastEditors: you name
  * @Description: 
 -->
 <!-- Header 页 -->
 <template>
   <div class="Header">
-    <div class="hidden md:block">
+    <div class="hidden md:block bg-white">
       <header class=" text-gray-400 bg-gray-800 ">
         <nav
           class="h-8 flex justify-between items-center text-xs container mx-auto max-w-7xl"
@@ -174,10 +174,44 @@
     </div>
 
     <!-- <div class="h-screen"></div> -->
+    <header
+      class="md:hidden bg-white py-2  flex px-4"
+      v-if="(this.$route.name=='Home'|this.$route.name=='search')"
+    >
+      <div
+        class=" h-10 flex items-center"
+        v-show="this.$route.name=='Home'"
+      >
+        <router-link
+          class="italic cursor-pointer"
+          :to="{path:'/'}"
+        >
+          <span class="text-4xl relative -right-1 text-blue-600">M</span>
+          <span class="text-black text-sm">商城</span>
+        </router-link>
+      </div>
+      <div v-show="this.$route.name!=='Home'">
+        <back />
+      </div>
+      <div
+        class="border border-black mx-4 rounded-full flex items-center h-10 ">
+
+        <i class="el-icon-search px-2 "></i>
+        <input
+          type="text"
+          placeholder="搜索商品"
+          class="bg-transparent py-1 text-sm"
+          v-model="searchContent"
+          @keyup.enter="appSearch"
+        >
+      </div>
+      <!-- 搜索框 end -->
+    </header>
   </div>
 </template>
 
 <script>
+import back from '@/components/appBack'
 import { search } from '@/api/Home.js'
 import { mapGetters } from 'vuex'
 
@@ -189,7 +223,7 @@ export default {
       searchContent: ''
     }
   },
-  components: {},
+  components: { back },
   computed: {
     ...mapGetters([
       'name',
@@ -268,6 +302,13 @@ export default {
 
 
       console.log('搜索');
+    },
+
+    appSearch () {
+      this.$router.push({
+        name: 'search',
+        query: { productName: this.searchContent }
+      })
     }
   }
 }

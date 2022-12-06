@@ -1,13 +1,14 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-09 09:42:03
- * @LastEditTime: 2022-11-29 17:53:40
+ * @LastEditTime: 2022-12-06 17:14:44
  * @LastEditors: you name
  * @Description: 主页
 -->
 <!-- Home 页 -->
 <template>
   <div class="Home select-none bg-gray-100">
+
     <el-backtop
       :bottom="60"
       :right="10"
@@ -18,8 +19,32 @@
       />
     </el-backtop>
 
+    <!-- <header class="md:hidden bg-white py-2 sticky top-0 z-50 flex px-4">
+      <div class=" h-10 flex items-center">
+        <router-link
+          class="italic cursor-pointer"
+          :to="{path:'/'}"
+        >
+          <span class="text-4xl relative -right-1 text-blue-600">M</span>
+          <span class="text-black text-sm">商城</span>
+        </router-link>
+      </div>
+      <div
+        class="border border-black mx-4 rounded-full flex items-center h-10 ">
+
+        <i class="el-icon-search px-2 "></i>
+        <input
+          type="text"
+          placeholder="搜索商品"
+          class="bg-transparent py-1 text-sm"
+        >
+      </div>
+      
+    </header> -->
+    <!-- 搜索框 end -->
+
     <van-swipe
-      class="my-swipe relative w-full md:hidden"
+      class="my-swipe relative w-full md:hidden h-36"
       :autoplay="3000"
       indicator-color="white"
     >
@@ -27,11 +52,11 @@
         v-for="item in 4"
         :key="item"
       >
-        <div class="p-3 rounder-lg">
+        <div class="p-3 h-full ">
           <img
             draggable="false"
             src="https://res.vmallres.com/cmscdn/CN/2022-09/43725456ac344dadb829bfd4903e3dbf.jpg"
-            class="object-scale-down mx-auto"
+            class="object-cover mx-auto h-full rounded-lg"
           >
         </div>
       </van-swipe-item>
@@ -58,7 +83,7 @@
 
       <div class="container mx-auto max-w-7xl">
         <div
-          class=" z-50 absolute top-1/2 transform -translate-y-1/2 w-60 shadow-lg"
+          class=" z-20 absolute top-1/2 transform -translate-y-1/2 w-60 shadow-lg"
         >
           <div class="navCard">
 
@@ -184,6 +209,8 @@ export default {
       })
 
     },
+
+
 
 
     enterFun (value) { // 鼠标移入

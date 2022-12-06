@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-01 20:32:58
- * @LastEditTime: 2022-12-05 23:08:51
+ * @LastEditTime: 2022-12-06 17:46:00
  * @LastEditors: you name
  * @Description: 
 -->
@@ -55,11 +55,29 @@
 
     </div>
 
-    <div class="md:hidden">
-      <header class="flex items-center">
-        <back />
-        <div>搜索</div>
-      </header>
+    <div class="md:hidden p-2 pb-3">
+      <div class="space-y-2">
+        <div
+          v-for="(productItem,productIndex) in productList"
+          :key="productIndex"
+          class="flex"
+          @click="jumpProductInfo(productItem._id)"
+        >
+          <div class="w-28 h-28 rounded-xl overflow-hidden">
+            <img
+              :src="baseUrl+productItem.image"
+              class="h-full w-full object-cover "
+            >
+          </div>
+          <div class="ml-2 h-28 relative">
+            <p class="text-black text-sm">{{productItem.name}}</p>
+            <p
+              v-html="productItem.prices"
+              class="absolute bottom-4"
+            ></p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

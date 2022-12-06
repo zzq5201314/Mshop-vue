@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 21:56:09
- * @LastEditTime: 2022-10-26 15:30:22
+ * @LastEditTime: 2022-12-06 16:14:49
  * @LastEditors: you name
  * @Description: 热门推荐列表
 -->
@@ -44,10 +44,11 @@
               <div class="font-semibold text-black">{{productItem.name}}
               </div>
               <div class="text-xs">商品详情</div>
-              <div class="flex items-center justify-between">
-                <div class=" text-xs text-black font-semibold">
+              <div class="flex items-center justify-between pr-2">
+                <!-- <div class=" text-xs text-black font-semibold">
                   ￥{{productItem.price.toFixed(2)}} 起
-                </div>
+                </div> -->
+                <p v-html="productItem.prices"></p>
                 <div
                   class=" bg-gray-100 text-xs text-black font-semibold px-4 py-2 rounded-full "
                   @click="jumpProductInfo(productItem._id)"
@@ -65,6 +66,7 @@
 <script>
 import { getProductRecommendList } from '@/api/Home'
 import productList from './productList.vue'
+import { decimalPoint } from '@/assets/js/common.js'  // 修改价格样式
 export default {
   name: "recommend",
   data () {
@@ -87,7 +89,11 @@ export default {
     getProductRecommendList () {
       getProductRecommendList().then(response => {
         this.recommendList = response.data.data
-        // console.log("getProductRecommendList => this.recommendList", this.recommendList)
+        console.log("getProductRecommendList => this.recommendList", this.recommendList)
+
+        this.recommendList.forEach(item => {    // 修改全部分类的商品价格样式
+          item['prices'] = decimalPoint(item.price)
+        })
       })
     },
     jumpProductInfo (value) { // 跳转商品详情

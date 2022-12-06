@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 16:03:55
- * @LastEditTime: 2022-11-30 21:55:22
+ * @LastEditTime: 2022-12-06 16:11:48
  * @LastEditors: you name
  * @Description: 
 -->
@@ -27,6 +27,7 @@
         <div
           v-for="(productItem,productIndex) in listData"
           :key="productIndex"
+          @click="jumpProductInfo(productItem._id)"
           class="bg-white rounded-lg p-3"
         >
           <div class="h-44 sm:h-56 flex items-center justify-center">
@@ -40,9 +41,10 @@
             class="font-semibold text-black text-left max-h-9 text-sm productName">
             {{productItem.name}}
           </p>
-          <p class="text-red-600 text-xs mt-1">￥<span
+          <!-- <p class="text-red-600 text-xs mt-1">￥<span
               class="font-bold text-sm">{{productItem.price.toFixed(2)}}</span>
-          </p>
+          </p> -->
+          <p v-html="productItem.prices"></p>
           <p class="text-xs">商品标签</p>
         </div>
       </div>
@@ -53,6 +55,7 @@
 <script>
 import { getProductList } from '@/api/Home'
 import productList from './productList.vue'
+import { decimalPoint } from '@/assets/js/common.js'  // 修改价格样式
 export default {
   name: "list",
   data () {
@@ -75,9 +78,20 @@ export default {
     getProductList () {
       getProductList().then(response => {
         this.listData = response.data.data
+
+        this.listData.forEach(item => {
+          item['prices'] = decimalPoint(item.price)
+        })
+        console.log("getProductList => this.listData", this.listData)
         // console.log("getProductList => this.listData", this.listData)
       })
-    }
+    },
+
+    async jumpProductInfo (productId) {
+      this.$router.push({
+        path: '/product/info/' + productId
+      })
+    },
   }
 }
 </script>
