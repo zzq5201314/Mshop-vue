@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 21:56:09
- * @LastEditTime: 2022-12-07 23:35:34
+ * @LastEditTime: 2022-12-07 23:47:24
  * @LastEditors: you name
  * @Description: 热门推荐列表
 -->
@@ -35,10 +35,12 @@
           :key="productIndex"
         >
           <div>
-            <img
-              :src="baseUrl+ productItem.image"
-              class="h-52 w-full object-cover p-2"
-            />
+            <div class="h-52">
+              <img
+                :src="baseUrl+ productItem.image"
+                class="h-52 w-full object-scale-down p-2"
+              />
+            </div>
             <!-- <div>{{productItem.price}}</div> -->
             <div class="space-y-1 pb-3 pt-1">
               <div class="font-semibold text-black line-clamp-2">

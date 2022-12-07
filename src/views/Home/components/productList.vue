@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 11:06:48
- * @LastEditTime: 2022-12-07 23:36:33
+ * @LastEditTime: 2022-12-07 23:49:18
  * @LastEditors: you name
  * @Description: 
 -->
@@ -44,7 +44,7 @@
                 <img
                   v-else
                   :src="baseUrl+data[index].image"
-                  class="image w-full h-full object-cover"
+                  class="image w-full h-full object-scale-down"
                 />
               </el-col>
               <!-- 商品图片end -->
