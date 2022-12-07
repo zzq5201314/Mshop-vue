@@ -53,10 +53,10 @@
               <img
                 :src="baseUrl+productItem.image"
                 class="h-full object-cover transform group-hover:scale-110 duration-300"
-                :alt="productItem.name"
               >
             </div>
-            <p class="text-center mt-2 text-black">{{productItem.name}}</p>
+            <p class="text-center mt-2 text-black line-clamp-2">
+              {{productItem.name}}</p>
             <p
               v-html="productItem.prices"
               class="text-center"

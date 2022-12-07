@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-13 11:06:48
- * @LastEditTime: 2022-10-23 21:40:54
+ * @LastEditTime: 2022-12-07 23:36:33
  * @LastEditors: you name
  * @Description: 
 -->
@@ -62,7 +62,7 @@
                   </template>
                 </el-skeleton>
                 <p
-                  class="font-semibold text-lg"
+                  class="font-semibold text-lg line-clamp-2"
                   v-else
                 >{{data[index].name}}</p>
               </el-col>
