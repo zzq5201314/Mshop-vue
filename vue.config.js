@@ -1,12 +1,13 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 16:56:51
- * @LastEditTime: 2022-10-23 01:34:38
+ * @LastEditTime: 2022-12-07 16:09:29
  * @LastEditors: you name
  * @Description: 
  */
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
+const config = require('./src/config/index')
 // const defaultSettings = require('./src/config/index.js')
 function resolve (dir) {
 	return path.join(__dirname, dir)
@@ -32,14 +33,15 @@ module.exports = {
 			errors: true
 		},
 		// proxy: {
-		// 	['/api']: {
+		// 	['http://localhost:3003']: {
 		// 		// target: 'http://112.74.54.76:3003/api',
 		// 		// target: process.env.BACKGROUND_APPLICATION_URL,
-		// 		target: process.env.VUE_APP_BASE_API,
+		// 		target: 'http://mshop.ziqiang.ltd:3003',
+		// 		// target: process.env.VUE_APP_BASE_API,
 		// 		changeOrigin: true, // 是否跨域
 		// 		pathRewrite: {
 		// 			// '^/api'是一个正则表达式，表示要匹配请求的url中，全部'http://localhost:8081/api' 转接为 http://localhost:8081/
-		// 			'^/api': '',
+		// 			'^http://localhost:3003': '',
 		// 		}
 		// 	}
 		// },

@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-11-28 16:12:29
+ * @LastEditTime: 2022-12-07 16:23:49
  * @LastEditors: you name
  * @Description: 
 -->
@@ -9,12 +9,10 @@
 <template>
   <div class="index container mx-auto max-w-7xl">
     <div class="hidden md:block">
-      <div class="flex justify-between">
+      <div class="flex justify-between mt-2">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item> -->
-          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-          <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-          <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>" {{productData.name}} "</el-breadcrumb-item>
         </el-breadcrumb>
         <div
           class="text-sm"
@@ -467,6 +465,10 @@ export default {
         })
         // console.log("getProductInfo => this.checkedList", this.checkedList)
         this.businessId = this.productData.business._id
+        // 修复富文本里图片请求地址
+        this.productData.info = this.productData.info.replace(new RegExp('http://localhost:3003', 'g'), this.baseUrl)
+        // console.log("awaitgetProductInfo => this.baseUrl", this.baseUrl)
+        // console.log("awaitgetProductInfo => this.productData.info", this.productData.info)
         // const { data, province, city, area, town } = require('province-city-china/data');
         // console.log("awaitgetProductInfo => province", province)
         // console.log("awaitgetProductInfo => city", city)
