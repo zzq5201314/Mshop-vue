@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-09-14 10:47:00
- * @LastEditTime: 2022-12-07 16:23:49
+ * @LastEditTime: 2022-12-07 16:55:15
  * @LastEditors: you name
  * @Description: 
 -->
@@ -250,8 +250,23 @@
       <div class="bg-white rounded-lg p-3 m-2 text-xs space-y-2">
         <div class="flex">
           <span class="w-8 mr-3">选择</span>
-          <div class=" text-black w-full flex justify-between">
-            <span>颜色分类</span>
+          <div
+            class=" text-black w-full flex justify-between"
+            @click="buyPopupShow('buy')"
+          >
+            <!-- <span>颜色分类</span> -->
+            <div class="flex">
+              <!-- 请选择&nbsp -->
+              <p
+                v-for="(skuItem,skuIndex) in productData.sku"
+                :key="skuIndex"
+              >
+                <span
+                  :class="[checkedList[skuIndex].name!==null?'text-red-500':'']"
+                >{{checkedList[skuIndex].name==null?skuItem.product_group_name:checkedList[skuIndex].name}}</span>
+                &nbsp
+              </p>
+            </div>
             <span><i class="el-icon-arrow-right text-gray-400"></i></span>
           </div>
         </div>
@@ -260,10 +275,11 @@
           <div class="w-full text-black">
             <div class="flex">
               <div class="w-full flex divide-x ">
-                <div class="pr-3">广东东莞</div>
+                <div class="pr-3">{{productData.business.address}}</div>
                 <div class="pl-3">快递：免运费</div>
               </div>
-              <div class="w-3/12 text-right text-gray-400">销量 31</div>
+              <div class="w-3/12 text-right text-gray-400">销量
+                {{productData.sales}}</div>
             </div>
             <div class="mt-1">现货，付款后48小时内发货</div>
           </div>
@@ -466,9 +482,12 @@ export default {
         // console.log("getProductInfo => this.checkedList", this.checkedList)
         this.businessId = this.productData.business._id
         // 修复富文本里图片请求地址
-        this.productData.info = this.productData.info.replace(new RegExp('http://localhost:3003', 'g'), this.baseUrl)
+        if (this.productData.info) {
+
+          this.productData.info = this.productData.info.replace(new RegExp('http://localhost:3003', 'g'), this.baseUrl)
+        }
         // console.log("awaitgetProductInfo => this.baseUrl", this.baseUrl)
-        // console.log("awaitgetProductInfo => this.productData.info", this.productData.info)
+        console.log("awaitgetProductInfo => this.productData.info", this.productData)
         // const { data, province, city, area, town } = require('province-city-china/data');
         // console.log("awaitgetProductInfo => province", province)
         // console.log("awaitgetProductInfo => city", city)
