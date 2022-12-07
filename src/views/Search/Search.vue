@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-01 20:32:58
- * @LastEditTime: 2022-12-06 17:46:00
+ * @LastEditTime: 2022-12-07 23:23:06
  * @LastEditors: you name
  * @Description: 
 -->
@@ -69,8 +69,10 @@
               class="h-full w-full object-cover "
             >
           </div>
-          <div class="ml-2 h-28 relative">
-            <p class="text-black text-sm">{{productItem.name}}</p>
+          <div class="ml-2 h-28 relative w-8/12">
+            <p
+              class="text-black text-sm overflow-ellipsis overflow-hidden line-clamp-2">
+              {{productItem.name}}</p>
             <p
               v-html="productItem.prices"
               class="absolute bottom-4"

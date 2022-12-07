@@ -1,7 +1,7 @@
 /*
  * @Author: 清羽
  * @Date: 2022-09-09 09:17:30
- * @LastEditTime: 2022-11-29 16:43:51
+ * @LastEditTime: 2022-12-07 23:22:46
  * @LastEditors: you name
  * @Description: 
  */
@@ -32,6 +32,7 @@ module.exports = {
     // }
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     function ({ addBase }) {
       addBase({
         ".el-button": {
