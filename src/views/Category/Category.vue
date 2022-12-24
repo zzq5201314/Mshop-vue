@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-10-16 18:26:31
- * @LastEditTime: 2022-12-04 17:20:12
+ * @LastEditTime: 2022-12-25 00:47:09
  * @LastEditors: you name
  * @Description: 
 -->
@@ -213,6 +213,7 @@ export default {
       getCategory(params).then(response => {
         this.categoryList = response.data.data
         let category = this.categoryList.category
+        console.log("getCategory => category", category)
 
         if (category) {
           category.checked = true  // 父分类高亮状态
@@ -280,9 +281,16 @@ export default {
     selectCategory (item, index) {
       console.log("selectCategory => item", item)
       let category = this.categoryList.category
+      console.log("selectCategory => category", category)
       if (item) {  // 选择了子类
         item.checked = true
         category.checked = false
+        category.childCategory.forEach(i => {
+
+          if (item._id !== i._id) {
+            i.checked = false
+          }
+        })
 
         item.product.forEach((i) => { // 修改选中的分类下的商品价格样式
 
@@ -299,7 +307,7 @@ export default {
         this.selectProductList = this.productList  // 改回 全部商品列表
       }
       this.$forceUpdate(); //强制刷新，解决页面不会重新渲染的问题
-      console.log("getCategory =>  this.categoryList", this.categoryList)
+      // console.log("getCategory =>  this.categoryList", this.categoryList)
     },
 
     async jumpProductInfo (productId) {
