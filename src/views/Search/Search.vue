@@ -1,7 +1,7 @@
 <!--
  * @Author: 清羽
  * @Date: 2022-12-01 20:32:58
- * @LastEditTime: 2022-12-07 23:23:06
+ * @LastEditTime: 2022-12-24 23:23:31
  * @LastEditors: you name
  * @Description: 
 -->
@@ -95,7 +95,7 @@ export default {
       baseUrl: this.$baseUrl,
       categoryId: this.$route.query.id,
       categoryName: this.$route.query.name,
-      searchContent: this.$route.query.productName,
+      searchContent: this.$route.query.categoryName,
       productList: []
     }
   },
